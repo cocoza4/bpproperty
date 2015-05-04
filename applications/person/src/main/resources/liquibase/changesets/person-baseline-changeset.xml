@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet author="coco" id="initTables">
+
+        <createTable tableName="CUSTOMER">
+            <column name="ID" type="BIGINT" autoIncrement="true" startWith="1">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="FIRSTNAME" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LASTNAME" type="VARCHAR(45)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ADDRESS" type="TEXT"/>
+            <column name="TEL" type="VARCHAR(20)"/>
+            <column name="CREATED_BY" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_TIME" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="BIGINT"/>
+            <column name="UPDATED_TIME" type="BIGINT"/>
+        </createTable>
+
+    </changeSet>
+
+
+</databaseChangeLog>

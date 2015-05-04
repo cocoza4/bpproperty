@@ -1,0 +1,40 @@
+
+<br/>
+
+<form class="form-horizontal" ng-submit="submit()">
+    <div class="form-group">
+        <label for="inputName" class="control-label col-xs-2">ชื่อโครงการ</label>
+        <div class="col-xs-10">
+            <input type="text" class="form-control" id="inputName" placeholder="Property's Name" ng-model="land.name">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputAddress" class="control-label col-xs-2">ที่อยู่</label>
+        <div class="col-xs-10">
+            <input type="text" class="form-control" id="inputAddress" placeholder="Address" ng-model="land.address">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="areaGroup" class="control-label col-xs-2">เนื้อที่</label>
+        <div class="col-xs-10 form-inline" id="areaGroup" >
+            <input type="number" class="form-control" ng-model="land.area.rai"> &nbsp; ไร่ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="number" class="form-control" ng-model="land.area.yarn"> &nbsp; งาน &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="number" class="form-control" ng-model="land.area.tarangwa"> ตารางวา
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="inputDescription" class="control-label col-xs-2">หมายเหตุ</label>
+        <div class="col-xs-10">
+            <textarea class="form-control" rows="10" id="inputDescription" placeholder="Description" ng-model="land.description"></textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-10">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-danger" type="button">Delete</a>
+        </div>
+    </div>
+</form>

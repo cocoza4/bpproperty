@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="populateTables" author="coco">
+
+        <!-- init Customer -->
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname1"/>
+            <column name="LASTNAME" value="lastname1"/>
+            <column name="ADDRESS" value="address1"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname2"/>
+            <column name="LASTNAME" value="lastname2"/>
+            <column name="ADDRESS" value="address2"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname3"/>
+            <column name="LASTNAME" value="lastname3"/>
+            <column name="ADDRESS" value="address3"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname4"/>
+            <column name="LASTNAME" value="lastname4"/>
+            <column name="ADDRESS" value="address4"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+
+        <!-- init Property -->
+        <insert tableName="PROPERTY">
+            <column name="NAME" value="Por Permpol"/>
+            <column name="ADDRESS" value="address1"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="RAI" value="100"/>
+            <column name="YARN" value="5"/>
+            <column name="TARANGWA" value="10"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="PROPERTY">
+            <column name="NAME" value="property 2"/>
+            <column name="ADDRESS" value="address2"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="RAI" value="100"/>
+            <column name="YARN" value="5"/>
+            <column name="TARANGWA" value="10"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="PROPERTY">
+            <column name="NAME" value="property 3"/>
+            <column name="ADDRESS" value="address3"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="RAI" value="100"/>
+            <column name="YARN" value="5"/>
+            <column name="TARANGWA" value="10"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="PROPERTY">
+            <column name="NAME" value="property 4"/>
+            <column name="ADDRESS" value="address4"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="RAI" value="100"/>
+            <column name="YARN" value="5"/>
+            <column name="TARANGWA" value="10"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+
+        <!-- init PropertyPurchaseInfo -->
+        <insert tableName="PROPERTY_PURCHASE_INFO">
+            <column name="PROPERTY_ID" valueComputed="(SELECT ID FROM PROPERTY WHERE NAME = 'Por Permpol')"/>
+            <column name="CUSTOMER_ID" valueComputed="(SELECT ID FROM CUSTOMER WHERE FIRSTNAME = 'firstname1')"/>
+            <column name="PURCHASE_TYPE" value="I"/>
+            <column name="SELL_PRICE" value="100"/>
+            <column name="ANNUAL_INTEREST" value="15"/>
+            <column name="YEARS_OF_INSTALLMENT" value="5"/>
+            <column name="RAI" value="10"/>
+            <column name="YARN" value="5"/>
+            <column name="TARANGWA" value="10"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="PROPERTY_PURCHASE_INFO">
+            <column name="PROPERTY_ID" valueComputed="(SELECT ID FROM PROPERTY WHERE NAME = 'Por Permpol')"/>
+            <column name="CUSTOMER_ID" valueComputed="(SELECT ID FROM CUSTOMER WHERE FIRSTNAME = 'firstname2')"/>
+            <column name="PURCHASE_TYPE" value="c"/>
+            <column name="SELL_PRICE" value="10"/>
+            <column name="ANNUAL_INTEREST" value="10"/>
+            <column name="YEARS_OF_INSTALLMENT" value="3"/>
+            <column name="RAI" value="5"/>
+            <column name="YARN" value="5"/>
+            <column name="TARANGWA" value="10"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>

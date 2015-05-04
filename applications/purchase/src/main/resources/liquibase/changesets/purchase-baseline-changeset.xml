@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet author="coco" id="initTables">
+
+        <comment>Rai = ไร่
+            Yarn = งาน
+            Tarangwa = ตารางวา
+        </comment>
+        <createTable tableName="LAND_BUY_DETAIL">
+            <column name="ID" type="BIGINT" autoIncrement="true" startWith="1">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="PROPERTY_ID" type="BIGINT">
+                <constraints nullable="false" deleteCascade="true" foreignKeyName="FK_PROPERTY_ID"
+                             references="LAND(ID)"/>
+            </column>
+            <column name="CUSTOMER_ID" type="BIGINT">
+                <constraints nullable="false" deleteCascade="true" foreignKeyName="FK_CUSTOMER_ID"
+                             references="CUSTOMER(ID)"/>
+            </column>
+            <column name="BUY_TYPE" type="CHAR(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BUY_PRICE" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ANNUAL_INTEREST" type="INT"/>
+            <column name="YEARS_OF_INSTALLMENT" type="INT"/>
+
+            <column name="RAI" type="INT"/>
+            <column name="YARN" type="INT"/>
+            <column name="TARANGWA" type="INT"/>
+
+            <column name="DESCRIPTION" type="TEXT"/>
+
+            <column name="CREATED_BY" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_TIME" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="BIGINT"/>
+            <column name="UPDATED_TIME" type="BIGINT"/>
+        </createTable>
+        <addUniqueConstraint tableName="LAND_BUY_DETAIL" columnNames="PROPERTY_ID, CUSTOMER_ID"/>
+
+        <createTable tableName="INSTALLMENTS_RECORD">
+            <column name="ID" type="BIGINT" autoIncrement="true" startWith="1">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="BUY_DETAIL_ID" type="BIGINT">
+                <constraints nullable="false" deleteCascade="true"
+                             foreignKeyName="FK_INSTALLMENT_RECORD_LAND_BUY_DETAIL_ID"
+                             references="LAND_BUY_DETAIL(ID)"/>
+            </column>
+            <column name="PAYMENT_DATE" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AMOUNT" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RECEIVER_ID" type="BIGINT"/>
+            <column name="CREATED_BY" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_TIME" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_BY" type="BIGINT"/>
+            <column name="UPDATED_TIME" type="BIGINT"/>
+        </createTable>
+
+    </changeSet>
+
+
+</databaseChangeLog>
