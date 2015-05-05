@@ -152,6 +152,110 @@
             <column name="CREATED_BY" valueNumeric="0" />
             <column name="CREATED_TIME" valueDate="${now}"/>
         </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname19"/>
+            <column name="LASTNAME" value="lastname19"/>
+            <column name="ADDRESS" value="address19"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname20"/>
+            <column name="LASTNAME" value="lastname20"/>
+            <column name="ADDRESS" value="address20"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname21"/>
+            <column name="LASTNAME" value="lastname21"/>
+            <column name="ADDRESS" value="address21"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname22"/>
+            <column name="LASTNAME" value="lastname22"/>
+            <column name="ADDRESS" value="address22"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname23"/>
+            <column name="LASTNAME" value="lastname23"/>
+            <column name="ADDRESS" value="address23"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname24"/>
+            <column name="LASTNAME" value="lastname24"/>
+            <column name="ADDRESS" value="address24"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname25"/>
+            <column name="LASTNAME" value="lastname25"/>
+            <column name="ADDRESS" value="address25"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname26"/>
+            <column name="LASTNAME" value="lastname26"/>
+            <column name="ADDRESS" value="address26"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname27"/>
+            <column name="LASTNAME" value="lastname27"/>
+            <column name="ADDRESS" value="address27"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname28"/>
+            <column name="LASTNAME" value="lastname28"/>
+            <column name="ADDRESS" value="address28"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname29"/>
+            <column name="LASTNAME" value="lastname29"/>
+            <column name="ADDRESS" value="address29"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname30"/>
+            <column name="LASTNAME" value="lastname30"/>
+            <column name="ADDRESS" value="address30"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname31"/>
+            <column name="LASTNAME" value="lastname31"/>
+            <column name="ADDRESS" value="address31"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
 
         <!-- init Property -->
         <insert tableName="LAND">

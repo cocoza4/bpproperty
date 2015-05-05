@@ -1,24 +1,24 @@
 (function () {
 
-  'use strict';
+    'use strict';
 
-  angular
+    angular
 
-  .module('ui-tab', [])
+        .module('my-tab', [])
 
-  .directive('myShowtab', function() {
-    return {
-      link: function(scope, element, attrs) {
+        .directive('myShowtab', function () {
+            return {
+                link: function (scope, element, attrs) {
 
-        element.click(function(e) {
-          var url = $(element).attr("href");
-          alert(url);
+                    element.click(function (e) {
+                        var url = $(element).attr("href");
+                        alert(url);
 //          e.preventDefault();
-          $(element).tab('show');
-        });
-      },
+                        $(element).tab('show');
+                    });
+                }
 
-    };
-  });
+            };
+        });
 
 })();

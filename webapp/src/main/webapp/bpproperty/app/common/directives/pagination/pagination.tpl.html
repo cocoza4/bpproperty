@@ -1,0 +1,5 @@
+<ul class="pagination" style="margin:0">
+    <li ng-if="boundaryLinks" ng-class="{disabled: noPrevious()}"><a href ng-click="selectPage(1, $event)">{{getText('first')}}</a></li>
+    <li ng-repeat="page in pages" ng-class="{active: page.active}"><a href ng-click="selectPage(page.number, $event)">{{page.text}}</a></li>
+    <li ng-if="boundaryLinks" ng-class="{disabled: noNext()}"><a href ng-click="selectPage(totalPages, $event)">{{getText('last')}}</a></li>
+</ul>
