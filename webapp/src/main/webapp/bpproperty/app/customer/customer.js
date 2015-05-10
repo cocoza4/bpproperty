@@ -15,14 +15,14 @@
                     controller: 'customerListCtrl'
                 })
 
-                .when('/customer/:id', {
-                    templateUrl: 'customer/customer-detail.tpl.html',
-                    controller: 'customerCtrl'
-                })
-
                 .when('/customer/create', {
                     templateUrl: 'customer/customer-detail.tpl.html',
                     controller: 'createCustomerCtrl'
+                })
+
+                .when('/customer/:id', {
+                    templateUrl: 'customer/customer-detail.tpl.html',
+                    controller: 'customerCtrl'
                 });
 
         }])
@@ -53,7 +53,7 @@
 
             $scope.onRecordsPerPageChanged = function() {
                 $scope.currentPage = 1; // TODO: should remove this - added to prevent calling "updateCustomerTable()" twice
-                  $scope.updateCustomerTable();
+                $scope.updateCustomerTable();
             };
 
             $scope.updateCustomerTable = function () {

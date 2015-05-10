@@ -19,6 +19,7 @@
 
             'land',
             'land-service',
+            'land-buy',
             'land-buy-service',
             'customer',
             'customer-service'

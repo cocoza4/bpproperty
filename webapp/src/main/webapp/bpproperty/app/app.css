@@ -53,6 +53,7 @@
 .table th {
   text-align: center;
   vertical-align: middle !important;
+  background: #F0F0F0 ;
 }
 
 .table tbody tr {

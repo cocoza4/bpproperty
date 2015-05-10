@@ -42,7 +42,7 @@ public class CustomerRestController {
         Pageable pageRequest = new PageRequest(page, length);
         Page<Customer> customerPage = customerDAO.findAll(pageRequest);
 
-        DataTableObject<Customer> dataTableObject = new DataTableObject(customerPage.getContent(),
+        DataTableObject<Customer> dataTableObject = new DataTableObject<>(customerPage.getContent(),
                                                                         customerPage.getContent().size(),
                                                                         customerPage.getTotalElements());
 

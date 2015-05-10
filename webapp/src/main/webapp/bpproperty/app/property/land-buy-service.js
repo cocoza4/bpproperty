@@ -14,7 +14,9 @@
                     buyDetailId: '@buyDetailId'
                 },
                 {
-                    'update': {method: 'PUT'}
+                    'update': {method: 'PUT'},
+                    'query': {method: 'GET', params: {landId: '@landId', page: '@page', length: '@length'}}
+//                    'query': {method: 'GET', params: {landId: '@landId', page: '@page', length: '@length'}}
                 });
         }]);
 

@@ -14,7 +14,6 @@
 
                     templateUrl: 'property/land-list.tpl.html',
                     controller: 'landListCtrl'
-                    //TODO: add "resolve"
 
                 })
 
@@ -28,76 +27,9 @@
                     controller: 'landDetailCtrl'
                 })
 
-                .when('/land/:landId/buyDetail/create', {
-                    templateUrl: 'property/land-buyer-detail.tpl.html',
-                    controller: 'createLandBuyDetailCtrl'
-                })
-
-                .when('/land/:landId/buyDetail/:buyDetailId', {
-                    templateUrl: 'property/land-buyer-detail.tpl.html',
-                    controller: 'landBuyDetailCtrl'
-                })
-
-                .when('/land/:landId/buyDetail', {
-                    templateUrl: 'property/land-buyers.tpl.html',
-                    controller: 'landBuyDetailListCtrl'
-                })
-
                 .otherwise({
                     redirectTo: '/land'
                 });
-
-        }])
-
-        .controller('landBuyDetailCtrl', ['$scope', '$routeParams', 'LandBuy', function ($scope, $routeParams, LandBuy) {
-
-            $scope.buyTypeItems = ['CASH', 'INSTALLMENT'];
-
-            $scope.submit = function () {
-                $scope.buyDetail.$update({
-                    landId: $routeParams.landId,
-                    buyDetailId: $routeParams.buyDetailId
-                });
-                alert('updated');
-            };
-
-            $scope.buyDetail = LandBuy.get({
-                landId: $routeParams.landId,
-                buyDetailId: $routeParams.buyDetailId
-            });
-
-        }])
-
-
-        .controller('createLandBuyDetailCtrl', ['$scope', '$routeParams', 'LandBuy', function ($scope, $routeParams, LandBuy) {
-
-            $scope.buyTypeItems = ['CASH', 'INSTALLMENT'];
-
-            $scope.submit = function () {
-                $scope.buyDetail.$save({
-                    landId: $routeParams.landId,
-                    buyDetailId: $routeParams.buyDetailId
-                });
-                alert('saved')
-            };
-            $scope.buyDetail = new LandBuy({propertyId: $routeParams.landId});
-        }])
-
-        .controller('landBuyDetailListCtrl', ['$scope', '$location', '$routeParams', 'LandBuy', function ($scope, $location, $routeParams, LandBuy) {
-
-            $scope.landPurchases = LandBuy.query({landId: $routeParams.landId});
-
-            $scope.pageSizes = [10, 25, 50, 100];
-            $scope.pageSize = 10;
-            $scope.currentPage = 1;
-
-            $scope.redirect = function (buyDetailId) {
-                $location.path('/land/' + $routeParams.landId + '/buyDetail/' + buyDetailId);
-            };
-
-            $scope.redirectToCreateLandBuyDetailPage = function () {
-                $location.path('/land/' + $scope.landId + '/buyDetail/create');
-            };
 
         }])
 
@@ -117,20 +49,46 @@
 
         }])
 
-        .controller('landListCtrl', ['$scope', '$location', 'Land', function ($scope, $location, Land) {
+        .controller('landListCtrl', ['$scope', '$location', 'LandService', function ($scope, $location, LandService) {
 
             $scope.redirect = function (url) {
                 $location.path(url);
             };
 
-            $scope.updateLandTable = function () {
-//      alert($scope.pageSize);
+            $scope.onRecordsPerPageChanged = function() {
+                $scope.currentPage = 1;
+                $scope.updateLandTable();
             };
 
-            $scope.lands = Land.query();
-            $scope.pageSizes = [10, 25, 50, 100];
-            $scope.pageSize = 10;
+            $scope.updateLandTable = function () {
+
+                var criteria = {
+                    page: $scope.currentPage - 1, // zero-based page index
+                    length: $scope.recordsPerPage
+                };
+
+                LandService.query(criteria).$promise.then(
+                    function (data) {
+                        $scope.lands = data.content;
+
+                        console.log('[Query Land] - length:' + data.content.length); // TODO: remove this - this is for debugging
+
+                        $scope.totalRecords = data.totalRecords;
+                        $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
+                        $scope.endIndex = $scope.startIndex + data.totalDisplayRecords - 1;
+
+                    },
+                    function (error) {
+                        alert('Unable to query from table Land');
+                    }
+                );
+            };
+
+            $scope.recordsPerPageList = [10, 25, 50, 100];
             $scope.currentPage = 1;
+            $scope.recordsPerPage = 10;
+
+            $scope.updateLandTable();
 
         }])
 

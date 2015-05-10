@@ -5,12 +5,17 @@ import com.porpermpol.ppproperty.property.model.Land;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailDAO;
 import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
 import com.porpermpol.ppproperty.webapp.exception.ResourceNotFoundException;
+import com.porpermpol.ppproperty.webapp.utils.DataTableObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
@@ -36,19 +41,39 @@ public class LandRestController {
         return Land;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Land> getAllLands() {
-        return (List<Land>) landDAO.findAll();
+    @RequestMapping(method = RequestMethod.GET)
+    public DataTableObject<Land> getAllLands(@RequestParam(value = "page", defaultValue = "0") int page,
+                                            @RequestParam(value = "length", defaultValue = "10") int length) {
+        Pageable pageRequest = new PageRequest(page, length);
+        Page<Land> landPage = landDAO.findAll(pageRequest);
+
+        DataTableObject<Land> dataTableObject = new DataTableObject<>(landPage.getContent(),
+                                                                landPage.getContent().size(),
+                                                                landPage.getTotalElements());
+
+        return dataTableObject;
     }
 
     @RequestMapping(value = "/{landId}/buyDetail", method = RequestMethod.GET)
-    public List<LandBuyDetail> getAllBuyDetails(@PathVariable("landId") long id) {
-        return (List<LandBuyDetail>) buyDetailDAO.findAll();
+    public DataTableObject<LandBuyDetail> getAllBuyDetails(@PathVariable("landId") long id,
+                                                @RequestParam(value = "page", defaultValue = "0") int page,
+                                                @RequestParam(value = "length", defaultValue = "10") int length) {
+
+        Pageable pageRequest = new PageRequest(page, length);
+        Page<LandBuyDetail> landBuyPage = buyDetailDAO.findAll(pageRequest);
+
+        DataTableObject<LandBuyDetail> dataTableObject = new DataTableObject<>(landBuyPage.getContent(),
+                                                                            landBuyPage.getContent().size(),
+                                                                            landBuyPage.getTotalElements());
+
+        return dataTableObject;
     }
 
     @RequestMapping(value = "/{landId}/buyDetail/{buyDetailId}", method = RequestMethod.GET)
     public LandBuyDetail getBuyDetailById(@PathVariable("landId") long landId,
-                                                  @PathVariable("buyDetailId") long buyDetailId) {
+                                          @PathVariable("buyDetailId") long buyDetailId,
+                                          @RequestParam(value = "page", defaultValue = "0") int page,
+                                          @RequestParam(value = "length", defaultValue = "10") int length) {
 
         LandBuyDetail buyDetail = buyDetailDAO.findOne(buyDetailId);
         if (buyDetail == null) {
@@ -101,7 +126,7 @@ public class LandRestController {
     public void saveBuyDetail(@PathVariable("landId") long landId, @RequestBody LandBuyDetail buyDetail) {
 
         System.out.println("SAVE BUY DETAIL: ");
-
+        buyDetail.setPropertyId(landId);
         buyDetail.setCreatedBy(0L);
         buyDetail.setCreatedTime(new Date());
 
