@@ -2,6 +2,24 @@
 
     'use strict';
 
+    var LandBuyDetailResolve = {
+        BuyDetails: function($q, $route, Land, LandBuy, Customer) {
+
+            var landBuyCriteria = {
+                landId: $route.current.params['landId'],
+                buyDetailId: $route.current.params['buyDetailId']
+            };
+
+            alert('landId: ' + $route.current.params['landId'] + ', buyDetailId: ' + $route.current.params['buyDetailId']);
+
+            var buyDetail = LandBuy.get(landBuyCriteria);
+            var land = Land.get({landId: $route.current.params['landId']});
+            var customer = Customer.get({id: buyDetail.customerId});
+
+            return $q.all({buyDetail: buyDetail.$promise, land: land.$promise, customer: customer.$promise});
+        }
+    };
+
     angular
 
         .module('land-buy', ['ngRoute'])
@@ -17,7 +35,8 @@
 
                  .when('/land/:landId/buyDetail/:buyDetailId', {
                      templateUrl: 'property/land-buy-detail.tpl.html',
-                     controller: 'landBuyDetailCtrl'
+                     controller: 'LandBuyDetailCtrl',
+                     resolve: LandBuyDetailResolve
                  })
 
                  .when('/land/:landId/buyDetail', {
@@ -27,8 +46,8 @@
 
          }])
 
-        .controller('landBuyDetailCtrl', ['$scope', '$routeParams', 'LandBuy', 'Land', 'Customer',
-                                            function ($scope, $routeParams, LandBuy, Land, Customer) {
+        .controller('LandBuyDetailCtrl', ['$scope', '$routeParams', 'LandBuy', 'Land', 'Customer', 'BuyDetails',
+                                            function ($scope, $routeParams, LandBuy, Land, Customer, BuyDetails) {
 
             $scope.buyTypeItems = ['CASH', 'INSTALLMENT'];
 
@@ -40,17 +59,21 @@
                 alert('updated');
             };
 
-            LandBuy.get({
-                landId: $routeParams.landId,
-                buyDetailId: $routeParams.buyDetailId
-            }).$promise.then(
-                function(data) {
-                    $scope.buyDetail = data;
-                    $scope.land = Land.get({landId: $routeParams.landId});
-                    $scope.customer = Customer.get({id: data.customerId});
-                },
-                function(error) {}
-            );
+            $scope.buyDetail = BuyDetails.buyDetail;
+            $scope.land = BuyDetails.land;
+            $scope.customer = BuyDetails.customer;
+
+//            LandBuy.get({
+//                landId: $routeParams.landId,
+//                buyDetailId: $routeParams.buyDetailId
+//            }).$promise.then(
+//                function(data) {
+//                    $scope.buyDetail = data;
+//                    $scope.land = Land.get({landId: $routeParams.landId});
+//                    $scope.customer = Customer.get({id: data.customerId});
+//                },
+//                function(error) {}
+//            );
 
         }])
 

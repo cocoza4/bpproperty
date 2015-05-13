@@ -2,6 +2,16 @@
 
     'use strict';
 
+    var CustomerListResolve = {
+        Customers: function(Customer) {
+            var criteria = {
+                page: 0, // zero-based page index
+                length: 10
+            };
+            return Customer.query(criteria).$promise;
+        }
+    };
+
     angular
 
         .module('customer', ['ngRoute'])
@@ -12,7 +22,8 @@
 
                 .when('/customer', {
                     templateUrl: 'customer/customer-list.tpl.html',
-                    controller: 'customerListCtrl'
+                    controller: 'CustomerListCtrl',
+                    resolve: CustomerListResolve
                 })
 
                 .when('/customer/create', {
@@ -45,7 +56,7 @@
             $scope.customer = {};
         }])
 
-        .controller('customerListCtrl', ['$scope', '$location', 'Customer', function ($scope, $location, Customer) {
+        .controller('CustomerListCtrl', ['$scope', '$location', 'Customer', 'Customers', function ($scope, $location, Customer, Customers) {
 
             $scope.redirect = function (url) {
                 $location.path(url);
@@ -65,14 +76,8 @@
 
                 Customer.query(criteria).$promise.then(
                     function (data) {
-                        $scope.customers = data.content;
-
-                        console.log('[Query Customer] - length:' + data.content.length); // TODO: remove this - this is for debugging
-
-                        $scope.totalRecords = data.totalRecords;
-                        $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
-                        $scope.endIndex = $scope.startIndex + data.totalDisplayRecords - 1;
-
+                        self.updateScope($scope, data);
+                        console.log('[Query Customer] - length:' + data.content.length);
                     },
                     function (error) {
                         alert('Unable to query from table Customer');
@@ -80,10 +85,20 @@
                 );
             };
 
+            var self = this;
+
+            this.updateScope = function(scope, data) {
+                $scope.customers = data.content;
+                $scope.totalRecords = data.totalRecords;
+                $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
+                $scope.endIndex = $scope.startIndex + data.totalDisplayRecords - 1;
+            }
+
             $scope.recordsPerPageList = [10, 25, 50, 100];
             $scope.currentPage = 1;
             $scope.recordsPerPage = 10;
-            $scope.updateCustomerTable();
+
+            this.updateScope($scope, Customers);
 
         }]);
 })();

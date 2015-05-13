@@ -1,5 +1,5 @@
 
-<a ng-href="{{'#/land/' + land.id + '/buyDetail'}}" class="btn btn-info input-sm pull-right" type="button"><span class="glyphicon glyphicon-list-alt"></span> ดูยอดขาย</a>
+<a ng-href="{{'#/land/' + land.id + '/buyDetail'}}" ng-show="land.id != null" class="btn btn-info input-sm pull-right" type="button"><span class="glyphicon glyphicon-list-alt"></span> ยอดขาย</a>
 <div style="clear:both; padding: 5px;"></div>
 <form class="form-horizontal" ng-submit="submit()">
     <div class="form-group">

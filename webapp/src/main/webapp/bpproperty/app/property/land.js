@@ -2,6 +2,16 @@
 
     'use strict';
 
+    var LandListResolve = {
+        Lands: function(LandService) {
+            var criteria = {
+                page: 0, // zero-based page index
+                length: 10
+            };
+            return LandService.query(criteria).$promise;
+        }
+    };
+
     angular
 
         .module('land', ['ngRoute'])
@@ -13,8 +23,8 @@
                 .when('/land', {
 
                     templateUrl: 'property/land-list.tpl.html',
-                    controller: 'landListCtrl'
-
+                    controller: 'LandListCtrl',
+                    resolve: LandListResolve
                 })
 
                 .when('/land/create', {
@@ -49,7 +59,7 @@
 
         }])
 
-        .controller('landListCtrl', ['$scope', '$location', 'LandService', function ($scope, $location, LandService) {
+        .controller('LandListCtrl', ['$scope', '$location', 'LandService', 'Lands', function ($scope, $location, LandService, Lands) {
 
             $scope.redirect = function (url) {
                 $location.path(url);
@@ -88,8 +98,10 @@
             $scope.currentPage = 1;
             $scope.recordsPerPage = 10;
 
-            $scope.updateLandTable();
-
+            $scope.lands = Lands.content;
+            $scope.totalRecords = Lands.totalRecords;
+            $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
+            $scope.endIndex = $scope.startIndex + Lands.totalDisplayRecords - 1;
         }])
 
         .controller('landDetailCtrl', ['$scope', '$routeParams', 'Land', function ($scope, $routeParams, Land) {
