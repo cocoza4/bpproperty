@@ -59,9 +59,10 @@ public class LandBuyDetailDAOTest {
         landBuyDetail.setArea(new Area(1, 2, 3));
         landBuyDetail.setCustomerId(customer.getId());
         landBuyDetail.setPropertyId(Land.getId());
-        landBuyDetail.setBuyPrice(10f);
+        landBuyDetail.setDownPayment(1000f);
+        landBuyDetail.setBuyPrice(100000f);
         landBuyDetail.setBuyType(BuyType.CASH);
-        landBuyDetail.setAnnualInterest(15);
+        landBuyDetail.setAnnualInterest(15f);
         landBuyDetail.setYearsOfInstallment(5);
         landBuyDetail.setCreatedBy(0L);
         landBuyDetail.setCreatedTime(new Date());

@@ -26,6 +26,7 @@
             <column name="BUY_TYPE" type="CHAR(1)">
                 <constraints nullable="false"/>
             </column>
+            <column name="DOWN_PAYMENT" type="FLOAT"/>
             <column name="BUY_PRICE" type="FLOAT">
                 <constraints nullable="false"/>
             </column>
@@ -58,13 +59,13 @@
                              foreignKeyName="FK_INSTALLMENT_RECORD_LAND_BUY_DETAIL_ID"
                              references="LAND_BUY_DETAIL(ID)"/>
             </column>
-            <column name="PAYMENT_DATE" type="BIGINT">
+            <column name="PAY_FOR" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="AMOUNT" type="FLOAT">
                 <constraints nullable="false"/>
             </column>
-            <column name="RECEIVER_ID" type="BIGINT"/>
+            <column name="DESCRIPTION" type="TEXT"/>
             <column name="CREATED_BY" type="BIGINT">
                 <constraints nullable="false"/>
             </column>

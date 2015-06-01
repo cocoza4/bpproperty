@@ -12,6 +12,12 @@
         }
     };
 
+    var LandDetailResolve = {
+      Land: function($route, LandService) {
+        return LandService.query({landId: $route.current.params['landId']}).$promise;
+      }
+    }
+
     angular
 
         .module('land', ['ngRoute'])
@@ -34,7 +40,8 @@
 
                 .when('/land/:landId', {
                     templateUrl: 'property/land-detail.tpl.html',
-                    controller: 'landDetailCtrl'
+                    controller: 'LandDetailCtrl',
+                    resolve: LandDetailResolve
                 })
 
                 .otherwise({
@@ -43,16 +50,28 @@
 
         }])
 
-        .controller('createLandCtrl', ['$scope', 'Land', function ($scope, Land) {
+        .controller('createLandCtrl', ['$scope', 'LandService', function ($scope, LandService) {
 
-            $scope.submit = function () {
-                if ($scope.land.name) {
-                    alert($scope.land.name);
-                    Land.save($scope.land);
-                    alert('saved');
-                } else {
-                    alert('undefined');
-                }
+            $scope.submit = function (isValid) {
+              if (isValid) {
+                LandService.create($scope.land).then(function(data) {
+                  $scope.notification = {
+                    type: 'success',
+                    header: 'Success',
+                    message: $scope.land.name + ' has been created',
+                    display: false
+                  };
+                  $scope.notification.display = true;
+                }, function(error) {
+                  $scope.notification = {
+                    type: 'danger',
+                    header: 'Error',
+                    message: 'Unable to create new Land',
+                    display: false
+                  };
+                  $scope.notification.display = true;
+                });
+              }
             };
 
             $scope.land = {};
@@ -79,14 +98,8 @@
 
                 LandService.query(criteria).$promise.then(
                     function (data) {
-                        $scope.lands = data.content;
-
-                        console.log('[Query Land] - length:' + data.content.length); // TODO: remove this - this is for debugging
-
-                        $scope.totalRecords = data.totalRecords;
-                        $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
-                        $scope.endIndex = $scope.startIndex + data.totalDisplayRecords - 1;
-
+                        self.updateScope($scope, data);
+                        console.log('[Query Land] - length:' + data.content.length);
                     },
                     function (error) {
                         alert('Unable to query from table Land');
@@ -94,25 +107,48 @@
                 );
             };
 
+            var self = this;
+
+            this.updateScope = function(scope, data) {
+                $scope.lands = data.content;
+                $scope.totalRecords = data.totalRecords;
+                $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
+                $scope.endIndex = $scope.startIndex + data.totalDisplayRecords - 1;
+            }
+
             $scope.recordsPerPageList = [10, 25, 50, 100];
             $scope.currentPage = 1;
             $scope.recordsPerPage = 10;
 
-            $scope.lands = Lands.content;
-            $scope.totalRecords = Lands.totalRecords;
-            $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
-            $scope.endIndex = $scope.startIndex + Lands.totalDisplayRecords - 1;
+            this.updateScope($scope, Lands);
         }])
 
-        .controller('landDetailCtrl', ['$scope', '$routeParams', 'Land', function ($scope, $routeParams, Land) {
+        .controller('LandDetailCtrl', ['$scope', '$routeParams', 'Land', 'LandService', function ($scope, $routeParams, Land, LandService) {
 
-            $scope.submit = function () {
-                alert($scope.land.name);
-                $scope.land.$update();
-                alert('updated');
+            $scope.submit = function (isValid) {
+              if (isValid) {
+                LandService.update($scope.land).then(function(data) {
+                  $scope.notification = {
+                    type: 'success',
+                    header: 'Success',
+                    message: Land.name + ' has been updated',
+                    display: false
+                  };
+                  $scope.notification.display = true;
+                }, function(error) {
+                  $scope.notification = {
+                    type: 'danger',
+                    header: 'Error',
+                    message: 'Unable to update Land',
+                    display: false
+                  };
+                  $scope.notification.display = true;
+                });
+
+              }
             };
 
-            $scope.land = Land.get({landId: $routeParams.landId});
+            $scope.land = Land;
 
         }]);
 

@@ -5,6 +5,8 @@ import com.nurkiewicz.jdbcrepository.RowUnmapper;
 import com.porpermpol.ppproperty.core.utils.ModelUtils;
 import com.porpermpol.ppproperty.purchase.dao.IInstallmentRecordDAO;
 import com.porpermpol.ppproperty.purchase.model.InstallmentRecord;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -12,27 +14,35 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
 public class InstallmentRecordDAO extends JdbcRepository<InstallmentRecord, Long> implements IInstallmentRecordDAO {
 
+    @Autowired
+    private JdbcOperations jdbcOperations;
+
+    private static final String SQL_SELECT_BY_BUY_DETAIL_ID = "SELECT * FROM installments_record " +
+                                                                            "WHERE buy_detail_id = ? " +
+                                                                            "ORDER BY pay_for ASC";
+
     public InstallmentRecordDAO() {
-        super(ROW_MAPPER, ROW_UNMAPPER, "INSTALLMENTS_RECORD", "ID");
+        super(ROW_MAPPER, ROW_UNMAPPER, "INSTALLMENTS_RECORD", "id");
     }
 
     public static final RowMapper<InstallmentRecord> ROW_MAPPER = new RowMapper<InstallmentRecord>() {
         @Override
         public InstallmentRecord mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new InstallmentRecord(rs.getLong("ID"),
-                    rs.getLong("BUY_DETAIL_ID"),
-                    new Date(rs.getLong("PAYMENT_DATE")),
-                    rs.getFloat("AMOUNT"),
-                    rs.getLong("RECEIVER_ID"),
-                    rs.getLong("CREATED_BY"),
-                    new Date(rs.getLong("CREATED_TIME")),
-                    ModelUtils.getNullableLongField(rs, "UPDATED_BY"),
-                    ModelUtils.getNullableDateField(rs, "UPDATED_TIME")).withPersisted(true);
+            return new InstallmentRecord(rs.getLong("id"),
+                    rs.getLong("buy_detail_id"),
+                    new Date(rs.getLong("pay_for")),
+                    rs.getFloat("amount"),
+                    rs.getString("description"),
+                    rs.getLong("created_by"),
+                    new Date(rs.getLong("created_time")),
+                    ModelUtils.getNullableLongField(rs, "updated_by"),
+                    ModelUtils.getNullableDateField(rs, "updated_time")).withPersisted(true);
         }
     };
 
@@ -40,11 +50,11 @@ public class InstallmentRecordDAO extends JdbcRepository<InstallmentRecord, Long
         @Override
         public Map<String, Object> mapColumns(InstallmentRecord model) {
             Map<String, Object> mapping = new LinkedHashMap<>();
-            mapping.put("ID", model.getId());
-            mapping.put("BUY_DETAIL_ID", model.getBuyDetailId());
-            mapping.put("PAYMENT_DATE", model.getPaymentDate().getTime());
-            mapping.put("AMOUNT", model.getAmount());
-            mapping.put("RECEIVER_ID", model.getReceiverId());
+            mapping.put("id", model.getId());
+            mapping.put("buy_detail_id", model.getBuyDetailId());
+            mapping.put("pay_for", model.getPayFor().getTime());
+            mapping.put("amount", model.getAmount());
+            mapping.put("description", model.getDescription());
             ModelUtils.setAuditFields(mapping, model);
             return mapping;
         }
@@ -61,4 +71,8 @@ public class InstallmentRecordDAO extends JdbcRepository<InstallmentRecord, Long
         return entity.withPersisted(true);
     }
 
+    @Override
+    public List<InstallmentRecord> findByBuyDetailId(long buyDetailId) {
+        return jdbcOperations.query(SQL_SELECT_BY_BUY_DETAIL_ID, ROW_MAPPER, buyDetailId);
+    }
 }

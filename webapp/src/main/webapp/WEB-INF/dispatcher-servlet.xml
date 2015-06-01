@@ -18,7 +18,13 @@
        <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
               <property name="messageConverters">
                      <list>
-                            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+                            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                               <!--<property name="objectMapper">-->
+                                  <!--&lt;!&ndash;&lt;!&ndash;<bean class="com.fasterxml.jackson.databind.ObjectMapper"/>&ndash;&gt;&ndash;&gt;-->
+                                  <!--<bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean"></bean>-->
+                               <!--</property>-->
+                            </bean>
+
                             <!--<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>-->
                             <!--<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>-->
                             <!--<bean class="org.springframework.http.converter.FormHttpMessageConverter"/>-->
@@ -27,7 +33,7 @@
                             <!--<list>-->
                                    <!--<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">-->
                                           <!--<property name="objectMapper">-->
-                                                 <!--&lt;!&ndash;&lt;!&ndash;<bean class="com.fasterxml.jackson.databind.ObjectMapper"/>&ndash;&gt;&ndash;&gt;-->
+                                                 <!--<bean class="com.fasterxml.jackson.databind.ObjectMapper"/>-->
                                                  <!--<bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean"></bean>-->
                                           <!--</property>-->
                                    <!--</bean>-->

@@ -34,7 +34,8 @@ public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implem
             model.setCustomerId(rs.getLong("CUSTOMER_ID"));
             model.setBuyType(BuyType.get(rs.getString("BUY_TYPE")));
             model.setBuyPrice(rs.getFloat("BUY_PRICE"));
-            model.setAnnualInterest(rs.getInt("ANNUAL_INTEREST"));
+            model.setDownPayment(rs.getFloat("DOWN_PAYMENT"));
+            model.setAnnualInterest(rs.getFloat("ANNUAL_INTEREST"));
             model.setYearsOfInstallment(rs.getInt("YEARS_OF_INSTALLMENT"));
             model.setDescription(rs.getString("DESCRIPTION"));
             model.setArea(new Area(rs.getInt("RAI"), rs.getInt("YARN"), rs.getInt("TARANGWA")));
@@ -54,6 +55,7 @@ public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implem
             mapping.put("PROPERTY_ID", model.getPropertyId());
             mapping.put("CUSTOMER_ID", model.getCustomerId());
             mapping.put("BUY_TYPE", model.getBuyType().getCode());
+            mapping.put("DOWN_PAYMENT", model.getDownPayment());
             mapping.put("BUY_PRICE", model.getBuyPrice());
             mapping.put("ANNUAL_INTEREST", model.getAnnualInterest());
             mapping.put("YEARS_OF_INSTALLMENT", model.getYearsOfInstallment());

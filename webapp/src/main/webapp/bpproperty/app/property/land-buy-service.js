@@ -6,6 +6,29 @@
 
         .module('land-buy-service', ['ngResource'])
 
+        .service('LandBuyService', ['LandBuy', function(LandBuy) {
+
+          this.query = function(criteria) {
+              return LandBuy.query(criteria).$promise;
+          };
+
+          this.create = function(landBuy) {
+            return LandBuy.save(landBuy).$promise;
+          };
+
+          this.update = function(landBuy) {
+            // alert(landBuy.buyType == 'ผ่อน');
+            // if (landBuy.buyType == 'ผ่อน') {
+            //   landBuy.buyType = 'INSTALLMENT';
+            // } else {
+            //   landBuy.buyType = 'CASH';
+            // }
+
+            return LandBuy.update({landId: landBuy.propertyId, buyDetailId: landBuy.id}, landBuy).$promise;
+          }
+
+        }])
+
         .factory('LandBuy', ['$resource', '$location', function ($resource, $location) {
             return $resource(
                 '/bpproperty/api/land/:landId/buyDetail/:buyDetailId',

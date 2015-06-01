@@ -7,19 +7,19 @@ import java.util.Date;
 public class InstallmentRecord extends PersistableModel<Long> {
 
     private Long buyDetailId;
-    private Date paymentDate;
+    private Date payFor;
     private Float amount;
-    private Long receiverId;
+    private String description;
 
     public InstallmentRecord() {}
 
-    public InstallmentRecord(Long id, Long buyDetailId, Date paymentDate, Float amount, Long receiverId,
+    public InstallmentRecord(Long id, Long buyDetailId, Date payFor, Float amount, String description,
                              Long createdBy, Date createdTime, Long updatedBy, Date updatedTime) {
         super(id, createdBy, createdTime, updatedBy, updatedTime);
         this.buyDetailId = buyDetailId;
-        this.paymentDate = paymentDate;
+        this.payFor = payFor;
         this.amount = amount;
-        this.receiverId = receiverId;
+        this.description = description;
     }
 
     public Long getBuyDetailId() {
@@ -30,12 +30,12 @@ public class InstallmentRecord extends PersistableModel<Long> {
         this.buyDetailId = buyDetailId;
     }
 
-    public Date getPaymentDate() {
-        return paymentDate;
+    public Date getPayFor() {
+        return payFor;
     }
 
-    public void setPaymentDate(Date paymentDate) {
-        this.paymentDate = paymentDate;
+    public void setPayFor(Date payFor) {
+        this.payFor = payFor;
     }
 
     public Float getAmount() {
@@ -46,11 +46,11 @@ public class InstallmentRecord extends PersistableModel<Long> {
         this.amount = amount;
     }
 
-    public Long getReceiverId() {
-        return receiverId;
+    public String getDescription() {
+        return description;
     }
 
-    public void setReceiverId(Long receiverId) {
-        this.receiverId = receiverId;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

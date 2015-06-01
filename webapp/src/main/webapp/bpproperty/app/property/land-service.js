@@ -6,12 +6,19 @@
 
         .module('land-service', ['ngResource'])
 
-        .service('LandService', ['$q', 'Land', function($q, Land) {
+        .service('LandService', ['Land', function(Land) {
 
             this.query = function(criteria) {
-//                var def = $q.defer();
                 return Land.query(criteria);
             };
+
+            this.create = function(land) {
+              return Land.save(land).$promise;
+            };
+
+            this.update = function(land) {
+              return Land.update({landId: land.id}, land).$promise;
+            }
 
         }])
 

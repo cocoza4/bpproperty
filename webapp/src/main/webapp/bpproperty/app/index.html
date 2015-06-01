@@ -30,6 +30,9 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
+  <div id="loaderDiv" my-loader>
+      <img ng-src="common/interceptors/spinner.gif" class="ajax-loader"/>
+  </div>
 
   <div ng-include="'header.tpl.html'"></div>
 
@@ -143,7 +146,14 @@
   <script src="bower_components/angular-resource/angular-resource.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 
+  <script src="common/interceptors/spinner.js"></script>
+
+  <script src="common/directives/loader.js"></script>
+  <script src="common/directives/tabs.js"></script>
   <script src="common/directives/tab.js"></script>
+  <script src="common/directives/notification.js"></script>
+  <script src="common/directives/decimal-number.js"></script>
+  <script src="common/directives/percentage.js"></script>
   <script src="common/directives/pagination/pagination.js"></script>
 
   <script src="components/services/breadcrumbs.js"></script>
@@ -151,6 +161,8 @@
   <script src="property/land-buy-service.js"></script>
   <script src="property/land.js"></script>
   <script src="property/land-buy.js"></script>
+  <script src="property/land-installment.js"></script>
+  <script src="property/land-installment-service.js"></script>
   <script src="customer/customer-service.js"></script>
   <script src="customer/customer.js"></script>
   <script src="app.js"></script>

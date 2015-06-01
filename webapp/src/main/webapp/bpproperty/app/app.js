@@ -7,12 +7,19 @@
 
         .module('myApp', [
             'ngRoute',
+
             'myApp.version',
             'services.breadcrumbs',
 
             'my-tab', // TODO: remove - currently unused
-            'my-pagination',
+            'my-tab1',
+            'my-spinner',
+            'my-loader',
 
+            'my-pagination',
+            'my-notification',
+            'decimal-number',
+            'percentage',
 
             'customer',
             'myApp.view2',
@@ -21,6 +28,9 @@
             'land-service',
             'land-buy',
             'land-buy-service',
+            'land-installment',
+            'land-installment-service',
+
             'customer',
             'customer-service'
 
@@ -45,4 +55,3 @@
         }]);
 
 })();
-

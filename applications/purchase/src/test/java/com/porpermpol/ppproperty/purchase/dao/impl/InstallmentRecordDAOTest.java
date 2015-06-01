@@ -65,9 +65,10 @@ public class InstallmentRecordDAOTest {
         landBuyDetail.setArea(new Area(1, 2, 3));
         landBuyDetail.setCustomerId(customer.getId());
         landBuyDetail.setPropertyId(Land.getId());
-        landBuyDetail.setBuyPrice(10f);
+        landBuyDetail.setBuyPrice(10000f);
         landBuyDetail.setBuyType(BuyType.CASH);
-        landBuyDetail.setAnnualInterest(15);
+        landBuyDetail.setAnnualInterest(15f);
+        landBuyDetail.setDownPayment(1000f);
         landBuyDetail.setYearsOfInstallment(5);
         landBuyDetail.setCreatedBy(0L);
         landBuyDetail.setCreatedTime(new Date());
@@ -76,8 +77,8 @@ public class InstallmentRecordDAOTest {
         installmentRecord = new InstallmentRecord();
         installmentRecord.setBuyDetailId(landBuyDetail.getId());
         installmentRecord.setAmount(10000f);
-        installmentRecord.setPaymentDate(new Date());
-        installmentRecord.setReceiverId(0L);
+        installmentRecord.setPayFor(new Date());
+        installmentRecord.setDescription("description");
         installmentRecord.setCreatedBy(0L);
         installmentRecord.setCreatedTime(new Date());
     }
@@ -119,14 +120,21 @@ public class InstallmentRecordDAOTest {
 
         assertEquals(installmentRecord.getId(), model.getId());
         assertEquals(installmentRecord.getAmount(), model.getAmount());
-        assertEquals(installmentRecord.getPaymentDate(), model.getPaymentDate());
+        assertEquals(installmentRecord.getPayFor(), model.getPayFor());
         assertEquals(installmentRecord.getBuyDetailId(), model.getBuyDetailId());
-        assertEquals(installmentRecord.getReceiverId(), model.getReceiverId());
+        assertEquals(installmentRecord.getDescription(), model.getDescription());
         assertEquals(installmentRecord.getCreatedBy(), model.getCreatedBy());
         assertEquals(installmentRecord.getCreatedTime(), model.getCreatedTime());
         assertEquals(installmentRecord.getUpdatedBy(), model.getUpdatedBy());
         assertEquals(installmentRecord.getUpdatedTime(), model.getUpdatedTime());
 
+    }
+
+    @Test
+    public void testFindByBuyDetailId() throws Exception {
+        assertTrue(installmentRecordDAO.findByBuyDetailId(installmentRecord.getBuyDetailId()).isEmpty());
+        installmentRecordDAO.save(installmentRecord);
+        assertEquals(1, installmentRecordDAO.findByBuyDetailId(installmentRecord.getBuyDetailId()).size());
     }
 
     @Test

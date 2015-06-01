@@ -2,15 +2,23 @@ package com.porpermpol.ppproperty.webapp.controller.rest;
 
 import com.porpermpol.ppproperty.property.dao.ILandDAO;
 import com.porpermpol.ppproperty.property.model.Land;
+import com.porpermpol.ppproperty.purchase.dao.IInstallmentRecordDAO;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailDAO;
+import com.porpermpol.ppproperty.purchase.model.BuyType;
+import com.porpermpol.ppproperty.purchase.model.InstallmentRecord;
 import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
+import com.porpermpol.ppproperty.webapp.controller.propertyEditor.BuyTypePropertyEditor;
 import com.porpermpol.ppproperty.webapp.exception.ResourceNotFoundException;
 import com.porpermpol.ppproperty.webapp.utils.DataTableObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +39,17 @@ public class LandRestController {
 
     @Autowired
     private ILandBuyDetailDAO buyDetailDAO;
+
+    @Autowired
+    private IInstallmentRecordDAO installmentRecordDAO;
+
+    // unable to perform init binder using @RequestBody
+    @InitBinder("installmentRecord")
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(BuyType.class, new BuyTypePropertyEditor());
+        binder.registerCustomEditor(Date.class, "payFor", new CustomDateEditor(
+                new SimpleDateFormat("dd/MM/yyyy"), false));
+    }
 
     @RequestMapping(value = "/{landId}", method = RequestMethod.GET)
     public Land getLandById(@PathVariable("landId") long id) {
@@ -83,7 +103,41 @@ public class LandRestController {
         return buyDetail;
     }
 
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{landId}/buyDetail/{buyDetailId}/installmentsRecord", method = RequestMethod.GET)
+    public List<InstallmentRecord> getInstallmentRecordsByBuyDetailId(@PathVariable("landId") long landId,
+                                          @PathVariable("buyDetailId") long buyDetailId) {
+
+        return installmentRecordDAO.findByBuyDetailId(buyDetailId);
+    }
+
+    @RequestMapping(value = "/{landId}/buyDetail/{buyDetailId}/installmentsRecord", method = RequestMethod.POST)
+    public void saveInstallment(@PathVariable("landId") long landId,
+                                @PathVariable("buyDetailId") long buyDetailId,
+                                @RequestBody InstallmentRecord installmentRecord) {
+
+        System.out.println("SAVE new Installment");
+        System.out.println("buyDetailId: " + installmentRecord.getBuyDetailId());
+        installmentRecord.setCreatedBy(0L);
+        installmentRecord.setCreatedTime(new Date());
+
+        installmentRecordDAO.save(installmentRecord);
+    }
+
+    @RequestMapping(value = "/{landId}/buyDetail/{buyDetailId}/installmentsRecord", method = RequestMethod.PUT)
+    public void updateInstallment(@PathVariable("landId") long landId,
+                                @PathVariable("buyDetailId") long buyDetailId,
+                                @RequestBody InstallmentRecord installmentRecord) {
+
+        System.out.println("SAVE new Installment");
+        System.out.println("buyDetailId: " + installmentRecord.getBuyDetailId());
+        installmentRecord.setUpdatedBy(0L);
+        installmentRecord.setUpdatedTime(new Date());
+        installmentRecord.setPersisted(true);
+
+        installmentRecordDAO.save(installmentRecord);
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
     public void saveLand(@RequestBody Land land) {
 
         System.out.println("SAVE NEW LAND: ");
@@ -122,8 +176,8 @@ public class LandRestController {
         landDAO.save(land);
     }
 
-    @RequestMapping(value = "/{landId}/buyDetail", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void saveBuyDetail(@PathVariable("landId") long landId, @RequestBody LandBuyDetail buyDetail) {
+    @RequestMapping(value = "/{landId}/buyDetail", method = RequestMethod.POST)
+    public void saveBuyDetail(@PathVariable("landId") long landId, @ModelAttribute LandBuyDetail buyDetail) {
 
         System.out.println("SAVE BUY DETAIL: ");
         buyDetail.setPropertyId(landId);
@@ -141,19 +195,13 @@ public class LandRestController {
         buyDetailDAO.save(buyDetail);
     }
 
-    @RequestMapping(value = "/{landId}/buyDetail/{buyDetailId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{landId}/buyDetail/{buyDetailId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void updateBuyDetail(@PathVariable("landId") long landId,
                                   @PathVariable("buyDetailId") long buyDetailId,
                                  @RequestBody LandBuyDetail buyDetail) {
+        System.out.println("landId: " + landId);
+        System.out.println(buyDetail);
 
-        System.out.println("UPDATE BUY DETAIL: ");
-
-        System.out.println(buyDetail.getBuyType());
-        System.out.println(buyDetail.getBuyPrice());
-        System.out.println("rai: " + buyDetail.getArea().getRai());
-        System.out.println("yarn: " + buyDetail.getArea().getYarn());
-        System.out.println("tarangwa: " + buyDetail.getArea().getTarangwa());
-        System.out.println(buyDetail.getDescription());
         buyDetail.setPersisted(true);
         buyDetailDAO.save(buyDetail);
     }

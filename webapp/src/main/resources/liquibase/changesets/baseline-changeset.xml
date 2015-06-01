@@ -304,7 +304,8 @@
             <column name="PROPERTY_ID" valueComputed="(SELECT ID FROM LAND WHERE NAME = 'Por Permpol')"/>
             <column name="CUSTOMER_ID" valueComputed="(SELECT ID FROM CUSTOMER WHERE FIRSTNAME = 'firstname1')"/>
             <column name="BUY_TYPE" value="I"/>
-            <column name="BUY_PRICE" value="100"/>
+            <column name="DOWN_PAYMENT" value="100.55"/>
+            <column name="BUY_PRICE" value="100.1"/>
             <column name="ANNUAL_INTEREST" value="15"/>
             <column name="YEARS_OF_INSTALLMENT" value="5"/>
             <column name="RAI" value="10"/>
@@ -317,7 +318,8 @@
             <column name="PROPERTY_ID" valueComputed="(SELECT ID FROM LAND WHERE NAME = 'Por Permpol')"/>
             <column name="CUSTOMER_ID" valueComputed="(SELECT ID FROM CUSTOMER WHERE FIRSTNAME = 'firstname2')"/>
             <column name="BUY_TYPE" value="C"/>
-            <column name="BUY_PRICE" value="10"/>
+            <column name="DOWN_PAYMENT" value="100.55"/>
+            <column name="BUY_PRICE" value="10.8"/>
             <column name="ANNUAL_INTEREST" value="10"/>
             <column name="YEARS_OF_INSTALLMENT" value="3"/>
             <column name="RAI" value="5"/>
@@ -325,6 +327,64 @@
             <column name="TARANGWA" value="10"/>
             <column name="CREATED_BY" valueNumeric="0" />
             <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+
+        <!-- init INSTALLMENTS_RECORD -->
+        <insert tableName="INSTALLMENTS_RECORD">
+            <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
+            <column name="PAY_FOR" value="1422631659000"/>
+            <column name="AMOUNT" value="6000"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" value="1422631659000"/>
+        </insert>
+        <insert tableName="INSTALLMENTS_RECORD">
+            <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
+            <column name="PAY_FOR" value="1425310059000"/>
+            <column name="AMOUNT" value="6000"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" value="1425310059000"/>
+        </insert>
+        <insert tableName="INSTALLMENTS_RECORD">
+            <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
+            <column name="PAY_FOR" value="1427729259000"/>
+            <column name="AMOUNT" value="6000"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" value="1427729259000"/>
+        </insert>
+        <insert tableName="INSTALLMENTS_RECORD">
+            <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
+            <column name="PAY_FOR" value="1430407659000"/>
+            <column name="AMOUNT" value="6000"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" value="1430407659000"/>
+        </insert>
+        <insert tableName="INSTALLMENTS_RECORD">
+            <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
+            <column name="PAY_FOR" value="1432999659000"/>
+            <column name="AMOUNT" value="6000"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" value="1432999659000"/>
+        </insert>
+        <insert tableName="INSTALLMENTS_RECORD">
+            <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
+            <column name="PAY_FOR" value="1419953259000"/>
+            <column name="AMOUNT" value="6000"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" value="1419953259000"/>
+        </insert>
+        <insert tableName="INSTALLMENTS_RECORD">
+            <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
+            <column name="PAY_FOR" valueComputed="1417361259000"/>
+            <column name="AMOUNT" value="6000"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" value="1417361259000"/>
         </insert>
 
     </changeSet>
