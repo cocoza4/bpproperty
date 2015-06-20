@@ -137,6 +137,15 @@ public class LandRestController {
         installmentRecordDAO.save(installmentRecord);
     }
 
+    @RequestMapping(value = "/{landId}/buyDetail/{buyDetailId}/installmentsRecord/{installmentId}", method = RequestMethod.DELETE)
+    public void deleteInstallment(@PathVariable("landId") long landId,
+                                  @PathVariable("buyDetailId") long buyDetailId,
+                                  @PathVariable("installmentId") long installmentId) {
+
+        System.out.println("DELETE Installment");
+        installmentRecordDAO.delete(installmentId);
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     public void saveLand(@RequestBody Land land) {
 

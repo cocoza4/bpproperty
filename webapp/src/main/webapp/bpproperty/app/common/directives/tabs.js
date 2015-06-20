@@ -1,13 +1,15 @@
-(function () {
+(function() {
 
-    'use strict';
-angular.module('my-tab', []).
-  directive('myTabs', function() {
+  'use strict';
+
+  angular.module('my-tab', [])
+
+  .directive('myTabs', function() {
     return {
       restrict: 'E',
       transclude: true,
       scope: {},
-      controller: [ '$scope', function($scope) {
+      controller: ['$scope', function($scope) {
         var panes = $scope.panes = [];
 
         $scope.select = function(pane) {
@@ -22,15 +24,14 @@ angular.module('my-tab', []).
           panes.push(pane);
         }
       }],
-      template:
-              '<div class="tabbable">' +
-                '<ul class="nav nav-tabs">' +
-                  '<li ng-repeat="pane in panes" ng-class="{active: pane.selected}">'+
-                    '<a href="" ng-click="select(pane)">{{pane.title}}</a>' +
-                  '</li>' +
-                '</ul>' +
-                '<div class="tab-content" ng-transclude></div>' +
-              '</div>',
+      template: '<div class="tabbable">' +
+        '<ul class="nav nav-tabs">' +
+        '<li ng-repeat="pane in panes" ng-class="{active: pane.selected}">' +
+        '<a href="" ng-click="select(pane)">{{pane.title}}</a>' +
+        '</li>' +
+        '</ul>' +
+        '<div class="tab-content" ng-transclude></div>' +
+        '</div>',
       replace: true
     };
   }).
@@ -39,13 +40,14 @@ angular.module('my-tab', []).
       require: '^myTabs',
       restrict: 'E',
       transclude: true,
-      scope: { title: '@'},
+      scope: {
+        title: '@'
+      },
       link: function(scope, element, attrs, tabsCtrl) {
         tabsCtrl.addPane(scope);
       },
-      template:
-              '<div class="tab-pane" ng-class="{active: selected}" ng-transclude>' +
-              '</div>',
+      template: '<div class="tab-pane" ng-class="{active: selected}" ng-transclude>' +
+        '</div>',
       replace: true
     };
   })

@@ -1,0 +1,120 @@
+<div style="padding-top: 10px"></div>
+<div ng-controller="InstallmentListCtrl">
+<!-- Confirm Delete -->
+  <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="confirmDeleteDialog" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+          <h4 class="modal-title">Confirm Delete</h4>
+        </div>
+        <div class="modal-body">
+          <p>You are about to delete one payment record,
+            <strong class="text-info">฿{{installment.amount}}</strong> for
+            <strong class="text-info">{{installment.payFor | date: "MMM, yyyy"}}</strong>,
+            this procedure is irreversible.</p>
+          <p>Do you want to proceed?</p>
+          <p class="debug-url"></p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-default btn-sm" data-dismiss="modal" type="button">Cancel</button>
+          <a class="btn btn-danger btn-ok btn-sm" ng-click="deleteInstallment()">Delete</a>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Modal -->
+  <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="installmentDialog" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+      <form class="form-horizontal" name="installmentForm" ng-submit="saveInstallment(installmentForm.$valid)" role="form">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+            <h3 class="modal-title">Payment Record</h3>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="month">ประจำเดือน:
+              </label>
+              <div class="col-sm-9">
+                <select class="form-control input-sm" name="month" ng-model="selectedMonth" ng-options="month.value for month in months" style="width: 320px;"></select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="year">ประจำปี:</label>
+              <div class="col-sm-9">
+                <select class="form-control input-sm" name="year" ng-model="selectedYear" ng-options="year for year in years" style="width: 320px;"></select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="amount">จำนวน:</label>
+              <div class="col-sm-9">
+                <input class="form-control" decimal-number name="amount" ng-model="installment.amount" placeholder="Amount" required type="text">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-3" for="description">หมายเหตุ:</label>
+              <div class="col-sm-9">
+                <textarea class="form-control input-sm" name="description" ng-model="installment.description" placeholder="Description" rows="5" style="width: 320px;"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default btn-sm" data-dismiss="modal" type="button">Close</button>
+            <button class="btn btn-primary btn-sm" type="submit">Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="pull-right" style="padding-bottom: 10px;">
+    <button class="btn btn-default btn-sm" data-target="#installmentDialog" data-toggle="modal" ng-click="installment = {}" type="button">
+      <span class="glyphicon glyphicon-plus"></span>
+      สร้าง
+    </button>
+  </div>
+  <table cellspacing="0" class="table table-striped table-bordered table-hover" width="100%">
+    <thead>
+      <tr valign="middle">
+        <th>No.</th>
+        <th>ประจำเดือน</th>
+        <th class="sortable">จำนวน
+          <span class="glyphicon glyphicon-sort"></span>
+        </th>
+        <th class="sortable">วันที่จ่าย
+          <span class="glyphicon glyphicon-sort"></span>
+        </th>
+        <th>หมายเหตุ</th>
+        <th>แก้ไข</th>
+        <th>ลบ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="installment in installments">
+        <td align="center">{{$index + 1}}</td>
+        <td align="right">{{installment.payFor | date: "MMM, yyyy"}}</td>
+        <td align="right">{{installment.amount | number}}</td>
+        <td align="right">{{installment.createdTime | date:"MMM dd, yyyy ' at ' h:mma"}}</td>
+        <td align="right">{{installment.description}}</td>
+        <td align="middle" ng-click="viewInstallment(installment);">
+          <span class="glyphicon glyphicon-edit" style="color:#337ab7"></span>
+        </td>
+        <td align="middle" ng-click="confirmDeleteDialog(installment)">
+          <span class="glyphicon glyphicon-remove" style="color:#d9534f"></span>
+        </td>
+      </tr>
+      <tr>
+        <td align="right" colspan="2"><b>ยอดรวม</b></td>
+        <td align="right"><b>{{totalAmount | number}}</b></td>
+      </tr>
+      <tr>
+        <td align="right" colspan="2"><b>เงินดาวน์</b></td>
+        <td align="right"><b>{{landBuy.downPayment | number}}</b></td>
+      </tr>
+      <tr>
+        <td align="right" colspan="2"><b>ยอดค้าง</b></td>
+        <td align="right"><b class="text-primary">{{remaining | number}}</b></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

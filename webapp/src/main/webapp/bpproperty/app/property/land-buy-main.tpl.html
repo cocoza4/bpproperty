@@ -1,0 +1,57 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <i class="glyphicon glyphicon-plus"></i>
+    General Information
+  </div>
+  <div class="panel-body">
+    <div class="container-fluid">
+      <div style="padding: 3px;"></div>
+      <div class="row">
+        <div class="col-xs-3 col-sm-2">
+          <label for="name">ชื่อโครงการ</label>
+        </div>
+        <div class="col-xs-9 col-sm-10">
+          <span name="name">
+            {{land.name}}
+          </span>
+        </div>
+      </div>
+      <div style="padding: 3px;"></div>
+      <div class="row">
+        <div class="col-xs-3 col-sm-2">
+          <label for="totalArea">เนื้อที่ทั้งหมด</label>
+        </div>
+        <div class="col-xs-9 col-sm-10">
+          <span name="totalArea">
+            <strong class="text-success">{{land.area.rai}}</strong>
+            <font color="grey">ไร่</font>,
+            <strong class="text-success">{{land.area.yarn}}</strong>
+            <font color="grey">งาน</font>,
+            <strong class="text-success">{{land.area.tarangwa}}</strong>
+            <font color="grey">ตารางวา</font>
+          </span>
+        </div>
+      </div>
+      <div style="padding: 5px;"></div>
+      <div class="row">
+        <label class="control-label col-xs-3 col-sm-2" for="buyer">ผู้ซื้อ</label>
+        <div class="col-xs-9 col-sm-10">
+          <p name="buyder">
+            <a href="">{{customer.firstName + ' ' + customer.lastName}}</a>
+            <a href="" ng-show="buyDetail.customerId == null">
+              <span class="glyphicon glyphicon-plus-sign"></span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <hr>
+      <div style="padding: 5px;"></div>
+      <tabset>
+        <tab title="Buy Details" template-url="property/land-buy-details.tpl.html">
+        </tab>
+        <tab title="Payment Records" template-url="property/land-installment.tpl.html">
+        </tab>
+      </tabset>
+    </div>
+  </div>

@@ -24,6 +24,10 @@
               return Installment.update(criteria, installment).$promise;
             };
 
+            this.delete = function(criteria, id) {
+              return Installment.delete(criteria, id).$promise;
+            }
+
             this.getTotalPayment = function(installments) {
               var total = 0;
               for (var i = 0; i < installments.length; i++) {

@@ -1,0 +1,77 @@
+
+<div style="padding-top: 10px"></div>
+
+<div class="container-fluid" ng-controller="LandBuyDetailsCtrl">
+  <form class="form-horizontal" name="form" ng-submit="submit(form.$valid)">
+    <div class="form-group">
+      <label class="col-sm-2 col-xs-3 control-label" for="buyType">ประเภทการซื้อ</label>
+      <div class="col-sm-10 col-xs-9">
+        <select class="form-control input-sm" name="buyType" ng-model="buyDetail.buyType" ng-options="buyTypeItem for buyTypeItem in buyTypeItems" style="width: 130px"></select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2 col-xs-3" for="annualInterest">ดอกเบี้ยต่อปี (%)</label>
+      <div class="col-sm-10 col-xs-9">
+        <input class="form-control input-sm" name="annualInterest" ng-model="buyDetail.annualInterest" percentage placeholder="Annual Interest" type="text">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2 col-xs-3" for="yearsOfInstallment">จำนวนปีที่ผ่อน</label>
+      <div class="col-sm-10 col-xs-9">
+        <input class="form-control input-sm" decimal-number id="yearsOfInstallment" ng-model="buyDetail.yearsOfInstallment" placeholder="Years of Installment" type="text">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2 col-xs-3" for="downPayment">เงินดาวน์</label>
+      <div class="col-sm-10 col-xs-9">
+        <input class="form-control input-sm" decimal-number id="downPayment" ng-model="buyDetail.downPayment" placeholder="Down Payment" type="text">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2 col-xs-3" for="buyPrice">ราคาซื้อ</label>
+      <div class="col-sm-10 col-xs-9">
+        <input class="form-control input-sm" decimal-number id="buyPrice" ng-model="buyDetail.buyPrice" placeholder="Buy Price" type="text">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2 col-xs-3" for="area-group">เนื้อที่ที่ซื้อ</label>
+      <div class="col-sm-10 col-xs-9">
+        <table border="0" name="area-group">
+          <tr>
+            <td ng-class="{'has-error': form.rai.$error.required && (form.$submitted || form.rai.$touched)}" width="110">
+              <div class="has-feedback">
+                <input class="form-control input-sm area" data-placement="top" data-toggle="tooltip" decimal-number name="rai" ng-model="buyDetail.area.rai" required title="ไร่" type="text">
+                <i class="text-info form-control-feedback">ไร่</i>
+              </div>
+            </td>
+            <td ng-class="{'has-error': form.yarn.$error.required && (form.$submitted || form.yarn.$touched)}" width="110">
+              <div class="has-feedback">
+                <input class="form-control input-sm area" data-placement="top" data-toggle="tooltip" decimal-number name="yarn" ng-model="buyDetail.area.yarn" required title="งาน" type="text">
+                <i class="text-info form-control-feedback">งาน</i>
+              </div>
+            </td>
+            <td ng-class="{'has-error': form.tarangwa.$error.required && (form.$submitted || form.tarangwa.$touched)}" width="110">
+              <div class="has-feedback">
+                <input class="form-control input-sm area" data-placement="top" data-toggle="tooltip" decimal-number name="tarangwa" ng-model="buyDetail.area.tarangwa" required title="ตารางวา" type="text">
+                <i class="text-info form-control-feedback">วา
+                  <sup>2</sup></i>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2 col-xs-3" for="description">หมายเหตุ</label>
+      <div class="col-sm-10 col-xs-9">
+        <textarea class="form-control input-sm" name="description" ng-model="buyDetail.description" placeholder="Description" rows="5"></textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-xs-offset-3 col-xs-9 col-sm-offset-2 col-sm-10">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn btn-danger" type="button">Delete</a>
+      </div>
+    </div>
+  </form>
+</div>
