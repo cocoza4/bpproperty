@@ -17,14 +17,14 @@ public class BPPropertyInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        requestAttributes.setAttribute(RequestAttributesUtils.REQUEST_TIMESTAMP, new Date(), RequestAttributes.SCOPE_REQUEST);
+        requestAttributes.setAttribute(RequestAttributesUtils.CURRENT_TIMESTAMP, new Date(), RequestAttributes.SCOPE_REQUEST);
 
         Long userLoginId = null;
         SecurityContext securityContext = SecurityContextHolder.getContext();
         if (securityContext != null && securityContext.getAuthentication() != null) {
             userLoginId = BPPropertySecurityUtils.getUserLoginId(securityContext.getAuthentication());
         }
-        requestAttributes.setAttribute(RequestAttributesUtils.REQUEST_USER, userLoginId, RequestAttributes.SCOPE_REQUEST);
+        requestAttributes.setAttribute(RequestAttributesUtils.USER_LOGIN_ID, userLoginId, RequestAttributes.SCOPE_REQUEST);
 
         return true;
     }

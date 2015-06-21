@@ -7,15 +7,15 @@ import java.util.Date;
 
 public class RequestAttributesUtils {
 
-    public final static String REQUEST_TIMESTAMP = "requestTimestamp";
-    public final static String REQUEST_USER = "requestUser";
+    public final static String CURRENT_TIMESTAMP = "CURRENT_TIMESTAMP";
+    public final static String USER_LOGIN_ID = "USER_LOGIN_ID";
 
-    public static Date getRequestTime() {
-        return (Date) RequestContextHolder.getRequestAttributes().getAttribute(REQUEST_TIMESTAMP, RequestAttributes.SCOPE_REQUEST);
+    public static Date getCurrentTimestamp() {
+        return (Date) RequestContextHolder.getRequestAttributes().getAttribute(CURRENT_TIMESTAMP, RequestAttributes.SCOPE_REQUEST);
     }
 
     public static Long getUserLoginId() {
-        return (Long) RequestContextHolder.getRequestAttributes().getAttribute(REQUEST_USER, RequestAttributes.SCOPE_REQUEST);
+        return (Long) RequestContextHolder.getRequestAttributes().getAttribute(USER_LOGIN_ID, RequestAttributes.SCOPE_REQUEST);
     }
 
 }
