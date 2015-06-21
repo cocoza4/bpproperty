@@ -32,11 +32,11 @@ public abstract class ModelUtils {
 
     public static void setAuditFields(Map<String, Object> mapping, PersistableModel model) {
         if (model.isNew()) {
-            mapping.put("CREATED_BY", model.getCreatedBy());
-            mapping.put("CREATED_TIME", model.getCreatedTime().getTime());
+            mapping.put("created_by", model.getCreatedBy());
+            mapping.put("created_time", model.getCreatedTime().getTime());
         } else {
-            mapping.put("UPDATED_BY", model.getUpdatedBy());
-            ModelUtils.setNullableDateField(mapping, "UPDATED_TIME", model.getUpdatedTime());
+            mapping.put("updated_by", model.getUpdatedBy());
+            ModelUtils.setNullableDateField(mapping, "updated_time", model.getUpdatedTime());
         }
     }
 

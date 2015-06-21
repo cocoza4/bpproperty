@@ -25,6 +25,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.nurkiewicz.jdbcrepository</groupId>
             <artifactId>jdbcrepository</artifactId>
             <!--<version>${nurkiewicz.jdbcrepository.version}</version>-->

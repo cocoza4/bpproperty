@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/property-context.xml")
-public class LandDAOTest {
+public class LandDAOIT {
 
     @Autowired
     private ILandDAO landDAO;

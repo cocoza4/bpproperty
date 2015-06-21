@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/purchase-context.xml")
-public class InstallmentRecordDAOTest {
+public class InstallmentRecordDAOIT {
 
     @Autowired
     private ILandDAO propertyDAO;
@@ -67,7 +67,7 @@ public class InstallmentRecordDAOTest {
         landBuyDetail.setPropertyId(Land.getId());
         landBuyDetail.setBuyPrice(10000f);
         landBuyDetail.setBuyType(BuyType.CASH);
-        landBuyDetail.setAnnualInterest(15f);
+        landBuyDetail.setAnnualInterest(15.5f);
         landBuyDetail.setDownPayment(1000f);
         landBuyDetail.setYearsOfInstallment(5);
         landBuyDetail.setCreatedBy(0L);

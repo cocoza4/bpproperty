@@ -11,29 +11,29 @@
                 Yarn = งาน
                 Tarangwa = ตารางวา
         </comment>
-        <createTable tableName="LAND">
-            <column name="ID" type="BIGINT" autoIncrement="true" startWith="1">
+        <createTable tableName="land">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="NAME" type="VARCHAR(120)">
+            <column name="name" type="varchar(120)">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="ADDRESS" type="TEXT">
+            <column name="address" type="text">
                 <constraints nullable="false"/>
             </column>
-            <column name="DESCRIPTION" type="TEXT"/>
-            <column name="RAI" type="INT"/>
-            <column name="YARN" type="INT"/>
-            <column name="TARANGWA" type="INT"/>
+            <column name="description" type="text"/>
+            <column name="rai" type="int"/>
+            <column name="yarn" type="int"/>
+            <column name="tarangwa" type="int"/>
 
-            <column name="CREATED_BY" type="BIGINT">
+            <column name="created_by" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="CREATED_TIME" type="BIGINT">
+            <column name="created_time" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="UPDATED_BY" type="BIGINT"/>
-            <column name="UPDATED_TIME" type="BIGINT"/>
+            <column name="updated_by" type="bigint"/>
+            <column name="updated_time" type="bigint"/>
         </createTable>
 
     </changeSet>

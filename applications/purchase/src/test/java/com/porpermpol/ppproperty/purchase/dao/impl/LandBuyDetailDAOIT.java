@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/purchase-context.xml")
-public class LandBuyDetailDAOTest {
+public class LandBuyDetailDAOIT {
 
     @Autowired
     private ICustomerDAO customerDAO;
@@ -62,7 +62,7 @@ public class LandBuyDetailDAOTest {
         landBuyDetail.setDownPayment(1000f);
         landBuyDetail.setBuyPrice(100000f);
         landBuyDetail.setBuyType(BuyType.CASH);
-        landBuyDetail.setAnnualInterest(15f);
+        landBuyDetail.setAnnualInterest(15.5f);
         landBuyDetail.setYearsOfInstallment(5);
         landBuyDetail.setCreatedBy(0L);
         landBuyDetail.setCreatedTime(new Date());

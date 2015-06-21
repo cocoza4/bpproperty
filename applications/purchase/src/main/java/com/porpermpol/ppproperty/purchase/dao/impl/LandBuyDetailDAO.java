@@ -21,7 +21,7 @@ import java.util.Map;
 public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implements ILandBuyDetailDAO {
 
     public LandBuyDetailDAO() {
-        super(ROW_MAPPER, ROW_UNMAPPER, "LAND_BUY_DETAIL", "ID");
+        super(ROW_MAPPER, ROW_UNMAPPER, "land_buy_detail", "id");
     }
 
     public static final RowMapper<LandBuyDetail> ROW_MAPPER = new RowMapper<LandBuyDetail>() {
@@ -29,20 +29,20 @@ public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implem
         public LandBuyDetail mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             LandBuyDetail model = new LandBuyDetail();
-            model.setId(rs.getLong("ID"));
-            model.setPropertyId(rs.getLong("PROPERTY_ID"));
-            model.setCustomerId(rs.getLong("CUSTOMER_ID"));
-            model.setBuyType(BuyType.get(rs.getString("BUY_TYPE")));
-            model.setBuyPrice(rs.getFloat("BUY_PRICE"));
-            model.setDownPayment(rs.getFloat("DOWN_PAYMENT"));
-            model.setAnnualInterest(rs.getFloat("ANNUAL_INTEREST"));
-            model.setYearsOfInstallment(rs.getInt("YEARS_OF_INSTALLMENT"));
-            model.setDescription(rs.getString("DESCRIPTION"));
-            model.setArea(new Area(rs.getInt("RAI"), rs.getInt("YARN"), rs.getInt("TARANGWA")));
-            model.setCreatedBy(rs.getLong("CREATED_BY"));
-            model.setCreatedTime(new Date(rs.getLong("CREATED_TIME")));
-            model.setUpdatedBy(ModelUtils.getNullableLongField(rs, "UPDATED_BY"));
-            model.setUpdatedTime(ModelUtils.getNullableDateField(rs, "UPDATED_TIME"));
+            model.setId(rs.getLong("id"));
+            model.setPropertyId(rs.getLong("property_id"));
+            model.setCustomerId(rs.getLong("customer_id"));
+            model.setBuyType(BuyType.get(rs.getString("buy_type")));
+            model.setBuyPrice(rs.getFloat("buy_price"));
+            model.setDownPayment(rs.getFloat("down_payment"));
+            model.setAnnualInterest(rs.getFloat("annual_interest"));
+            model.setYearsOfInstallment(rs.getInt("years_of_installment"));
+            model.setDescription(rs.getString("description"));
+            model.setArea(new Area(rs.getInt("rai"), rs.getInt("yarn"), rs.getInt("tarangwa")));
+            model.setCreatedBy(rs.getLong("created_by"));
+            model.setCreatedTime(new Date(rs.getLong("created_time")));
+            model.setUpdatedBy(ModelUtils.getNullableLongField(rs, "updated_by"));
+            model.setUpdatedTime(ModelUtils.getNullableDateField(rs, "updated_time"));
             return model.withPersisted(true);
         }
     };
@@ -51,19 +51,19 @@ public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implem
         @Override
         public Map<String, Object> mapColumns(LandBuyDetail model) {
             Map<String, Object> mapping = new LinkedHashMap<>();
-            mapping.put("ID", model.getId());
-            mapping.put("PROPERTY_ID", model.getPropertyId());
-            mapping.put("CUSTOMER_ID", model.getCustomerId());
-            mapping.put("BUY_TYPE", model.getBuyType().getCode());
-            mapping.put("DOWN_PAYMENT", model.getDownPayment());
-            mapping.put("BUY_PRICE", model.getBuyPrice());
-            mapping.put("ANNUAL_INTEREST", model.getAnnualInterest());
-            mapping.put("YEARS_OF_INSTALLMENT", model.getYearsOfInstallment());
-            mapping.put("DESCRIPTION", model.getDescription());
+            mapping.put("id", model.getId());
+            mapping.put("property_id", model.getPropertyId());
+            mapping.put("customer_id", model.getCustomerId());
+            mapping.put("buy_type", model.getBuyType().getCode());
+            mapping.put("down_payment", model.getDownPayment());
+            mapping.put("buy_price", model.getBuyPrice());
+            mapping.put("annual_interest", model.getAnnualInterest());
+            mapping.put("years_of_installment", model.getYearsOfInstallment());
+            mapping.put("description", model.getDescription());
 
-            mapping.put("RAI", model.getArea().getRai());
-            mapping.put("YARN", model.getArea().getYarn());
-            mapping.put("TARANGWA", model.getArea().getTarangwa());
+            mapping.put("rai", model.getArea().getRai());
+            mapping.put("yarn", model.getArea().getYarn());
+            mapping.put("tarangwa", model.getArea().getTarangwa());
 
             ModelUtils.setAuditFields(mapping, model);
             return mapping;

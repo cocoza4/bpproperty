@@ -19,21 +19,21 @@ import java.util.Map;
 public class LandDAO extends JdbcRepository<Land, Long> implements ILandDAO {
 
     public LandDAO() {
-        super(ROW_MAPPER, ROW_UNMAPPER, "LAND", "ID");
+        super(ROW_MAPPER, ROW_UNMAPPER, "land", "id");
     }
 
     public static final RowMapper<Land> ROW_MAPPER = new RowMapper<Land>() {
         @Override
         public Land mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Land(rs.getLong("ID"),
-                    rs.getString("NAME"),
-                    new Area(rs.getInt("RAI"), rs.getInt("YARN"), rs.getInt("TARANGWA")),
-                    rs.getString("ADDRESS"),
-                    rs.getString("DESCRIPTION"),
-                    rs.getLong("CREATED_BY"),
-                    new Date(rs.getLong("CREATED_TIME")),
-                    ModelUtils.getNullableLongField(rs, "UPDATED_BY"),
-                    ModelUtils.getNullableDateField(rs, "UPDATED_TIME")).withPersisted(true);
+            return new Land(rs.getLong("id"),
+                    rs.getString("name"),
+                    new Area(rs.getInt("rai"), rs.getInt("yarn"), rs.getInt("tarangwa")),
+                    rs.getString("address"),
+                    rs.getString("description"),
+                    rs.getLong("created_by"),
+                    new Date(rs.getLong("created_time")),
+                    ModelUtils.getNullableLongField(rs, "updated_by"),
+                    ModelUtils.getNullableDateField(rs, "updated_time")).withPersisted(true);
         }
     };
 
@@ -41,13 +41,13 @@ public class LandDAO extends JdbcRepository<Land, Long> implements ILandDAO {
         @Override
         public Map<String, Object> mapColumns(Land model) {
             Map<String, Object> mapping = new LinkedHashMap<>();
-            mapping.put("ID", model.getId());
-            mapping.put("NAME", model.getName());
-            mapping.put("RAI", model.getArea().getRai());
-            mapping.put("YARN", model.getArea().getYarn());
-            mapping.put("TARANGWA", model.getArea().getTarangwa());
-            mapping.put("ADDRESS", model.getAddress());
-            mapping.put("DESCRIPTION", model.getDescription());
+            mapping.put("id", model.getId());
+            mapping.put("name", model.getName());
+            mapping.put("rai", model.getArea().getRai());
+            mapping.put("yarn", model.getArea().getYarn());
+            mapping.put("tarangwa", model.getArea().getTarangwa());
+            mapping.put("address", model.getAddress());
+            mapping.put("description", model.getDescription());
             ModelUtils.setAuditFields(mapping, model);
             return mapping;
         }

@@ -11,69 +11,69 @@
             Yarn = งาน
             Tarangwa = ตารางวา
         </comment>
-        <createTable tableName="LAND_BUY_DETAIL">
-            <column name="ID" type="BIGINT" autoIncrement="true" startWith="1">
+        <createTable tableName="land_buy_detail">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="PROPERTY_ID" type="BIGINT">
-                <constraints nullable="false" deleteCascade="true" foreignKeyName="FK_PROPERTY_ID"
-                             references="LAND(ID)"/>
+            <column name="property_id" type="bigint">
+                <constraints nullable="false" deleteCascade="true" foreignKeyName="fk_property_id"
+                             references="land(id)"/>
             </column>
-            <column name="CUSTOMER_ID" type="BIGINT">
-                <constraints nullable="false" deleteCascade="true" foreignKeyName="FK_CUSTOMER_ID"
-                             references="CUSTOMER(ID)"/>
+            <column name="customer_id" type="bigint">
+                <constraints nullable="false" deleteCascade="true" foreignKeyName="fk_customer_id"
+                             references="customer(id)"/>
             </column>
-            <column name="BUY_TYPE" type="CHAR(1)">
+            <column name="buy_type" type="char(1)">
                 <constraints nullable="false"/>
             </column>
-            <column name="DOWN_PAYMENT" type="FLOAT"/>
-            <column name="BUY_PRICE" type="FLOAT">
+            <column name="down_payment" type="float"/>
+            <column name="buy_price" type="float">
                 <constraints nullable="false"/>
             </column>
-            <column name="ANNUAL_INTEREST" type="INT"/>
-            <column name="YEARS_OF_INSTALLMENT" type="INT"/>
+            <column name="annual_interest" type="float"/>
+            <column name="years_of_installment" type="smallint"/>
 
-            <column name="RAI" type="INT"/>
-            <column name="YARN" type="INT"/>
-            <column name="TARANGWA" type="INT"/>
+            <column name="rai" type="int"/>
+            <column name="yarn" type="int"/>
+            <column name="tarangwa" type="int"/>
 
-            <column name="DESCRIPTION" type="TEXT"/>
+            <column name="description" type="text"/>
 
-            <column name="CREATED_BY" type="BIGINT">
+            <column name="created_by" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="CREATED_TIME" type="BIGINT">
+            <column name="created_time" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="UPDATED_BY" type="BIGINT"/>
-            <column name="UPDATED_TIME" type="BIGINT"/>
+            <column name="updated_by" type="bigint"/>
+            <column name="updated_time" type="bigint"/>
         </createTable>
-        <addUniqueConstraint tableName="LAND_BUY_DETAIL" columnNames="PROPERTY_ID, CUSTOMER_ID"/>
+        <addUniqueConstraint tableName="land_buy_detail" columnNames="property_id, customer_id"/>
 
-        <createTable tableName="INSTALLMENTS_RECORD">
-            <column name="ID" type="BIGINT" autoIncrement="true" startWith="1">
+        <createTable tableName="installments_record">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="BUY_DETAIL_ID" type="BIGINT">
+            <column name="buy_detail_id" type="bigint">
                 <constraints nullable="false" deleteCascade="true"
-                             foreignKeyName="FK_INSTALLMENT_RECORD_LAND_BUY_DETAIL_ID"
-                             references="LAND_BUY_DETAIL(ID)"/>
+                             foreignKeyName="fk_installment_record_land_buy_detail_id"
+                             references="land_buy_detail(id)"/>
             </column>
-            <column name="PAY_FOR" type="BIGINT">
+            <column name="pay_for" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="AMOUNT" type="FLOAT">
+            <column name="amount" type="float">
                 <constraints nullable="false"/>
             </column>
-            <column name="DESCRIPTION" type="TEXT"/>
-            <column name="CREATED_BY" type="BIGINT">
+            <column name="description" type="text"/>
+            <column name="created_by" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="CREATED_TIME" type="BIGINT">
+            <column name="created_time" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="UPDATED_BY" type="BIGINT"/>
-            <column name="UPDATED_TIME" type="BIGINT"/>
+            <column name="updated_by" type="bigint"/>
+            <column name="updated_time" type="bigint"/>
         </createTable>
 
     </changeSet>

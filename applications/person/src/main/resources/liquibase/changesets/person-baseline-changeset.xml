@@ -3,30 +3,33 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
 
     <changeSet author="coco" id="initTables">
 
-        <createTable tableName="CUSTOMER">
-            <column name="ID" type="BIGINT" autoIncrement="true" startWith="1">
-                <constraints primaryKey="true"/>
+        <createTable tableName="customer">
+
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" />
             </column>
-            <column name="FIRSTNAME" type="VARCHAR(45)">
+
+            <column name="firstname" type="varchar(45)">
                 <constraints nullable="false"/>
             </column>
-            <column name="LASTNAME" type="VARCHAR(45)">
+            <column name="lastname" type="varchar(45)">
                 <constraints nullable="false"/>
             </column>
-            <column name="ADDRESS" type="TEXT"/>
-            <column name="TEL" type="VARCHAR(20)"/>
-            <column name="CREATED_BY" type="BIGINT">
+            <column name="address" type="text"/>
+            <column name="tel" type="varchar(20)"/>
+            <column name="created_by" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="CREATED_TIME" type="BIGINT">
+            <column name="created_time" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="UPDATED_BY" type="BIGINT"/>
-            <column name="UPDATED_TIME" type="BIGINT"/>
+            <column name="updated_by" type="bigint"/>
+            <column name="updated_time" type="bigint"/>
         </createTable>
 
     </changeSet>

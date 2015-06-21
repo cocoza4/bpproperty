@@ -18,22 +18,22 @@ import java.util.Map;
 public class CustomerDAO extends JdbcRepository<Customer, Long> implements ICustomerDAO {
 
     public CustomerDAO() {
-        super(ROW_MAPPER, ROW_UNMAPPER, "CUSTOMER", "ID");
+        super(ROW_MAPPER, ROW_UNMAPPER, "customer", "id");
     }
 
     public static final RowMapper<Customer> ROW_MAPPER = new RowMapper<Customer>() {
         @Override
         public Customer mapRow(ResultSet rs, int rowNum) throws SQLException {
             Customer customer = new Customer();
-            customer.setId(rs.getLong("ID"));
-            customer.setFirstName(rs.getString("FIRSTNAME"));
-            customer.setLastName(rs.getString("LASTNAME"));
-            customer.setAddress(rs.getString("ADDRESS"));
-            customer.setTel(rs.getString("TEL"));
-            customer.setCreatedBy(rs.getLong("CREATED_BY"));
-            customer.setCreatedTime(new Date(rs.getLong("CREATED_TIME")));
-            customer.setUpdatedBy(ModelUtils.getNullableLongField(rs, "UPDATED_BY"));
-            customer.setUpdatedTime(ModelUtils.getNullableDateField(rs, "UPDATED_TIME"));
+            customer.setId(rs.getLong("id"));
+            customer.setFirstName(rs.getString("firstname"));
+            customer.setLastName(rs.getString("lastname"));
+            customer.setAddress(rs.getString("address"));
+            customer.setTel(rs.getString("tel"));
+            customer.setCreatedBy(rs.getLong("created_by"));
+            customer.setCreatedTime(new Date(rs.getLong("created_time")));
+            customer.setUpdatedBy(ModelUtils.getNullableLongField(rs, "updated_by"));
+            customer.setUpdatedTime(ModelUtils.getNullableDateField(rs, "updated_time"));
             return customer.withPersisted(true);
         }
     };
@@ -42,11 +42,11 @@ public class CustomerDAO extends JdbcRepository<Customer, Long> implements ICust
         @Override
         public Map<String, Object> mapColumns(Customer model) {
             Map<String, Object> mapping = new LinkedHashMap<>();
-            mapping.put("ID", model.getId());
-            mapping.put("FIRSTNAME", model.getFirstName());
-            mapping.put("LASTNAME", model.getLastName());
-            mapping.put("ADDRESS", model.getAddress());
-            mapping.put("TEL", model.getTel());
+            mapping.put("id", model.getId());
+            mapping.put("firstname", model.getFirstName());
+            mapping.put("lastname", model.getLastName());
+            mapping.put("address", model.getAddress());
+            mapping.put("tel", model.getTel());
             ModelUtils.setAuditFields(mapping, model);
             return mapping;
         }
