@@ -131,10 +131,10 @@ public class InstallmentRecordDAOIT {
     }
 
     @Test
-    public void testFindByBuyDetailId() throws Exception {
-        assertTrue(installmentRecordDAO.findByBuyDetailId(installmentRecord.getBuyDetailId()).isEmpty());
+    public void testFindByLandBuyDetailId() throws Exception {
+        assertTrue(installmentRecordDAO.findByLandBuyDetailId(installmentRecord.getBuyDetailId()).isEmpty());
         installmentRecordDAO.save(installmentRecord);
-        assertEquals(1, installmentRecordDAO.findByBuyDetailId(installmentRecord.getBuyDetailId()).size());
+        assertEquals(1, installmentRecordDAO.findByLandBuyDetailId(installmentRecord.getBuyDetailId()).size());
     }
 
     @Test

@@ -2,6 +2,8 @@ package com.porpermpol.ppproperty.person.model;
 
 import com.porpermpol.ppproperty.core.jdbcrepository.extension.PersistableModel;
 
+import java.util.Date;
+
 public class Customer extends PersistableModel<Long> {
 
     private String firstName;
@@ -12,8 +14,9 @@ public class Customer extends PersistableModel<Long> {
     public Customer() {
     }
 
-    public Customer(Long id, String firstName, String lastName, String address, String tel) {
-        super(id);
+    public Customer(Long id, String firstName, String lastName, String address, String tel,
+                    Long createdBy, Date createdTime, Long updatedBy, Date updatedTime) {
+        super(id, createdBy, createdTime, updatedBy, updatedTime);
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;

@@ -10,6 +10,7 @@
        http://www.springframework.org/schema/tx/spring-tx.xsd" >
 
     <context:component-scan base-package="com.porpermpol.ppproperty.property.dao.impl" />
+    <context:component-scan base-package="com.porpermpol.ppproperty.property.service.impl" />
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location">

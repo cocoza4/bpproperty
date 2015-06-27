@@ -15,6 +15,10 @@
 
        <mvc:resources mapping="/bpproperty/**" location="/bpproperty/app"/>
 
+       <mvc:interceptors>
+              <bean class="com.porpermpol.ppproperty.webapp.security.BPPropertyInterceptor"></bean>
+       </mvc:interceptors>
+
        <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
               <property name="messageConverters">
                      <list>

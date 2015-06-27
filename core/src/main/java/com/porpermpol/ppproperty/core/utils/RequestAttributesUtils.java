@@ -1,11 +1,11 @@
-package com.porpermpol.ppproperty.webapp.utils;
+package com.porpermpol.ppproperty.core.utils;
 
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import java.util.Date;
 
-public class RequestAttributesUtils {
+public abstract class RequestAttributesUtils {
 
     public final static String CURRENT_TIMESTAMP = "CURRENT_TIMESTAMP";
     public final static String USER_LOGIN_ID = "USER_LOGIN_ID";

@@ -30,6 +30,17 @@ public abstract class ModelUtils {
         }
     }
 
+    public static <T extends PersistableModel> T setAuditFields(T model) {
+        if(model.isNew()) {
+            model.setCreatedBy(RequestAttributesUtils.getUserLoginId());
+            model.setCreatedTime(RequestAttributesUtils.getCurrentTimestamp());
+        } else {
+            model.setUpdatedBy(RequestAttributesUtils.getUserLoginId());
+            model.setUpdatedTime(RequestAttributesUtils.getCurrentTimestamp());
+        }
+        return model;
+    }
+
     public static void setAuditFields(Map<String, Object> mapping, PersistableModel model) {
         if (model.isNew()) {
             mapping.put("created_by", model.getCreatedBy());

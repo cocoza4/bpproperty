@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface IInstallmentRecordDAO extends PagingAndSortingRepository<InstallmentRecord, Long> {
 
-    List<InstallmentRecord> findByBuyDetailId(long buyDetailId);
+    List<InstallmentRecord> findByLandBuyDetailId(long id);
 
 }

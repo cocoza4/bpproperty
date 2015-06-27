@@ -23,7 +23,7 @@ public class InstallmentRecordDAO extends JdbcRepository<InstallmentRecord, Long
     @Autowired
     private JdbcOperations jdbcOperations;
 
-    private static final String SQL_SELECT_BY_BUY_DETAIL_ID = "SELECT * FROM installments_record " +
+    private static final String SQL_SELECT_BY_LAND_BUY_DETAIL_ID = "SELECT * FROM installments_record " +
                                                                             "WHERE buy_detail_id = ? " +
                                                                             "ORDER BY pay_for ASC";
 
@@ -72,7 +72,7 @@ public class InstallmentRecordDAO extends JdbcRepository<InstallmentRecord, Long
     }
 
     @Override
-    public List<InstallmentRecord> findByBuyDetailId(long buyDetailId) {
-        return jdbcOperations.query(SQL_SELECT_BY_BUY_DETAIL_ID, ROW_MAPPER, buyDetailId);
+    public List<InstallmentRecord> findByLandBuyDetailId(long id) {
+        return jdbcOperations.query(SQL_SELECT_BY_LAND_BUY_DETAIL_ID, ROW_MAPPER, id);
     }
 }

@@ -1,5 +1,6 @@
 package com.porpermpol.ppproperty.person.service.impl;
 
+import com.porpermpol.ppproperty.core.utils.ModelUtils;
 import com.porpermpol.ppproperty.person.dao.ICustomerDAO;
 import com.porpermpol.ppproperty.person.model.Customer;
 import com.porpermpol.ppproperty.person.service.ICustomerService;
@@ -14,6 +15,17 @@ public class CustomerService implements ICustomerService {
 
     @Autowired
     private ICustomerDAO customerDAO;
+
+    @Override
+    public void saveCustomer(Customer customer) {
+        ModelUtils.setAuditFields(customer);
+        customerDAO.save(customer);
+    }
+
+    @Override
+    public void deleteById(long id) {
+        customerDAO.delete(id);
+    }
 
     @Transactional(readOnly = true)
     @Override
@@ -31,5 +43,11 @@ public class CustomerService implements ICustomerService {
     @Override
     public Page<Customer> findAll(Pageable pageable) {
         return customerDAO.findAll(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public long count() {
+        return customerDAO.count();
     }
 }

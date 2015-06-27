@@ -71,6 +71,11 @@
             <artifactId>junit</artifactId>
             <!--<version>4.12</version>-->
         </dependency>
+
+        <dependency>
+            <groupId>org.jmockit</groupId>
+            <artifactId>jmockit</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

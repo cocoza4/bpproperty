@@ -1,6 +1,6 @@
 package com.porpermpol.ppproperty.webapp.security;
 
-import com.porpermpol.ppproperty.webapp.utils.RequestAttributesUtils;
+import com.porpermpol.ppproperty.core.utils.RequestAttributesUtils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestAttributes;
@@ -19,13 +19,15 @@ public class BPPropertyInterceptor implements HandlerInterceptor {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         requestAttributes.setAttribute(RequestAttributesUtils.CURRENT_TIMESTAMP, new Date(), RequestAttributes.SCOPE_REQUEST);
 
-        Long userLoginId = null;
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        if (securityContext != null && securityContext.getAuthentication() != null) {
-            userLoginId = BPPropertySecurityUtils.getUserLoginId(securityContext.getAuthentication());
-        }
+//        Long userLoginId = null;
+//        SecurityContext securityContext = SecurityContextHolder.getContext();
+//        if (securityContext != null && securityContext.getAuthentication() != null) {
+//            userLoginId = BPPropertySecurityUtils.getUserLoginId(securityContext.getAuthentication());
+//        }
+        Long userLoginId = 1L;
         requestAttributes.setAttribute(RequestAttributesUtils.USER_LOGIN_ID, userLoginId, RequestAttributes.SCOPE_REQUEST);
 
+        System.out.println("intercepted");
         return true;
     }
 
