@@ -1,38 +1,46 @@
-(function () {
+(function() {
 
-    'use strict';
+  'use strict';
 
-    angular
+  angular
 
-        .module('land-service', ['ngResource'])
+    .module('land-service', ['ngResource'])
 
-        .service('LandService', ['Land', function(Land) {
+  .service('LandService', ['Land', function(Land) {
 
-            this.query = function(criteria) {
-                return Land.query(criteria);
-            };
+    this.query = function(criteria) {
+      return Land.query(criteria).$promise;
+    };
 
-            this.create = function(land) {
-              return Land.save(land).$promise;
-            };
+    this.create = function(land) {
+      return Land.save(land).$promise;
+    };
 
-            this.update = function(land) {
-              return Land.update({landId: land.id}, land).$promise;
-            }
+    this.update = function(land) {
+      return Land.update({
+        landId: land.id
+      }, land).$promise;
+    }
 
-        }])
+  }])
 
-        .factory('Land', ['$resource', '$location', function ($resource, $location) {
-            return $resource(
-                '/bpproperty/api/land/:landId',
-                {
-                    landId: '@landId'
-                },
-                {
-                    'update': {method: 'PUT'},
-                    'query': {method: 'GET', params: {page: '@page', length: '@length'}}
-                });
-        }]);
+  .factory('Land', ['$resource', function($resource) {
+    return $resource(
+      '/bpproperty/api/land/:landId', {
+        landId: '@landId'
+      }, {
+        'update': {
+          method: 'PUT'
+        },
+        'query': {
+          method: 'GET',
+          params: {
+            page: '@page',
+            length: '@length'
+          }
+        }
+      });
+  }]);
 
 
 })();

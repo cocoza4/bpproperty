@@ -3,57 +3,66 @@
   'use strict';
 
   var LandBuyDetailListResolve = {
-    BuyDetailList: ['$route', 'LandBuyService', function($route, LandBuyService) {
-      var criteria = {
-        landId: $route.current.params['landId'],
-      };
-      return LandBuyService.query(criteria);
-    }]
+    BuyDetailList: ['$q', '$route', 'LandService', 'LandBuyService',
+      function($q, $route, LandService, LandBuyService) {
+
+        var landId = $route.current.params['landId'];
+        var criteria = {
+          landId: landId
+        };
+
+        var landBuyDetail = LandBuyService.query(criteria);
+        var land = LandService.query(criteria);
+
+        var promises = {
+          land: land,
+          landBuyDetail: landBuyDetail
+        }
+        return $q.all(promises);
+
+      }
+    ]
   };
 
   var LandBuyDetailResolve = {
-    BuyDetails: function($q, $route, LandService, LandBuyService, Customer) {
+    BuyDetails: ['$q', '$route', 'LandService', 'LandBuyService', 'Customer',
+      function($q, $route, LandService, LandBuyService, Customer) {
 
-      var landBuyCriteria = {
-        landId: $route.current.params['landId'],
-        buyDetailId: $route.current.params['buyDetailId']
-      };
-
-      var buyDetail = LandBuyService.query(landBuyCriteria);
-      var land = LandService.query({
-        landId: $route.current.params['landId']
-      });
-
-      // var promises = {
-      //   land: land.$promise,
-      //   customer: buyDetail.$promise
-      // }
-      // return $q.all(promises);
-
-      var loadBuyDetail = function() {
-          return $q.all([buyDetail, land.$promise])
-            .then(function(response) {
-
-              return {
-                buyDetail: response[0],
-                land: response[1]
-              };
-
-            });
-        },
-        loadCustomer = function(buyDetails) {
-          return Customer.get({
-            id: buyDetails.buyDetail.customerId
-          }).$promise.then(function(response) {
-            return {
-              buyDetail: buyDetails.buyDetail,
-              land: buyDetails.land,
-              customer: response
-            }
-          });
+        var landBuyCriteria = {
+          landId: $route.current.params['landId'],
+          buyDetailId: $route.current.params['buyDetailId']
         };
-      return loadBuyDetail().then(loadCustomer);
-    }
+
+        var buyDetail = LandBuyService.query(landBuyCriteria);
+        var land = LandService.query({
+          landId: $route.current.params['landId']
+        });
+
+        var loadBuyDetail = function() {
+            return $q.all([buyDetail, land])
+              .then(function(response) {
+
+                return {
+                  buyDetail: response[0],
+                  land: response[1]
+                };
+
+              });
+          },
+          loadCustomer = function(buyDetails) {
+            return Customer.get({
+              id: buyDetails.buyDetail.customerId
+            }).$promise.then(function(response) {
+              return {
+                buyDetail: buyDetails.buyDetail,
+                land: buyDetails.land,
+                customer: response
+              }
+            });
+          };
+        return loadBuyDetail().then(loadCustomer);
+      }
+    ]
   };
 
   angular
@@ -83,8 +92,8 @@
 
   }])
 
-  .controller('LandBuyDetailsCtrl', ['$scope', '$route', 'LandBuyService',
-    function($scope, $route, LandBuyService) {
+  .controller('LandBuyDetailsCtrl', ['$scope', '$route', 'LandBuyService', 'NotificationService',
+    function($scope, $route, LandBuyService, NotificationService) {
 
       $scope.submit = function() {
 
@@ -118,32 +127,32 @@
     }
   ])
 
-  .controller('LandBuyGeneralDetailsCtrl', ['$scope', 'BuyDetails', 'NotificationService',
-    function($scope, BuyDetails, NotificationService) {
+  .controller('LandBuyGeneralDetailsCtrl', ['$scope', 'BuyDetails',
+    function($scope, BuyDetails) {
       $scope.buyDetail = BuyDetails.buyDetail;
       $scope.land = BuyDetails.land;
       $scope.customer = BuyDetails.customer;
     }
   ])
 
-  .controller('CreateLandBuyDetailCtrl', ['$scope', '$routeParams', 'LandBuy', 'Land', 'Customer',
-    function($scope, $routeParams, LandBuy, Land, Customer) {
+  .controller('CreateLandBuyDetailCtrl', ['$scope', '$routeParams', 'LandService',
+    function($scope, $routeParams, LandService) {
 
       $scope.buyTypeItems = ['CASH', 'INSTALLMENT'];
 
-      $scope.submit = function() {
-        $scope.buyDetail.$save({
-          landId: $routeParams.landId
-        });
-        alert('saved')
-      };
+      // $scope.submit = function() {
+      //   $scope.buyDetail.$save({
+      //     landId: $routeParams.landId
+      //   });
+      //   alert('saved')
+      // };
 
-      $scope.buyDetail = new LandBuy({
-        landId: $routeParams.landId
-      });
-      $scope.land = Land.get({
-        landId: $routeParams.landId
-      });
+      // $scope.buyDetail = new LandBuy({
+      //   landId: $routeParams.landId
+      // });
+      // $scope.land = LandService.query({
+      //   landId: $routeParams.landId
+      // });
 
     }
   ])
@@ -166,7 +175,7 @@
 
         LandBuyService.query(criteria).then(
           function(data) {
-            self.updateScope($scope, data);
+            self.updateScope(data);
             console.log('[Query LandBuy] - length:' + data.content.length); // TODO: remove this - this is for debugging
           },
           function(error) {
@@ -183,11 +192,12 @@
         $location.path('/land/' + $routeParams.landId + '/buyDetail/create');
       };
 
-      this.updateScope = function(scope, data) {
-        $scope.landBuys = data.content;
-        $scope.totalRecords = data.totalRecords;
+      this.updateScope = function(data) {
+        $scope.land = data.land;
+        $scope.landBuys = data.landBuyDetail.content;
+        $scope.totalRecords = data.landBuyDetail.totalRecords;
         $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
-        $scope.endIndex = $scope.startIndex + data.totalDisplayRecords - 1;
+        $scope.endIndex = $scope.startIndex + data.landBuyDetail.totalDisplayRecords - 1;
       }
 
       var self = this;
@@ -196,7 +206,7 @@
       $scope.currentPage = 1;
       $scope.recordsPerPage = 10;
 
-      this.updateScope($scope, BuyDetailList);
+      this.updateScope(BuyDetailList);
 
     }
   ]);

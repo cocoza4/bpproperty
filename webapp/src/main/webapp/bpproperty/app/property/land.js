@@ -8,15 +8,16 @@
         page: 0, // zero-based page index
         length: 10
       };
-      return LandService.query(criteria).$promise;
+      return LandService.query(criteria);
     }
   };
 
   var LandDetailResolve = {
     Land: function($route, LandService) {
-      return LandService.query({
+      var criteria = {
         landId: $route.current.params['landId']
-      }).$promise;
+      };
+      return LandService.query(criteria);
     }
   }
 
@@ -37,7 +38,7 @@
 
     .when('/land/create', {
       templateUrl: 'property/land.tpl.html',
-      controller: 'createLandCtrl'
+      controller: 'CreateLandCtrl'
     })
 
     .when('/land/:landId', {
@@ -52,33 +53,31 @@
 
   }])
 
-  .controller('createLandCtrl', ['$scope', 'LandService', function($scope, LandService) {
+  .controller('CreateLandCtrl', ['$scope', 'LandService', 'NotificationService',
+    function($scope, LandService, NotificationService) {
 
-    $scope.submit = function(isValid) {
-      if (isValid) {
-        LandService.create($scope.land).then(function(data) {
-          $scope.notification = {
-            type: 'success',
-            header: 'Success',
-            message: $scope.land.name + ' has been created',
-            display: false
-          };
-          $scope.notification.display = true;
-        }, function(error) {
-          $scope.notification = {
-            type: 'danger',
-            header: 'Error',
-            message: 'Unable to create new Land',
-            display: false
-          };
-          $scope.notification.display = true;
-        });
-      }
-    };
+      $scope.submit = function(isValid) {
+        if (isValid) {
+          LandService.create($scope.land).then(function(data) {
 
-    $scope.land = {};
+            NotificationService.notify({
+              type: 'success',
+              msg: 'Land created'
+            });
 
-  }])
+          }, function(error) {
+            NotificationService.notify({
+              type: 'error',
+              msg: 'Unable to create Land'
+            });
+          });
+        }
+      };
+
+      $scope.land = {};
+
+    }
+  ])
 
   .controller('LandListCtrl', ['$scope', '$location', 'LandService', 'Lands', function($scope, $location, LandService, Lands) {
 
@@ -98,9 +97,9 @@
         length: $scope.recordsPerPage
       };
 
-      LandService.query(criteria).$promise.then(
+      LandService.query(criteria).then(
         function(data) {
-          self.updateScope($scope, data);
+          self.updateScope(data);
           console.log('[Query Land] - length:' + data.content.length);
         },
         function(error) {
@@ -111,7 +110,7 @@
 
     var self = this;
 
-    this.updateScope = function(scope, data) {
+    this.updateScope = function(data) {
       $scope.lands = data.content;
       $scope.totalRecords = data.totalRecords;
       $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
@@ -122,36 +121,32 @@
     $scope.currentPage = 1;
     $scope.recordsPerPage = 10;
 
-    this.updateScope($scope, Lands);
+    this.updateScope(Lands);
   }])
 
-  .controller('LandDetailCtrl', ['$scope', '$routeParams', 'Land', 'LandService', function($scope, $routeParams, Land, LandService) {
+  .controller('LandDetailCtrl', ['$scope', '$routeParams', 'Land', 'LandService', 'NotificationService',
+    function($scope, $routeParams, Land, LandService, NotificationService) {
 
-    $scope.submit = function(isValid) {
-      if (isValid) {
-        LandService.update($scope.land).then(function(data) {
-          $scope.notification = {
-            type: 'success',
-            header: 'Success',
-            message: Land.name + ' has been updated',
-            display: false
-          };
-          $scope.notification.display = true;
-        }, function(error) {
-          $scope.notification = {
-            type: 'danger',
-            header: 'Error',
-            message: 'Unable to update Land',
-            display: false
-          };
-          $scope.notification.display = true;
-        });
+      $scope.submit = function(isValid) {
+        if (isValid) {
+          LandService.update($scope.land).then(function(data) {
+            NotificationService.notify({
+              type: 'success',
+              msg: $scope.land.name + ' updated'
+            });
+          }, function(error) {
+            NotificationService.notify({
+              type: 'error',
+              msg: 'Unable to update ' + $scope.land.name
+            });
+          });
 
-      }
-    };
+        }
+      };
 
-    $scope.land = Land;
+      $scope.land = Land;
 
-  }]);
+    }
+  ]);
 
 })();

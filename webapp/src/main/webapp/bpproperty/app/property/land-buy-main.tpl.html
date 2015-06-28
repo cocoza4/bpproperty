@@ -48,10 +48,8 @@
     <hr>
       <div style="padding: 5px;"></div>
       <tabset>
-        <tab title="Buy Details" template-url="property/land-buy-details.tpl.html">
-        </tab>
-        <tab title="Payment Records" template-url="property/land-installment.tpl.html">
-        </tab>
+        <tab template-url="property/land-buy-details.tpl.html" title="Buy Details"></tab>
+        <tab ng-if="buyDetail.customerId" template-url="property/land-installment.tpl.html" title="Payment Records"></tab>
       </tabset>
     </div>
   </div>
