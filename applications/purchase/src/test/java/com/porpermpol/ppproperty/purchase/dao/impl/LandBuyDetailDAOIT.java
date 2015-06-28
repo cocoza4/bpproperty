@@ -37,14 +37,14 @@ public class LandBuyDetailDAOIT {
 
     @Before
     public void setUp() throws Exception {
-        Land Land = new Land();
-        Land.setName("name");
-        Land.setAddress("address");
-        Land.setDescription("description");
-        Land.setArea(new Area(10, 20, 30));
-        Land.setCreatedBy(0L);
-        Land.setCreatedTime(new Date());
-        propertyDAO.save(Land);
+        Land land = new Land();
+        land.setName("name");
+        land.setAddress("address");
+        land.setDescription("description");
+        land.setArea(new Area(10, 20, 30));
+        land.setCreatedBy(0L);
+        land.setCreatedTime(new Date());
+        propertyDAO.save(land);
 
         Customer customer = new Customer();
         customer.setFirstName("firstname");
@@ -58,7 +58,7 @@ public class LandBuyDetailDAOIT {
         landBuyDetail = new LandBuyDetail();
         landBuyDetail.setArea(new Area(1, 2, 3));
         landBuyDetail.setCustomerId(customer.getId());
-        landBuyDetail.setPropertyId(Land.getId());
+        landBuyDetail.setPropertyId(land.getId());
         landBuyDetail.setDownPayment(1000f);
         landBuyDetail.setBuyPrice(100000f);
         landBuyDetail.setBuyType(BuyType.CASH);
