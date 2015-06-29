@@ -75,7 +75,7 @@ public class LandBuyServiceIT {
         landBuyDetail = new LandBuyDetail();
         landBuyDetail.setArea(new Area(1, 2, 3));
         landBuyDetail.setCustomerId(customer.getId());
-        landBuyDetail.setPropertyId(land.getId());
+        landBuyDetail.setLandId(land.getId());
         landBuyDetail.setDownPayment(1000f);
         landBuyDetail.setBuyPrice(100000f);
         landBuyDetail.setBuyType(BuyType.CASH);

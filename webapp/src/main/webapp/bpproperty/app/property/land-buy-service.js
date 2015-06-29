@@ -25,7 +25,7 @@
       // }
 
       return LandBuy.update({
-        landId: landBuy.propertyId,
+        landId: landBuy.landId,
         buyDetailId: landBuy.id
       }, landBuy).$promise;
     }

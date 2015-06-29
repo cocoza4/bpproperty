@@ -15,8 +15,8 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="property_id" type="bigint">
-                <constraints nullable="false" deleteCascade="true" foreignKeyName="fk_property_id"
+            <column name="land_id" type="bigint">
+                <constraints nullable="false" deleteCascade="true" foreignKeyName="fk_land_id"
                              references="land(id)"/>
             </column>
             <column name="customer_id" type="bigint">
@@ -48,7 +48,7 @@
             <column name="updated_by" type="bigint"/>
             <column name="updated_time" type="bigint"/>
         </createTable>
-        <addUniqueConstraint tableName="land_buy_detail" columnNames="property_id, customer_id"/>
+        <addUniqueConstraint tableName="land_buy_detail" columnNames="land_id, customer_id"/>
 
         <createTable tableName="installments_record">
             <column name="id" type="bigint" autoIncrement="true">

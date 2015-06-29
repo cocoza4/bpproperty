@@ -5,7 +5,7 @@ import com.porpermpol.ppproperty.property.model.Area;
 
 public class LandBuyDetail extends PersistableModel<Long> {
 
-    private Long propertyId;
+    private Long landId;
     private Long customerId;
     private BuyType buyType;
     private Float downPayment;
@@ -15,12 +15,12 @@ public class LandBuyDetail extends PersistableModel<Long> {
     private String description;
     private Area area;
 
-    public Long getPropertyId() {
-        return propertyId;
+    public Long getLandId() {
+        return landId;
     }
 
-    public void setPropertyId(Long propertyId) {
-        this.propertyId = propertyId;
+    public void setLandId(Long landId) {
+        this.landId = landId;
     }
 
     public Long getCustomerId() {
@@ -90,7 +90,7 @@ public class LandBuyDetail extends PersistableModel<Long> {
     @Override
     public String toString() {
         return "LandBuyDetail{" +
-                "propertyId=" + propertyId +
+                "landId=" + landId +
                 ", customerId=" + customerId +
                 ", buyType=" + buyType +
                 ", downPayment=" + downPayment +

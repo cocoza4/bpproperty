@@ -64,7 +64,7 @@ public class InstallmentRecordDAOIT {
         LandBuyDetail landBuyDetail = new LandBuyDetail();
         landBuyDetail.setArea(new Area(1, 2, 3));
         landBuyDetail.setCustomerId(customer.getId());
-        landBuyDetail.setPropertyId(Land.getId());
+        landBuyDetail.setLandId(Land.getId());
         landBuyDetail.setBuyPrice(10000f);
         landBuyDetail.setBuyType(BuyType.CASH);
         landBuyDetail.setAnnualInterest(15.5f);

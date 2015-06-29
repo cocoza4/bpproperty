@@ -301,7 +301,7 @@
 
         <!-- init LandBuyDetail -->
         <insert tableName="LAND_BUY_DETAIL">
-            <column name="PROPERTY_ID" valueComputed="(SELECT ID FROM LAND WHERE NAME = 'Por Permpol')"/>
+            <column name="LAND_ID" valueComputed="(SELECT ID FROM LAND WHERE NAME = 'Por Permpol')"/>
             <column name="CUSTOMER_ID" valueComputed="(SELECT ID FROM CUSTOMER WHERE FIRSTNAME = 'firstname1')"/>
             <column name="BUY_TYPE" value="I"/>
             <column name="DOWN_PAYMENT" value="100.55"/>
@@ -315,7 +315,7 @@
             <column name="CREATED_TIME" valueDate="${now}"/>
         </insert>
         <insert tableName="LAND_BUY_DETAIL">
-            <column name="PROPERTY_ID" valueComputed="(SELECT ID FROM LAND WHERE NAME = 'Por Permpol')"/>
+            <column name="LAND_ID" valueComputed="(SELECT ID FROM LAND WHERE NAME = 'Por Permpol')"/>
             <column name="CUSTOMER_ID" valueComputed="(SELECT ID FROM CUSTOMER WHERE FIRSTNAME = 'firstname2')"/>
             <column name="BUY_TYPE" value="C"/>
             <column name="DOWN_PAYMENT" value="100.55"/>

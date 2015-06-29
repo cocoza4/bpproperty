@@ -58,7 +58,7 @@ public class LandBuyDetailDAOIT {
         landBuyDetail = new LandBuyDetail();
         landBuyDetail.setArea(new Area(1, 2, 3));
         landBuyDetail.setCustomerId(customer.getId());
-        landBuyDetail.setPropertyId(land.getId());
+        landBuyDetail.setLandId(land.getId());
         landBuyDetail.setDownPayment(1000f);
         landBuyDetail.setBuyPrice(100000f);
         landBuyDetail.setBuyType(BuyType.CASH);
@@ -109,7 +109,7 @@ public class LandBuyDetailDAOIT {
 
         assertEquals(landBuyDetail.getId(), model.getId());
         assertEquals(landBuyDetail.getCustomerId(), model.getCustomerId());
-        assertEquals(landBuyDetail.getPropertyId(), model.getPropertyId());
+        assertEquals(landBuyDetail.getLandId(), model.getLandId());
         assertEquals(landBuyDetail.getAnnualInterest(), model.getAnnualInterest());
         assertEquals(landBuyDetail.getYearsOfInstallment(), model.getYearsOfInstallment());
         assertEquals(landBuyDetail.getBuyType(), model.getBuyType());

@@ -138,11 +138,12 @@ public class LandRestController {
     }
 
     @RequestMapping(value = "/{landId}/buyDetail", method = RequestMethod.POST)
-    public void saveBuyDetail(@PathVariable("landId") long landId, @RequestBody LandBuyDetail buyDetail) {
+    public LandBuyDetail saveBuyDetail(@PathVariable("landId") long landId, @RequestBody LandBuyDetail buyDetail) {
         landBuyService.saveLandBuyDetail(buyDetail);
+        return buyDetail;
     }
 
-    @RequestMapping(value = "/{landId}/buyDetail/{buyDetailId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{landId}/buyDetail/{buyDetailId}", method = RequestMethod.PUT)
     public void updateBuyDetail(@PathVariable("landId") long landId,
                                   @PathVariable("buyDetailId") long buyDetailId,
                                  @RequestBody LandBuyDetail buyDetail) {

@@ -30,7 +30,7 @@ public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implem
 
             LandBuyDetail model = new LandBuyDetail();
             model.setId(rs.getLong("id"));
-            model.setPropertyId(rs.getLong("property_id"));
+            model.setLandId(rs.getLong("land_id"));
             model.setCustomerId(rs.getLong("customer_id"));
             model.setBuyType(BuyType.get(rs.getString("buy_type")));
             model.setBuyPrice(rs.getFloat("buy_price"));
@@ -52,7 +52,7 @@ public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implem
         public Map<String, Object> mapColumns(LandBuyDetail model) {
             Map<String, Object> mapping = new LinkedHashMap<>();
             mapping.put("id", model.getId());
-            mapping.put("property_id", model.getPropertyId());
+            mapping.put("land_id", model.getLandId());
             mapping.put("customer_id", model.getCustomerId());
             mapping.put("buy_type", model.getBuyType().getCode());
             mapping.put("down_payment", model.getDownPayment());

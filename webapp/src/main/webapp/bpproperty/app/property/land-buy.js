@@ -92,37 +92,73 @@
 
   }])
 
-  .controller('LandBuyDetailsCtrl', ['$scope', '$route', 'LandBuyService', 'NotificationService',
-    function($scope, $route, LandBuyService, NotificationService) {
+  .controller('LandBuyDetailsCtrl', ['$scope', '$location', '$route', 'LandBuyService', 'NotificationService',
+    function($scope, $location, $route, LandBuyService, NotificationService) {
 
-      $scope.submit = function() {
+      $scope.saveLandBuyDetail = function(isValid) {
 
-        LandBuyService.update($scope.buyDetail).then(function(data) {
+        if (isValid) {
 
-          NotificationService.notify({
-            type: 'success',
-            msg: 'BuyDetail updated'
-          });
+          var isNew = $scope.buyDetail.id == null;
 
-        }, function(error) {
-          NotificationService.notify({
-            type: 'error',
-            msg: 'Unable to update BuyDetail'
-          });
-        });
+          if (isNew) {
+            $scope.buyDetail.customerId = 7; // TODO: fix this hard coded customerId
+            LandBuyService.create($scope.buyDetail).then(function(data) {
+              NotificationService.notify({
+                type: 'success',
+                msg: 'BuyDetail created'
+              });
+              $scope.buyDetail = data;
+
+              // reload the page
+              var url = '/land/' + $route.current.params['landId'] + '/buyDetail/' + $scope.buyDetail.id;
+              $location.path(url);
+
+            }, function(error) {
+              NotificationService.notify({
+                type: 'error',
+                msg: 'Unable to create BuyDetail'
+              });
+            });
+          } else {
+            LandBuyService.update($scope.buyDetail).then(function(data) {
+
+              NotificationService.notify({
+                type: 'success',
+                msg: 'BuyDetail updated'
+              });
+
+            }, function(error) {
+              NotificationService.notify({
+                type: 'error',
+                msg: 'Unable to update BuyDetail'
+              });
+            });
+          }
+        }
+
 
       };
 
-      var landBuyCriteria = {
-        landId: $route.current.params['landId'],
-        buyDetailId: $route.current.params['buyDetailId']
-      };
 
       $scope.buyTypeItems = ['CASH', 'INSTALLMENT'];
 
-      LandBuyService.query(landBuyCriteria).then(function(data) {
-        $scope.buyDetail = data;
-      });
+      if ($location.path().endsWith('create')) {
+        $scope.buyDetail = {
+          landId: $route.current.params['landId'],
+          buyType: 'CASH'
+        };
+      } else {
+        var landBuyCriteria = {
+          landId: $route.current.params['landId'],
+          buyDetailId: $route.current.params['buyDetailId']
+        };
+
+        LandBuyService.query(landBuyCriteria).then(function(data) {
+          $scope.buyDetail = data;
+        });
+      }
+
 
     }
   ])
@@ -138,6 +174,8 @@
   .controller('CreateLandBuyDetailCtrl', ['$scope', '$routeParams', 'LandService',
     function($scope, $routeParams, LandService) {
 
+      //TODO: unneccessary request is sent, fix it
+
       $scope.buyTypeItems = ['CASH', 'INSTALLMENT'];
 
       // $scope.submit = function() {
@@ -150,9 +188,14 @@
       // $scope.buyDetail = new LandBuy({
       //   landId: $routeParams.landId
       // });
-      // $scope.land = LandService.query({
-      //   landId: $routeParams.landId
-      // });
+
+      var landCriteria = {
+        landId: $routeParams.landId
+      };
+
+      LandService.query(landCriteria).then(function(data) {
+        $scope.land = data;
+      });
 
     }
   ])

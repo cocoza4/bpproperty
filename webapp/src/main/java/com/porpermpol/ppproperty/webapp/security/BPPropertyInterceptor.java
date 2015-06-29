@@ -27,7 +27,6 @@ public class BPPropertyInterceptor implements HandlerInterceptor {
         Long userLoginId = 1L;
         requestAttributes.setAttribute(RequestAttributesUtils.USER_LOGIN_ID, userLoginId, RequestAttributes.SCOPE_REQUEST);
 
-        System.out.println("intercepted");
         return true;
     }
 
