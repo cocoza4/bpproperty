@@ -1,23 +1,45 @@
-(function () {
+(function() {
 
-    'use strict';
+  'use strict';
 
-    angular
+  angular
 
-        .module('customer-service', ['ngResource'])
+    .module('customer-service', ['ngResource'])
 
-        .factory('Customer', ['$resource', function ($resource) {
+  .service('CustomerService', ['Customer', function(Customer) {
 
-            return $resource(
-                '/bpproperty/api/customer/:id',
-                {
-                    id: '@id'
-                },
-                {
-                    'update': {method: 'PUT'},
-                    'query': {method: 'GET', params: {page: '@page', length: '@length'}}
-                });
-        }]);
+    this.query = function(criteria) {
+      return Customer.query(criteria).$promise;
+    }
+
+    this.create = function(customer) {
+      return Customer.save(customer).$promise;
+    };
+
+    this.update = function(customer) {
+      return Customer.update(customer).$promise;
+    }
+
+  }])
+
+  .factory('Customer', ['$resource', function($resource) {
+
+    return $resource(
+      '/bpproperty/api/customer/:id', {
+        id: '@id'
+      }, {
+        'update': {
+          method: 'PUT'
+        },
+        'query': {
+          method: 'GET',
+          params: {
+            page: '@page',
+            length: '@length'
+          }
+        }
+      });
+  }]);
 
 
 })();

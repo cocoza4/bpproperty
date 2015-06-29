@@ -252,6 +252,14 @@
       this.updateScope(BuyDetailList);
 
     }
-  ]);
+  ])
+
+  .controller('SelectBuyerCtrl', ['$scope', function($scope) {
+
+    
+
+
+  }])
+  ;
 
 })();
