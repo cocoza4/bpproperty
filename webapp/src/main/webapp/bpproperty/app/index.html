@@ -46,7 +46,7 @@
           <li ng-repeat="breadcrumb in breadcrumbs.getAll()">
             <ng-switch on="$last">
               <span ng-switch-when="true">{{breadcrumb.name}}</span>
-              <span ng-switch-default><a href="#{{breadcrumb.path}}">{{breadcrumb.name}}</a></span>
+              <span ng-switch-default><a href="#{{breadcrumb.path}}">{{breadcrumb.name}}</a>&nbsp;&nbsp;&nbsp;</span>
             </ng-switch>
           </li>
         </ul>
@@ -93,7 +93,7 @@
   <script src="customer/customer-service.js"></script>
   <script src="property/land-service.js"></script>
   <script src="property/land-buy-service.js"></script>
-  
+
   <script src="property/land.js"></script>
   <script src="property/land-installment.js"></script>
   <script src="property/land-buy.js"></script>

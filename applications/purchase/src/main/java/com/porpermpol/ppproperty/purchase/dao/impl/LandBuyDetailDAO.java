@@ -7,6 +7,8 @@ import com.porpermpol.ppproperty.property.model.Area;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailDAO;
 import com.porpermpol.ppproperty.purchase.model.BuyType;
 import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +21,12 @@ import java.util.Map;
 
 @Repository
 public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implements ILandBuyDetailDAO {
+
+    @Autowired
+    private JdbcOperations jdbcOperations;
+
+    private static final String SQL_SELECT_BY_CUSTOMER_ID = "SELECT * FROM land_buy_detail " +
+            "WHERE customer_id = ? ORDER BY created_time DESC";
 
     public LandBuyDetailDAO() {
         super(ROW_MAPPER, ROW_UNMAPPER, "land_buy_detail", "id");
@@ -83,9 +91,14 @@ public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implem
 
     //TODO: complete this
     @Override
-    public List<LandBuyDetail> findByCriteria(Long propertyId) {
+    public List<LandBuyDetail> findByCriteria(long landId) {
         String sql = "SELECT * FROM LAND_PURCHASE_INFO WHERE PROPERTY_ID = ?";
 //        return getjdbc;
         return null;
+    }
+
+    @Override
+    public List<LandBuyDetail> findByCustomerId(long customerId) {
+        return jdbcOperations.query(SQL_SELECT_BY_CUSTOMER_ID, ROW_MAPPER, customerId);
     }
 }

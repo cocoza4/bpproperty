@@ -9,33 +9,43 @@
       ยอดขาย</a>
     <div style="clear:both; padding: 5px;"></div>
     <form class="form-horizontal" name="landForm" ng-submit="submit(landForm.$valid)" novalidate>
-      <div class="form-group">
+      <div class="form-group required">
         <label class="control-label col-xs-3" for="name">ชื่อโครงการ</label>
         <div class="col-xs-9" ng-class="{'has-error': landForm.name.$error.required && (landForm.$submitted || landForm.name.$touched)}">
           <input class="form-control input-sm" name="name" ng-model="land.name" placeholder="Property's Name" required type="text">
           <span class="text-danger" ng-show="landForm.name.$error.required && (landForm.$submitted || landForm.name.$touched)">Land's name is required.</span>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group required">
         <label class="control-label col-xs-3" for="address">ที่อยู่</label>
         <div class="col-xs-9" ng-class="{ 'has-error': landForm.addresss.$error.required && (landForm.$submitted || landForm.addresss.$touched)}">
           <input class="form-control input-sm" name="addresss" ng-model="land.address" placeholder="Address" required type="text">
           <span class="text-danger" ng-show="landForm.addresss.$error.required && (landForm.$submitted || landForm.addresss.$touched)">Land's address is required.</span>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group required">
         <label class="control-label col-xs-3" for="area-group">เนื้อที่</label>
         <div class="col-xs-9">
-          <table border="0" id="area-group">
+          <table border="0" name="area-group">
             <tr>
               <td ng-class="{'has-error': landForm.rai.$error.required && (landForm.$submitted || landForm.rai.$touched)}" width="110">
-                <input class="form-control input-sm area" data-placement="top" data-toggle="tooltip" decimal-number name="rai" ng-model="land.area.rai" required title="ไร่" type="text">
+                <div class="has-feedback">
+                  <input class="form-control input-sm area" data-placement="top" data-toggle="tooltip" decimal-number name="rai" ng-model="land.area.rai" required title="ไร่" type="text">
+                  <i class="text-info form-control-feedback">ไร่</i>
+                </div>
               </td>
               <td ng-class="{'has-error': landForm.yarn.$error.required && (landForm.$submitted || landForm.yarn.$touched)}" width="110">
-                <input class="form-control input-sm area" data-placement="top" data-toggle="tooltip" decimal-number name="yarn" ng-model="land.area.yarn" required title="งาน" type="text">
+                <div class="has-feedback">
+                  <input class="form-control input-sm area" data-placement="top" data-toggle="tooltip" decimal-number name="yarn" ng-model="land.area.yarn" required title="งาน" type="text">
+                  <i class="text-info form-control-feedback">งาน</i>
+                </div>
               </td>
               <td ng-class="{'has-error': landForm.tarangwa.$error.required && (landForm.$submitted || landForm.tarangwa.$touched)}" width="110">
-                <input class="form-control input-sm area" data-placement="top" data-toggle="tooltip" decimal-number name="tarangwa" ng-model="land.area.tarangwa" required title="ตารางวา" type="text">
+                <div class="has-feedback">
+                  <input class="form-control input-sm area" data-placement="top" data-toggle="tooltip" decimal-number name="tarangwa" ng-model="land.area.tarangwa" required title="ตารางวา" type="text">
+                  <i class="text-info form-control-feedback">วา
+                    <sup>2</sup></i>
+                </div>
               </td>
             </tr>
           </table>

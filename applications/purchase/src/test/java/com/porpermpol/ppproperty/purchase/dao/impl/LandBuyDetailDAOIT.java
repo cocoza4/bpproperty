@@ -17,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -98,6 +99,13 @@ public class LandBuyDetailDAOIT {
 
         assertEquals(expected, buyDetailDAO.findOne(landBuyDetail.getId()).getYearsOfInstallment());
 
+    }
+
+    @Test
+    public void testFindByCustomerId() throws Exception {
+        buyDetailDAO.save(landBuyDetail);
+        List<LandBuyDetail> models = buyDetailDAO.findByCustomerId(landBuyDetail.getCustomerId());
+        assertEquals(1, models.size());
     }
 
     @Test

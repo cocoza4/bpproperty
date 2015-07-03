@@ -21,6 +21,15 @@
     }]
   };
 
+  var CustomerLandsResolve = {
+    LandBuyDetailList: ['$route', 'CustomerService', function($route, CustomerService) {
+      var criteria = {
+        'id': $route.current.params['id']
+      };
+      return CustomerService.queryByCustomerId(criteria);
+    }]
+  };
+
   angular
 
     .module('customer', ['ngRoute'])
@@ -44,25 +53,33 @@
       templateUrl: 'customer/customer-detail.tpl.html',
       controller: 'CustomerCtrl',
       resolve: CustomerResolve
+    })
+
+    .when('/customer/:id/lands', {
+      templateUrl: 'customer/customer-lands.tpl.html',
+      controller: 'CustomerLandsCtrl',
+      resolve: CustomerLandsResolve
     });
 
   }])
 
   .controller('CustomerCtrl', ['$scope', '$routeParams', 'Customer', 'CustomerService', 'NotificationService',
     function($scope, $routeParams, Customer, CustomerService, NotificationService) {
-      $scope.submit = function() {
+      $scope.submit = function(isValid) {
 
-        CustomerService.update($scope.customer).then(function(data) {
-          NotificationService.notify({
-            type: 'success',
-            msg: 'Customer updated'
+        if (isValid) {
+          CustomerService.update($scope.customer).then(function(data) {
+            NotificationService.notify({
+              type: 'success',
+              msg: 'Customer updated'
+            });
+          }, function(error) {
+            NotificationService.notify({
+              type: 'error',
+              msg: 'Unable to update Customer'
+            });
           });
-        }, function(error) {
-          NotificationService.notify({
-            type: 'success',
-            msg: 'Unable to update Customer'
-          });
-        });
+        }
 
       };
 
@@ -70,25 +87,48 @@
     }
   ])
 
-  .controller('CreateCustomerCtrl', ['$scope', 'CustomerService', 'NotificationService',
-    function($scope, CustomerService, NotificationService) {
-      $scope.submit = function() {
-        CustomerService.create($scope.customer).then(function(data) {
-          NotificationService.notify({
-            type: 'success',
-            msg: 'Customer created'
+  .controller('CreateCustomerCtrl', ['$scope', '$location', 'CustomerService', 'NotificationService',
+    function($scope, $location, CustomerService, NotificationService) {
+      $scope.submit = function(isValid) {
+
+        if (isValid) {
+          CustomerService.create($scope.customer).then(function(data) {
+
+            $scope.customer = data;
+
+            NotificationService.notify({
+              type: 'success',
+              msg: 'Customer created'
+            });
+
+            // redirect to customer details page
+            var url = '/customer/' + data.id;
+            $location.path(url);
+
+          }, function(error) {
+            NotificationService.notify({
+              type: 'error',
+              msg: 'Unable to create Customer'
+            });
           });
-        }, function(error) {
-          NotificationService.notify({
-            type: 'success',
-            msg: 'Unable to create Customer'
-          });
-        });
+        }
+
       };
 
       $scope.customer = {};
     }
   ])
+
+  .controller('CustomerLandsCtrl', ['$scope', '$location', 'LandBuyDetailList', function($scope, $location, LandBuyDetailList) {
+
+    $scope.redirect = function(landBuyDetail) {
+      var url = 'land/' + landBuyDetail.landId + '/buyDetail/' + landBuyDetail.id;
+      $location.path(url);
+    };
+
+    $scope.landBuyDetails = LandBuyDetailList;
+
+  }])
 
   .controller('CustomerListCtrl', ['$scope', '$location', 'Customer', 'Customers', function($scope, $location, Customer, Customers) {
 

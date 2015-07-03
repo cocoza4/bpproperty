@@ -41,6 +41,12 @@ public class LandBuyService implements ILandBuyService {
 
     @Transactional(readOnly = true)
     @Override
+    public List<LandBuyDetail> findLandBuyDetailsByCustomerId(long customerId) {
+        return landBuyDetailDAO.findByCustomerId(customerId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public Page<LandBuyDetail> findLandBuyDetailByCriteria(String name, String address, Pageable pageable) {
         return null;
     }

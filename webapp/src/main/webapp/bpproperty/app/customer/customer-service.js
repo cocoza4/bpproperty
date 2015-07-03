@@ -6,10 +6,14 @@
 
     .module('customer-service', ['ngResource'])
 
-  .service('CustomerService', ['Customer', function(Customer) {
+  .service('CustomerService', ['Customer', 'CustomerLands', function(Customer, CustomerLands) {
 
     this.query = function(criteria) {
       return Customer.query(criteria).$promise;
+    }
+
+    this.queryByCustomerId = function(id) {
+      return CustomerLands.query(id).$promise;
     }
 
     this.create = function(customer) {
@@ -38,6 +42,13 @@
             length: '@length'
           }
         }
+      });
+  }])
+
+  .factory('CustomerLands', ['$resource', function($resource) {
+    return $resource(
+      '/bpproperty/api/customer/:id/lands', {
+        id: '@id'
       });
   }]);
 

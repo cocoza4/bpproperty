@@ -2,6 +2,8 @@ package com.porpermpol.ppproperty.webapp.controller.rest;
 
 import com.porpermpol.ppproperty.person.model.Customer;
 import com.porpermpol.ppproperty.person.service.ICustomerService;
+import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
+import com.porpermpol.ppproperty.purchase.service.ILandBuyService;
 import com.porpermpol.ppproperty.webapp.exception.ResourceNotFoundException;
 import com.porpermpol.ppproperty.webapp.utils.DataTableObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +17,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/customer")
 public class CustomerRestController {
 
     @Autowired
     private ICustomerService customerService;
+
+    @Autowired
+    private ILandBuyService landBuyService;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Customer getById(@PathVariable("id") long id) {
@@ -47,14 +54,20 @@ public class CustomerRestController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void save(@RequestBody Customer customer) {
+    public Customer save(@RequestBody Customer customer) {
         customerService.saveCustomer(customer);
+        return customer;
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public void update(@PathVariable("id") long id, @RequestBody Customer customer) {
         customer.setPersisted(true);
         customerService.saveCustomer(customer);
+    }
+
+    @RequestMapping(value = "/{id}/lands", method = RequestMethod.GET)
+    public List<LandBuyDetail> update(@PathVariable("id") long id) {
+        return landBuyService.findLandBuyDetailsByCustomerId(id);
     }
 
 }

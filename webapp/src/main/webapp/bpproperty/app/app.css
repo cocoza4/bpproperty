@@ -61,16 +61,26 @@
   cursor: hand;
 }
 
+/* This is added because mobile doesn't show border */
+.table tfoot td {
+  border-right: 1px solid #ddd !important;
+}
+
 input[type="text"] {
-    width: 320px;
+    max-width: 320px;
 }
 
 .area {
-    width: 100px !important;
+    max-width: 100px !important;
 }
 
 .sortable:hover {
   cursor: pointer;
+}
+
+.form-group.required .control-label:after {
+  content:"\00a0*";
+  color:#FF4000;
 }
 
 #loaderDiv {
@@ -86,7 +96,7 @@ input[type="text"] {
    position: absolute;
    left: 50%;
    top: 50%;
-   /*margin-left: -32px; /* -1 * image width / 2 */
-   /*margin-top: -32px; /* -1 * image height / 2 */
+   margin-left: -50px; /* -1 * image width / 2 */
+   margin-top: -50px; /* -1 * image height / 2  */
    display: block;
 }

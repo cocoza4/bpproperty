@@ -31,6 +31,7 @@
             <column name="updated_by" type="bigint"/>
             <column name="updated_time" type="bigint"/>
         </createTable>
+        <addUniqueConstraint tableName="customer" columnNames="firstname, lastname"/>
 
     </changeSet>
 

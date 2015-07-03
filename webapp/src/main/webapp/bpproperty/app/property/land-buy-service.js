@@ -49,7 +49,6 @@
             length: '@length'
           }
         }
-        //                    'query': {method: 'GET', params: {landId: '@landId', page: '@page', length: '@length'}}
       });
   }]);
 

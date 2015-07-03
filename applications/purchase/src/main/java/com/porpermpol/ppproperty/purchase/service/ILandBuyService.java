@@ -13,6 +13,7 @@ public interface ILandBuyService {
 
     void deleteLandBuyDetailById(long id);
     LandBuyDetail findLandBuyDetailById(long id);
+    List<LandBuyDetail> findLandBuyDetailsByCustomerId(long customerId);
 
     Page<LandBuyDetail> findLandBuyDetailByCriteria(String name, String address, Pageable pageable);
     Page<LandBuyDetail> findAllLandBuyDetails(Pageable pageable);
