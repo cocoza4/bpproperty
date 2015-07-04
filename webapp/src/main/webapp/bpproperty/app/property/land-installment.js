@@ -37,7 +37,7 @@
               $scope.installment = {}; // reset data
               NotificationService.notify({
                 type: 'success',
-                msg: 'Installment creatd'
+                msg: 'Installment created'
               });
             }, function(error) {
               NotificationService.notify({

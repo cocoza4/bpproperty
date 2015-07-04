@@ -93,16 +93,21 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="installment in installments">
+        <tr ng-show="installments.length" ng-repeat="installment in installments">
           <td align="center">{{$index + 1}}</td>
-          <td align="right">{{installment.payFor | date: "MMM, yyyy"}}</td>
+          <td align="right">{{installment.payFor | date: "MMMM yyyy"}}</td>
           <td align="right">{{installment.amount | number}}</td>
-          <td align="right">{{installment.createdTime | date:"MMM dd, yyyy ' at ' h:mma"}}</td>
+          <td align="right">{{installment.createdTime | date:"MMMM d, yyyy ' at ' h:mm a"}}</td>
           <td align="middle" ng-click="viewInstallment(installment);">
             <span class="glyphicon glyphicon-edit" style="color:#337ab7"></span>
           </td>
           <td align="middle" ng-click="confirmDeleteDialog(installment)">
             <span class="glyphicon glyphicon-remove" style="color:#d9534f"></span>
+          </td>
+        </tr>
+        <tr ng-show="!installments.length">
+          <td colspan="6">
+            No data found
           </td>
         </tr>
       </tbody>

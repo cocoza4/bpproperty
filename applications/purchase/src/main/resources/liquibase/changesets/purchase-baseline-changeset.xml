@@ -50,13 +50,13 @@
         </createTable>
         <addUniqueConstraint tableName="land_buy_detail" columnNames="land_id, customer_id"/>
 
-        <createTable tableName="installments_record">
+        <createTable tableName="installment">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="buy_detail_id" type="bigint">
                 <constraints nullable="false" deleteCascade="true"
-                             foreignKeyName="fk_installment_record_land_buy_detail_id"
+                             foreignKeyName="fk_installment_land_buy_detail_id"
                              references="land_buy_detail(id)"/>
             </column>
             <column name="pay_for" type="bigint">

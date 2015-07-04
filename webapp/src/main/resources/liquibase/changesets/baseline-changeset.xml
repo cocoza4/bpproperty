@@ -329,8 +329,8 @@
             <column name="CREATED_TIME" valueDate="${now}"/>
         </insert>
 
-        <!-- init INSTALLMENTS_RECORD -->
-        <insert tableName="INSTALLMENTS_RECORD">
+        <!-- init INSTALLMENT -->
+        <insert tableName="INSTALLMENT">
             <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
             <column name="PAY_FOR" value="1422631659000"/>
             <column name="AMOUNT" value="6000"/>
@@ -338,7 +338,7 @@
             <column name="CREATED_BY" valueNumeric="0" />
             <column name="CREATED_TIME" value="1422631659000"/>
         </insert>
-        <insert tableName="INSTALLMENTS_RECORD">
+        <insert tableName="INSTALLMENT">
             <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
             <column name="PAY_FOR" value="1425310059000"/>
             <column name="AMOUNT" value="6000"/>
@@ -346,7 +346,7 @@
             <column name="CREATED_BY" valueNumeric="0" />
             <column name="CREATED_TIME" value="1425310059000"/>
         </insert>
-        <insert tableName="INSTALLMENTS_RECORD">
+        <insert tableName="INSTALLMENT">
             <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
             <column name="PAY_FOR" value="1427729259000"/>
             <column name="AMOUNT" value="6000"/>
@@ -354,7 +354,7 @@
             <column name="CREATED_BY" valueNumeric="0" />
             <column name="CREATED_TIME" value="1427729259000"/>
         </insert>
-        <insert tableName="INSTALLMENTS_RECORD">
+        <insert tableName="INSTALLMENT">
             <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
             <column name="PAY_FOR" value="1430407659000"/>
             <column name="AMOUNT" value="6000"/>
@@ -362,7 +362,7 @@
             <column name="CREATED_BY" valueNumeric="0" />
             <column name="CREATED_TIME" value="1430407659000"/>
         </insert>
-        <insert tableName="INSTALLMENTS_RECORD">
+        <insert tableName="INSTALLMENT">
             <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
             <column name="PAY_FOR" value="1432999659000"/>
             <column name="AMOUNT" value="6000"/>
@@ -370,7 +370,7 @@
             <column name="CREATED_BY" valueNumeric="0" />
             <column name="CREATED_TIME" value="1432999659000"/>
         </insert>
-        <insert tableName="INSTALLMENTS_RECORD">
+        <insert tableName="INSTALLMENT">
             <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
             <column name="PAY_FOR" value="1419953259000"/>
             <column name="AMOUNT" value="6000"/>
@@ -378,7 +378,7 @@
             <column name="CREATED_BY" valueNumeric="0" />
             <column name="CREATED_TIME" value="1419953259000"/>
         </insert>
-        <insert tableName="INSTALLMENTS_RECORD">
+        <insert tableName="INSTALLMENT">
             <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
             <column name="PAY_FOR" valueComputed="1417361259000"/>
             <column name="AMOUNT" value="6000"/>

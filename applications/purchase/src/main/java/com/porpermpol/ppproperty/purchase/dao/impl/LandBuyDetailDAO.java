@@ -22,11 +22,14 @@ import java.util.Map;
 @Repository
 public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implements ILandBuyDetailDAO {
 
-    @Autowired
-    private JdbcOperations jdbcOperations;
-
     private static final String SQL_SELECT_BY_CUSTOMER_ID = "SELECT * FROM land_buy_detail " +
             "WHERE customer_id = ? ORDER BY created_time DESC";
+
+    private static final String SQL_COUNT_BY_LAND_ID = "SELECT count(*) FROM land_buy_detail " +
+            "WHERE land_id = ?";
+
+    @Autowired
+    private JdbcOperations jdbcOperations;
 
     public LandBuyDetailDAO() {
         super(ROW_MAPPER, ROW_UNMAPPER, "land_buy_detail", "id");
@@ -100,5 +103,10 @@ public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implem
     @Override
     public List<LandBuyDetail> findByCustomerId(long customerId) {
         return jdbcOperations.query(SQL_SELECT_BY_CUSTOMER_ID, ROW_MAPPER, customerId);
+    }
+
+    @Override
+    public long countByLandId(long id) {
+        return jdbcOperations.queryForObject(SQL_COUNT_BY_LAND_ID, Long.class, id);
     }
 }

@@ -64,10 +64,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-click="redirect(landBuy.id)" ng-repeat="landBuy in landBuys">
+          <tr ng-show="landBuys.length" ng-click="redirect(landBuy.id)" ng-repeat="landBuy in landBuys">
             <td align="center">{{$index + 1}}</td>
             <td>{{landBuy.buyType}}</td>
-            <td>{{landBuy.customerId}}</td>
+            <td>{{landBuy.buyerFirstName}} {{landBuy.buyerLastName}}</td>
             <td>{{landBuy.buyPrice}}</td>
             <td>{{landBuy.annualInterest}}</td>
             <td>{{landBuy.yearsOfInstallment}}</td>
@@ -75,6 +75,11 @@
             <td align="center">{{landBuy.area.yarn}}</td>
             <td align="center">{{landBuy.area.tarangwa}}</td>
             <td>{{landBuy.createdTime | date:"MMM dd, yyyy ' at ' h:mma"}}</td>
+          </tr>
+          <tr ng-show="!landBuys.length">
+            <td colspan="10">
+              No data found
+            </td>
           </tr>
         </tbody>
       </table>

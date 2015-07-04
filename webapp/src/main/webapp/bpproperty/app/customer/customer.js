@@ -22,11 +22,18 @@
   };
 
   var CustomerLandsResolve = {
-    LandBuyDetailList: ['$route', 'CustomerService', function($route, CustomerService) {
+    CustomerLands: ['$q', '$route', 'CustomerService', function($q, $route, CustomerService) {
       var criteria = {
-        'id': $route.current.params['id']
+        id: $route.current.params['id']
       };
-      return CustomerService.queryByCustomerId(criteria);
+      var landBuyDetails = CustomerService.queryByCustomerId(criteria);
+      var customer = CustomerService.query(criteria);
+
+      var promises = {
+        customer: customer,
+        landBuyDetails: landBuyDetails
+      }
+      return $q.all(promises);
     }]
   };
 
@@ -38,24 +45,24 @@
 
     $routeProvider
 
-      .when('/customer', {
+      .when('/customers', {
       templateUrl: 'customer/customer-list.tpl.html',
       controller: 'CustomerListCtrl',
       resolve: CustomerListResolve
     })
 
-    .when('/customer/create', {
+    .when('/customers/create', {
       templateUrl: 'customer/customer-detail.tpl.html',
       controller: 'CreateCustomerCtrl'
     })
 
-    .when('/customer/:id', {
+    .when('/customers/:id', {
       templateUrl: 'customer/customer-detail.tpl.html',
       controller: 'CustomerCtrl',
       resolve: CustomerResolve
     })
 
-    .when('/customer/:id/lands', {
+    .when('/customers/:id/lands', {
       templateUrl: 'customer/customer-lands.tpl.html',
       controller: 'CustomerLandsCtrl',
       resolve: CustomerLandsResolve
@@ -102,7 +109,7 @@
             });
 
             // redirect to customer details page
-            var url = '/customer/' + data.id;
+            var url = '/customers/' + data.id;
             $location.path(url);
 
           }, function(error) {
@@ -119,20 +126,22 @@
     }
   ])
 
-  .controller('CustomerLandsCtrl', ['$scope', '$location', 'LandBuyDetailList', function($scope, $location, LandBuyDetailList) {
+  .controller('CustomerLandsCtrl', ['$scope', '$location', 'CustomerLands', function($scope, $location, CustomerLands) {
 
     $scope.redirect = function(landBuyDetail) {
-      var url = 'land/' + landBuyDetail.landId + '/buyDetail/' + landBuyDetail.id;
+      var url = 'lands/' + landBuyDetail.landId + '/buydetails/' + landBuyDetail.id;
       $location.path(url);
     };
 
-    $scope.landBuyDetails = LandBuyDetailList;
+    $scope.customer = CustomerLands.customer;
+    $scope.landBuyDetails = CustomerLands.landBuyDetails;
 
   }])
 
   .controller('CustomerListCtrl', ['$scope', '$location', 'Customer', 'Customers', function($scope, $location, Customer, Customers) {
 
-    $scope.redirect = function(url) {
+    $scope.redirect = function(customer) {
+      var url = '/customers/' + customer.id;
       $location.path(url);
     };
 

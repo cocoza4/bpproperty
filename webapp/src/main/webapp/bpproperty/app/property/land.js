@@ -29,26 +29,26 @@
 
     $routeProvider
 
-      .when('/land', {
+      .when('/lands', {
 
       templateUrl: 'property/land-list.tpl.html',
       controller: 'LandListCtrl',
       resolve: LandListResolve
     })
 
-    .when('/land/create', {
+    .when('/lands/create', {
       templateUrl: 'property/land.tpl.html',
       controller: 'CreateLandCtrl'
     })
 
-    .when('/land/:landId', {
+    .when('/lands/:landId', {
       templateUrl: 'property/land.tpl.html',
       controller: 'LandDetailCtrl',
       resolve: LandDetailResolve
     })
 
     .otherwise({
-      redirectTo: '/land'
+      redirectTo: '/lands'
     });
 
   }])

@@ -7,7 +7,7 @@ import com.porpermpol.ppproperty.property.model.Area;
 import com.porpermpol.ppproperty.property.model.Land;
 import com.porpermpol.ppproperty.property.service.ILandService;
 import com.porpermpol.ppproperty.purchase.model.BuyType;
-import com.porpermpol.ppproperty.purchase.model.InstallmentRecord;
+import com.porpermpol.ppproperty.purchase.model.Installment;
 import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
 import com.porpermpol.ppproperty.purchase.service.ILandBuyService;
 import mockit.Mock;
@@ -42,7 +42,7 @@ public class LandBuyServiceIT {
     private Customer customer;
     private Land land;
     private LandBuyDetail landBuyDetail;
-    private InstallmentRecord installmentRecord;
+    private Installment installment;
 
     @Before
     public void setUp() throws Exception {
@@ -82,10 +82,10 @@ public class LandBuyServiceIT {
         landBuyDetail.setAnnualInterest(15.5f);
         landBuyDetail.setYearsOfInstallment(5);
 
-        installmentRecord = new InstallmentRecord();
-        installmentRecord.setPayFor(new Date());
-        installmentRecord.setAmount(200f);
-        installmentRecord.setDescription("description");
+        installment = new Installment();
+        installment.setPayFor(new Date());
+        installment.setAmount(200f);
+        installment.setDescription("description");
     }
 
     @After
@@ -128,32 +128,32 @@ public class LandBuyServiceIT {
     }
 
     @Test
-    public void testSaveInstallmentRecord_newInstance() throws Exception {
+    public void testSaveInstallment_newInstance() throws Exception {
         landBuyService.saveLandBuyDetail(landBuyDetail);
-        installmentRecord.setBuyDetailId(landBuyDetail.getId());
-        landBuyService.saveInstallmentRecord(installmentRecord);
+        installment.setBuyDetailId(landBuyDetail.getId());
+        landBuyService.saveInstallment(installment);
 
-        assertNotNull(installmentRecord.getId());
-        assertTrue(installmentRecord.isPersisted());
+        assertNotNull(installment.getId());
+        assertTrue(installment.isPersisted());
 
-        InstallmentRecord returnInstallmentRecord = landBuyService.findInstallmentRecordById(installmentRecord.getId());
-        assertEquals(USER_LOGIN_ID, returnInstallmentRecord.getCreatedBy());
-        assertEquals(CURRENT_DATE, returnInstallmentRecord.getCreatedTime());
+        Installment returnInstallment = landBuyService.findInstallmentById(installment.getId());
+        assertEquals(USER_LOGIN_ID, returnInstallment.getCreatedBy());
+        assertEquals(CURRENT_DATE, returnInstallment.getCreatedTime());
     }
 
     @Test
-    public void testSaveInstallmentRecord_update() throws Exception {
+    public void testSaveInstallment_update() throws Exception {
         landBuyService.saveLandBuyDetail(landBuyDetail);
-        installmentRecord.setBuyDetailId(landBuyDetail.getId());
-        landBuyService.saveInstallmentRecord(installmentRecord);
+        installment.setBuyDetailId(landBuyDetail.getId());
+        landBuyService.saveInstallment(installment);
 
         Float expected = 20f;
-        installmentRecord.setAmount(expected);
-        landBuyService.saveInstallmentRecord(installmentRecord);
+        installment.setAmount(expected);
+        landBuyService.saveInstallment(installment);
 
-        InstallmentRecord returnInstallmentRecord = landBuyService.findInstallmentRecordById(installmentRecord.getId());
-        assertEquals(expected, returnInstallmentRecord.getAmount());
-        assertEquals(USER_LOGIN_ID, returnInstallmentRecord.getUpdatedBy());
-        assertEquals(CURRENT_DATE, returnInstallmentRecord.getUpdatedTime());
+        Installment returnInstallment = landBuyService.findInstallmentById(installment.getId());
+        assertEquals(expected, returnInstallment.getAmount());
+        assertEquals(USER_LOGIN_ID, returnInstallment.getUpdatedBy());
+        assertEquals(CURRENT_DATE, returnInstallment.getUpdatedTime());
     }
 }

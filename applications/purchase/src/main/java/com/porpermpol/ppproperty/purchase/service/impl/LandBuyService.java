@@ -1,9 +1,11 @@
 package com.porpermpol.ppproperty.purchase.service.impl;
 
 import com.porpermpol.ppproperty.core.utils.ModelUtils;
-import com.porpermpol.ppproperty.purchase.dao.IInstallmentRecordDAO;
+import com.porpermpol.ppproperty.purchase.bo.LandBuyDetailBO;
+import com.porpermpol.ppproperty.purchase.dao.IInstallmentDAO;
+import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailBODAO;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailDAO;
-import com.porpermpol.ppproperty.purchase.model.InstallmentRecord;
+import com.porpermpol.ppproperty.purchase.model.Installment;
 import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
 import com.porpermpol.ppproperty.purchase.service.ILandBuyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +20,11 @@ import java.util.List;
 public class LandBuyService implements ILandBuyService {
 
     @Autowired
+    private ILandBuyDetailBODAO landBuyDetailBODAO;
+    @Autowired
     private ILandBuyDetailDAO landBuyDetailDAO;
     @Autowired
-    private IInstallmentRecordDAO installmentRecordDAO;
+    private IInstallmentDAO installmentDAO;
 
     @Override
     public void saveLandBuyDetail(LandBuyDetail landBuyDetail) {
@@ -47,6 +51,12 @@ public class LandBuyService implements ILandBuyService {
 
     @Transactional(readOnly = true)
     @Override
+    public Page<LandBuyDetailBO> findLandBuyDetailBOByLandId(long id, Pageable pageable) {
+        return landBuyDetailBODAO.findByLandId(id, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public Page<LandBuyDetail> findLandBuyDetailByCriteria(String name, String address, Pageable pageable) {
         return null;
     }
@@ -58,31 +68,31 @@ public class LandBuyService implements ILandBuyService {
     }
 
     @Override
-    public void saveInstallmentRecord(InstallmentRecord installmentRecord) {
-        ModelUtils.setAuditFields(installmentRecord);
-        installmentRecordDAO.save(installmentRecord);
+    public void saveInstallment(Installment installment) {
+        ModelUtils.setAuditFields(installment);
+        installmentDAO.save(installment);
     }
 
     @Override
-    public void deleteInstallmentRecordById(long id) {
-        installmentRecordDAO.delete(id);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public InstallmentRecord findInstallmentRecordById(long id) {
-        return installmentRecordDAO.findOne(id);
+    public void deleteInstallmentById(long id) {
+        installmentDAO.delete(id);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<InstallmentRecord> findInstallmentRecordsByLandBuyDetailId(long id) {
-        return installmentRecordDAO.findByLandBuyDetailId(id);
+    public Installment findInstallmentById(long id) {
+        return installmentDAO.findOne(id);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Page<InstallmentRecord> findAllInstallmentRecords(Pageable pageable) {
-        return installmentRecordDAO.findAll(pageable);
+    public List<Installment> findInstallmentsByLandBuyDetailId(long id) {
+        return installmentDAO.findByLandBuyDetailId(id);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<Installment> findAllInstallments(Pageable pageable) {
+        return installmentDAO.findAll(pageable);
     }
 }

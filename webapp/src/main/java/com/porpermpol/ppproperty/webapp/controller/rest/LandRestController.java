@@ -2,7 +2,8 @@ package com.porpermpol.ppproperty.webapp.controller.rest;
 
 import com.porpermpol.ppproperty.property.model.Land;
 import com.porpermpol.ppproperty.property.service.ILandService;
-import com.porpermpol.ppproperty.purchase.model.InstallmentRecord;
+import com.porpermpol.ppproperty.purchase.bo.LandBuyDetailBO;
+import com.porpermpol.ppproperty.purchase.model.Installment;
 import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
 import com.porpermpol.ppproperty.purchase.service.ILandBuyService;
 import com.porpermpol.ppproperty.webapp.exception.ResourceNotFoundException;
@@ -27,7 +28,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/land")
+@RequestMapping("api/lands")
 public class LandRestController {
 
     @Autowired
@@ -37,7 +38,7 @@ public class LandRestController {
     private ILandBuyService landBuyService;
 
     // unable to perform init binder using @RequestBody
-    @InitBinder("installmentRecord")
+    @InitBinder("installment")
     public void initBinder(WebDataBinder binder) {
 //        binder.registerCustomEditor(BuyType.class, new BuyTypePropertyEditor());
         binder.registerCustomEditor(Date.class, "payFor", new CustomDateEditor(
@@ -67,22 +68,22 @@ public class LandRestController {
         return dataTableObject;
     }
 
-    @RequestMapping(value = "/{landId}/buyDetail", method = RequestMethod.GET)
-    public DataTableObject<LandBuyDetail> getAllBuyDetails(@PathVariable("landId") long id,
+    @RequestMapping(value = "/{landId}/buydetails", method = RequestMethod.GET)
+    public DataTableObject<LandBuyDetailBO> getLandBuyDetailsBOByLandId(@PathVariable("landId") long id,
                                                 @RequestParam(value = "page", defaultValue = "0") int page,
                                                 @RequestParam(value = "length", defaultValue = "10") int length) {
 
         Pageable pageRequest = new PageRequest(page, length);
-        Page<LandBuyDetail> landBuyPage = landBuyService.findAllLandBuyDetails(pageRequest);
+        Page<LandBuyDetailBO> landBuyPage = landBuyService.findLandBuyDetailBOByLandId(id, pageRequest);
 
-        DataTableObject<LandBuyDetail> dataTableObject = new DataTableObject<>(landBuyPage.getContent(),
+        DataTableObject<LandBuyDetailBO> dataTableObject = new DataTableObject<>(landBuyPage.getContent(),
                                                                             landBuyPage.getContent().size(),
                                                                             landBuyPage.getTotalElements());
 
         return dataTableObject;
     }
 
-    @RequestMapping(value = "/{landId}/buyDetail/{buyDetailId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}", method = RequestMethod.GET)
     public LandBuyDetail getBuyDetailById(@PathVariable("landId") long landId,
                                           @PathVariable("buyDetailId") long buyDetailId,
                                           @RequestParam(value = "page", defaultValue = "0") int page,
@@ -96,34 +97,34 @@ public class LandRestController {
         return buyDetail;
     }
 
-    @RequestMapping(value = "/{landId}/buyDetail/{buyDetailId}/installmentsRecord", method = RequestMethod.GET)
-    public List<InstallmentRecord> getInstallmentRecordsByBuyDetailId(@PathVariable("landId") long landId,
+    @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/installments", method = RequestMethod.GET)
+    public List<Installment> getInstallmentsByBuyDetailId(@PathVariable("landId") long landId,
                                           @PathVariable("buyDetailId") long buyDetailId) {
 
-        return landBuyService.findInstallmentRecordsByLandBuyDetailId(buyDetailId);
+        return landBuyService.findInstallmentsByLandBuyDetailId(buyDetailId);
     }
 
-    @RequestMapping(value = "/{landId}/buyDetail/{buyDetailId}/installmentsRecord", method = RequestMethod.POST)
-    public void saveInstallmentRecord(@PathVariable("landId") long landId,
+    @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/installments", method = RequestMethod.POST)
+    public void saveInstallment(@PathVariable("landId") long landId,
                                 @PathVariable("buyDetailId") long buyDetailId,
-                                @RequestBody InstallmentRecord installmentRecord) {
+                                @RequestBody Installment installment) {
 
-        landBuyService.saveInstallmentRecord(installmentRecord);
+        landBuyService.saveInstallment(installment);
     }
 
-    @RequestMapping(value = "/{landId}/buyDetail/{buyDetailId}/installmentsRecord", method = RequestMethod.PUT)
-    public void updateInstallmentRecord(@PathVariable("landId") long landId,
+    @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/installments", method = RequestMethod.PUT)
+    public void updateInstallment(@PathVariable("landId") long landId,
                                 @PathVariable("buyDetailId") long buyDetailId,
-                                @RequestBody InstallmentRecord installmentRecord) {
-        installmentRecord.setPersisted(true);
-        landBuyService.saveInstallmentRecord(installmentRecord);
+                                @RequestBody Installment installment) {
+        installment.setPersisted(true);
+        landBuyService.saveInstallment(installment);
     }
 
-    @RequestMapping(value = "/{landId}/buyDetail/{buyDetailId}/installmentsRecord/{installmentId}", method = RequestMethod.DELETE)
-    public void deleteInstallmentRecord(@PathVariable("landId") long landId,
+    @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/installments/{installmentId}", method = RequestMethod.DELETE)
+    public void deleteInstallment(@PathVariable("landId") long landId,
                                   @PathVariable("buyDetailId") long buyDetailId,
                                   @PathVariable("installmentId") long installmentId) {
-        landBuyService.deleteInstallmentRecordById(installmentId);
+        landBuyService.deleteInstallmentById(installmentId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -137,13 +138,13 @@ public class LandRestController {
         landService.saveLand(land);
     }
 
-    @RequestMapping(value = "/{landId}/buyDetail", method = RequestMethod.POST)
+    @RequestMapping(value = "/{landId}/buydetails", method = RequestMethod.POST)
     public LandBuyDetail saveBuyDetail(@PathVariable("landId") long landId, @RequestBody LandBuyDetail buyDetail) {
         landBuyService.saveLandBuyDetail(buyDetail);
         return buyDetail;
     }
 
-    @RequestMapping(value = "/{landId}/buyDetail/{buyDetailId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}", method = RequestMethod.PUT)
     public void updateBuyDetail(@PathVariable("landId") long landId,
                                   @PathVariable("buyDetailId") long buyDetailId,
                                  @RequestBody LandBuyDetail buyDetail) {

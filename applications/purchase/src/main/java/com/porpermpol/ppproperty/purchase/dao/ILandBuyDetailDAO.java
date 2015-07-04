@@ -9,5 +9,6 @@ public interface ILandBuyDetailDAO extends PagingAndSortingRepository<LandBuyDet
 
     List<LandBuyDetail> findByCriteria(long landId);
     List<LandBuyDetail> findByCustomerId(long customerId);
+    long countByLandId(long id);
 
 }

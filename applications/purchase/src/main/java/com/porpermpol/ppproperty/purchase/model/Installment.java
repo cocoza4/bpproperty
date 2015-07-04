@@ -4,17 +4,17 @@ import com.porpermpol.ppproperty.core.jdbcrepository.extension.PersistableModel;
 
 import java.util.Date;
 
-public class InstallmentRecord extends PersistableModel<Long> {
+public class Installment extends PersistableModel<Long> {
 
     private Long buyDetailId;
     private Date payFor;
     private Float amount;
     private String description;
 
-    public InstallmentRecord() {}
+    public Installment() {}
 
-    public InstallmentRecord(Long id, Long buyDetailId, Date payFor, Float amount, String description,
-                             Long createdBy, Date createdTime, Long updatedBy, Date updatedTime) {
+    public Installment(Long id, Long buyDetailId, Date payFor, Float amount, String description,
+                       Long createdBy, Date createdTime, Long updatedBy, Date updatedTime) {
         super(id, createdBy, createdTime, updatedBy, updatedTime);
         this.buyDetailId = buyDetailId;
         this.payFor = payFor;

@@ -2,6 +2,15 @@
 
   'use strict';
 
+  var LandResolve = {
+    Land: function($route, LandService) {
+      var criteria = {
+        landId: $route.current.params['landId']
+      };
+      return LandService.query(criteria);
+    }
+  }
+
   var LandBuyDetailListResolve = {
     BuyDetailList: ['$q', '$route', 'LandService', 'LandBuyService',
       function($q, $route, LandService, LandBuyService) {
@@ -25,8 +34,8 @@
   };
 
   var LandBuyDetailResolve = {
-    BuyDetails: ['$q', '$route', 'LandService', 'LandBuyService', 'Customer',
-      function($q, $route, LandService, LandBuyService, Customer) {
+    BuyDetails: ['$q', '$route', 'LandService', 'LandBuyService', 'CustomerService',
+      function($q, $route, LandService, LandBuyService, CustomerService) {
 
         var landBuyCriteria = {
           landId: $route.current.params['landId'],
@@ -50,9 +59,9 @@
               });
           },
           loadCustomer = function(buyDetails) {
-            return Customer.get({
+            return CustomerService.query({
               id: buyDetails.buyDetail.customerId
-            }).$promise.then(function(response) {
+            }).then(function(response) {
               return {
                 buyDetail: buyDetails.buyDetail,
                 land: buyDetails.land,
@@ -73,18 +82,19 @@
 
     $routeProvider
 
-      .when('/land/:landId/buyDetail/create', {
+      .when('/lands/:landId/buydetails/create', {
       templateUrl: 'property/land-buy-main.tpl.html',
-      controller: 'CreateLandBuyDetailCtrl'
+      controller: 'CreateLandBuyDetailCtrl',
+      resolve: LandResolve
     })
 
-    .when('/land/:landId/buyDetail/:buyDetailId', {
+    .when('/lands/:landId/buydetails/:buyDetailId', {
       templateUrl: 'property/land-buy-main.tpl.html',
       controller: 'LandBuyGeneralDetailsCtrl',
       resolve: LandBuyDetailResolve
     })
 
-    .when('/land/:landId/buyDetail', {
+    .when('/lands/:landId/buydetails', {
       templateUrl: 'property/land-buy-list.tpl.html',
       controller: 'LandBuyDetailListCtrl',
       resolve: LandBuyDetailListResolve
@@ -95,6 +105,8 @@
   .controller('LandBuyDetailsCtrl', ['$scope', '$location', '$route', 'LandBuyService', 'NotificationService',
     function($scope, $location, $route, LandBuyService, NotificationService) {
 
+
+
       $scope.saveLandBuyDetail = function(isValid) {
 
         if (isValid) {
@@ -102,7 +114,7 @@
           var isNew = $scope.buyDetail.id == null;
 
           if (isNew) {
-            $scope.buyDetail.customerId = 7; // TODO: fix this hard coded customerId
+            $scope.buyDetail.customerId = $scope.customer.id;
             LandBuyService.create($scope.buyDetail).then(function(data) {
               NotificationService.notify({
                 type: 'success',
@@ -111,7 +123,7 @@
               $scope.buyDetail = data;
 
               // reload the page
-              var url = '/land/' + $route.current.params['landId'] + '/buyDetail/' + $scope.buyDetail.id;
+              var url = '/lands/' + $route.current.params['landId'] + '/buydetails/' + $scope.buyDetail.id;
               $location.path(url);
 
             }, function(error) {
@@ -136,10 +148,7 @@
             });
           }
         }
-
-
       };
-
 
       $scope.buyTypeItems = ['CASH', 'INSTALLMENT'];
 
@@ -159,7 +168,6 @@
         });
       }
 
-
     }
   ])
 
@@ -171,31 +179,58 @@
     }
   ])
 
-  .controller('CreateLandBuyDetailCtrl', ['$scope', '$routeParams', 'LandService',
-    function($scope, $routeParams, LandService) {
+  .controller('CreateLandBuyDetailCtrl', ['$scope', '$routeParams', 'CustomerService', 'Land',
+    function($scope, $routeParams, CustomerService, Land) {
 
-      //TODO: unneccessary request is sent, fix it
+      var buyerDialog = $('#selectBuyerDialog').on('hidden.bs.modal', function(e) {
+        $scope.selectedCustomer = {};
+      }).on('show.bs.modal', function (e) {
+        self.loadCustomers();
+      });
 
-      $scope.buyTypeItems = ['CASH', 'INSTALLMENT'];
-
-      // $scope.submit = function() {
-      //   $scope.buyDetail.$save({
-      //     landId: $routeParams.landId
-      //   });
-      //   alert('saved')
-      // };
-
-      // $scope.buyDetail = new LandBuy({
-      //   landId: $routeParams.landId
-      // });
-
-      var landCriteria = {
-        landId: $routeParams.landId
+      this.loadCustomers = function() {
+        var criteria = {
+          page: $scope.currentPage - 1, // zero-based page index
+          length: recordsPerPage
+        };
+        CustomerService.query(criteria).then(function(data) {
+          $scope.customers = data.content;
+          $scope.totalRecords = data.totalRecords;
+          $scope.startIndex = (($scope.currentPage - 1) * recordsPerPage) + 1;
+          $scope.endIndex = $scope.startIndex + data.totalDisplayRecords - 1;
+        });
       };
 
-      LandService.query(landCriteria).then(function(data) {
-        $scope.land = data;
-      });
+      $scope.onNextPageChanged = function() {
+        if ($scope.customers.length < 10) return;
+        $scope.currentPage = $scope.currentPage + 1;
+        self.loadCustomers();
+        $scope.selectedCustomer = {};
+      };
+
+      $scope.onPreviousPageChanged = function() {
+        if ($scope.currentPage === 1) return;
+        $scope.currentPage = $scope.currentPage - 1;
+        self.loadCustomers();
+        $scope.selectedCustomer = {};
+      };
+
+      $scope.selectBuyer = function(customer) {
+        $scope.selectedCustomer = customer;
+      };
+
+      $scope.updateOnScreen = function() {
+        buyerDialog.modal('hide'); // hide dialog
+        $scope.customer = $scope.selectedCustomer;
+      }
+
+      var self = this;
+      var recordsPerPage = 10;
+
+      $scope.currentPage = 1;
+      $scope.selectedCustomer = {};
+
+      $scope.land = Land;
 
     }
   ])
@@ -228,19 +263,25 @@
       };
 
       $scope.redirect = function(buyDetailId) {
-        $location.path('/land/' + $routeParams.landId + '/buyDetail/' + buyDetailId);
+        $location.path('/lands/' + $routeParams.landId + '/buydetails/' + buyDetailId);
       };
 
       $scope.redirectToCreateLandBuyDetailPage = function() {
-        $location.path('/land/' + $routeParams.landId + '/buyDetail/create');
+        $location.path('/lands/' + $routeParams.landId + '/buydetails/create');
       };
 
       this.updateScope = function(data) {
         $scope.land = data.land;
         $scope.landBuys = data.landBuyDetail.content;
         $scope.totalRecords = data.landBuyDetail.totalRecords;
-        $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
-        $scope.endIndex = $scope.startIndex + data.landBuyDetail.totalDisplayRecords - 1;
+        if ($scope.totalRecords == 0) {
+          $scope.startIndex = 0;
+          $scope.endIndex = 0;
+        } else {
+          $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
+          $scope.endIndex = $scope.startIndex + data.landBuyDetail.totalDisplayRecords - 1;
+        }
+
       }
 
       var self = this;
@@ -252,14 +293,6 @@
       this.updateScope(BuyDetailList);
 
     }
-  ])
-
-  .controller('SelectBuyerCtrl', ['$scope', function($scope) {
-
-    
-
-
-  }])
-  ;
+  ]);
 
 })();

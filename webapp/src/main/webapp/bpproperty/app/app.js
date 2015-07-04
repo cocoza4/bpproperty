@@ -51,7 +51,7 @@
 
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider.otherwise({
-      redirectTo: '/land'
+      redirectTo: '/lands'
     });
   }]);
 

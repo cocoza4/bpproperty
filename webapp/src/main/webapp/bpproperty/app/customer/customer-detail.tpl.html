@@ -4,10 +4,10 @@
     Customer Details</div>
   <div class="panel-body">
 
-    <a ng-if="customer.id" class="btn btn-info input-sm pull-right" ng-href="{{'#/customer/' + customer.id + '/lands'}}" type="button">
+    <a ng-if="customer.id" class="btn btn-default input-sm pull-right" ng-href="{{'#/customers/' + customer.id + '/lands'}}" type="button">
       <span class="glyphicon glyphicon-list-alt"></span>
       ยอดการซื้อ</a>
-      
+
     <div style="clear:both; padding: 5px;"></div>
 
     <form novalidate class="form-horizontal" ng-submit="submit(form.$valid)" name="form">

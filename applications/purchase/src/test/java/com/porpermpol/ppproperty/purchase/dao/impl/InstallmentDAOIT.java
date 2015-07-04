@@ -5,9 +5,9 @@ import com.porpermpol.ppproperty.person.model.Customer;
 import com.porpermpol.ppproperty.property.dao.ILandDAO;
 import com.porpermpol.ppproperty.property.model.Area;
 import com.porpermpol.ppproperty.property.model.Land;
-import com.porpermpol.ppproperty.purchase.dao.IInstallmentRecordDAO;
+import com.porpermpol.ppproperty.purchase.dao.IInstallmentDAO;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailDAO;
-import com.porpermpol.ppproperty.purchase.model.InstallmentRecord;
+import com.porpermpol.ppproperty.purchase.model.Installment;
 import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
 import com.porpermpol.ppproperty.purchase.model.BuyType;
 import org.junit.After;
@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:spring/purchase-context.xml")
-public class InstallmentRecordDAOIT {
+public class InstallmentDAOIT {
 
     @Autowired
     private ILandDAO propertyDAO;
@@ -36,9 +36,9 @@ public class InstallmentRecordDAOIT {
     private ILandBuyDetailDAO buyDetailDAO;
 
     @Autowired
-    private IInstallmentRecordDAO installmentRecordDAO;
+    private IInstallmentDAO installmentDAO;
 
-    private InstallmentRecord installmentRecord;
+    private Installment installment;
 
     @Before
     public void setUp() throws Exception {
@@ -74,13 +74,13 @@ public class InstallmentRecordDAOIT {
         landBuyDetail.setCreatedTime(new Date());
         buyDetailDAO.save(landBuyDetail);
 
-        installmentRecord = new InstallmentRecord();
-        installmentRecord.setBuyDetailId(landBuyDetail.getId());
-        installmentRecord.setAmount(10000f);
-        installmentRecord.setPayFor(new Date());
-        installmentRecord.setDescription("description");
-        installmentRecord.setCreatedBy(0L);
-        installmentRecord.setCreatedTime(new Date());
+        installment = new Installment();
+        installment.setBuyDetailId(landBuyDetail.getId());
+        installment.setAmount(10000f);
+        installment.setPayFor(new Date());
+        installment.setDescription("description");
+        installment.setCreatedBy(0L);
+        installment.setCreatedTime(new Date());
     }
 
     @After
@@ -92,55 +92,55 @@ public class InstallmentRecordDAOIT {
 
     @Test
     public void testInsert() throws Exception {
-        installmentRecordDAO.save(installmentRecord);
-        assertNotNull(installmentRecord.getId());
-        assertTrue(installmentRecord.isPersisted());
-        assertEquals(1, installmentRecordDAO.count());
+        installmentDAO.save(installment);
+        assertNotNull(installment.getId());
+        assertTrue(installment.isPersisted());
+        assertEquals(1, installmentDAO.count());
     }
 
     @Test
     public void testUpdate() throws Exception {
-        installmentRecordDAO.save(installmentRecord);
+        installmentDAO.save(installment);
 
         Float expected = 1f;
 
-        installmentRecord.setAmount(expected);
-        installmentRecord.setUpdatedBy(0L);
-        installmentRecord.setUpdatedTime(new Date());
+        installment.setAmount(expected);
+        installment.setUpdatedBy(0L);
+        installment.setUpdatedTime(new Date());
 
-        installmentRecordDAO.save(installmentRecord);
+        installmentDAO.save(installment);
 
-        assertEquals(expected, installmentRecordDAO.findOne(installmentRecord.getId()).getAmount());
+        assertEquals(expected, installmentDAO.findOne(installment.getId()).getAmount());
     }
 
     @Test
     public void testFindById() throws Exception {
-        installmentRecordDAO.save(installmentRecord);
-        InstallmentRecord model = installmentRecordDAO.findOne(installmentRecord.getId());
+        installmentDAO.save(installment);
+        Installment model = installmentDAO.findOne(installment.getId());
 
-        assertEquals(installmentRecord.getId(), model.getId());
-        assertEquals(installmentRecord.getAmount(), model.getAmount());
-        assertEquals(installmentRecord.getPayFor(), model.getPayFor());
-        assertEquals(installmentRecord.getBuyDetailId(), model.getBuyDetailId());
-        assertEquals(installmentRecord.getDescription(), model.getDescription());
-        assertEquals(installmentRecord.getCreatedBy(), model.getCreatedBy());
-        assertEquals(installmentRecord.getCreatedTime(), model.getCreatedTime());
-        assertEquals(installmentRecord.getUpdatedBy(), model.getUpdatedBy());
-        assertEquals(installmentRecord.getUpdatedTime(), model.getUpdatedTime());
+        assertEquals(installment.getId(), model.getId());
+        assertEquals(installment.getAmount(), model.getAmount());
+        assertEquals(installment.getPayFor(), model.getPayFor());
+        assertEquals(installment.getBuyDetailId(), model.getBuyDetailId());
+        assertEquals(installment.getDescription(), model.getDescription());
+        assertEquals(installment.getCreatedBy(), model.getCreatedBy());
+        assertEquals(installment.getCreatedTime(), model.getCreatedTime());
+        assertEquals(installment.getUpdatedBy(), model.getUpdatedBy());
+        assertEquals(installment.getUpdatedTime(), model.getUpdatedTime());
 
     }
 
     @Test
     public void testFindByLandBuyDetailId() throws Exception {
-        assertTrue(installmentRecordDAO.findByLandBuyDetailId(installmentRecord.getBuyDetailId()).isEmpty());
-        installmentRecordDAO.save(installmentRecord);
-        assertEquals(1, installmentRecordDAO.findByLandBuyDetailId(installmentRecord.getBuyDetailId()).size());
+        assertTrue(installmentDAO.findByLandBuyDetailId(installment.getBuyDetailId()).isEmpty());
+        installmentDAO.save(installment);
+        assertEquals(1, installmentDAO.findByLandBuyDetailId(installment.getBuyDetailId()).size());
     }
 
     @Test
     public void testCount() throws Exception {
-        assertEquals(0, installmentRecordDAO.count());
-        installmentRecordDAO.save(installmentRecord);
-        assertEquals(1, installmentRecordDAO.count());
+        assertEquals(0, installmentDAO.count());
+        installmentDAO.save(installment);
+        assertEquals(1, installmentDAO.count());
     }
 }

@@ -2,9 +2,6 @@ package com.porpermpol.ppproperty.webapp.controller.rest;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by cocoza4 on 4/12/15.
- */
 public class CustomerRestControllerTest {
 
     @org.junit.Before

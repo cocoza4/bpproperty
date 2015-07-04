@@ -3,8 +3,8 @@ package com.porpermpol.ppproperty.purchase.dao.impl;
 import com.nurkiewicz.jdbcrepository.JdbcRepository;
 import com.nurkiewicz.jdbcrepository.RowUnmapper;
 import com.porpermpol.ppproperty.core.utils.ModelUtils;
-import com.porpermpol.ppproperty.purchase.dao.IInstallmentRecordDAO;
-import com.porpermpol.ppproperty.purchase.model.InstallmentRecord;
+import com.porpermpol.ppproperty.purchase.dao.IInstallmentDAO;
+import com.porpermpol.ppproperty.purchase.model.Installment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,23 +18,23 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class InstallmentRecordDAO extends JdbcRepository<InstallmentRecord, Long> implements IInstallmentRecordDAO {
+public class InstallmentDAO extends JdbcRepository<Installment, Long> implements IInstallmentDAO {
 
     @Autowired
     private JdbcOperations jdbcOperations;
 
-    private static final String SQL_SELECT_BY_LAND_BUY_DETAIL_ID = "SELECT * FROM installments_record " +
+    private static final String SQL_SELECT_BY_LAND_BUY_DETAIL_ID = "SELECT * FROM installment " +
                                                                             "WHERE buy_detail_id = ? " +
                                                                             "ORDER BY pay_for ASC";
 
-    public InstallmentRecordDAO() {
-        super(ROW_MAPPER, ROW_UNMAPPER, "INSTALLMENTS_RECORD", "id");
+    public InstallmentDAO() {
+        super(ROW_MAPPER, ROW_UNMAPPER, "installment", "id");
     }
 
-    public static final RowMapper<InstallmentRecord> ROW_MAPPER = new RowMapper<InstallmentRecord>() {
+    public static final RowMapper<Installment> ROW_MAPPER = new RowMapper<Installment>() {
         @Override
-        public InstallmentRecord mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new InstallmentRecord(rs.getLong("id"),
+        public Installment mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new Installment(rs.getLong("id"),
                     rs.getLong("buy_detail_id"),
                     new Date(rs.getLong("pay_for")),
                     rs.getFloat("amount"),
@@ -46,9 +46,9 @@ public class InstallmentRecordDAO extends JdbcRepository<InstallmentRecord, Long
         }
     };
 
-    private static final RowUnmapper<InstallmentRecord> ROW_UNMAPPER = new RowUnmapper<InstallmentRecord>() {
+    private static final RowUnmapper<Installment> ROW_UNMAPPER = new RowUnmapper<Installment>() {
         @Override
-        public Map<String, Object> mapColumns(InstallmentRecord model) {
+        public Map<String, Object> mapColumns(Installment model) {
             Map<String, Object> mapping = new LinkedHashMap<>();
             mapping.put("id", model.getId());
             mapping.put("buy_detail_id", model.getBuyDetailId());
@@ -61,18 +61,18 @@ public class InstallmentRecordDAO extends JdbcRepository<InstallmentRecord, Long
     };
 
     @Override
-    protected InstallmentRecord postCreate(InstallmentRecord entity, Number generatedId) {
+    protected Installment postCreate(Installment entity, Number generatedId) {
         entity.setId(generatedId.longValue());
         return entity.withPersisted(true);
     }
 
     @Override
-    protected InstallmentRecord postUpdate(InstallmentRecord entity) {
+    protected Installment postUpdate(Installment entity) {
         return entity.withPersisted(true);
     }
 
     @Override
-    public List<InstallmentRecord> findByLandBuyDetailId(long id) {
+    public List<Installment> findByLandBuyDetailId(long id) {
         return jdbcOperations.query(SQL_SELECT_BY_LAND_BUY_DETAIL_ID, ROW_MAPPER, id);
     }
 }

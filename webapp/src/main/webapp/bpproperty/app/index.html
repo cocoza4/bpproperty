@@ -32,7 +32,7 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
-  <div id="loaderDiv" my-loader>
+  <div id="loaderDiv" my-loader ng-cloak>
     <img ng-src="common/interceptors/spinner.gif" class="ajax-loader" width="100" height="100"/>
   </div>
 
@@ -45,8 +45,8 @@
         <ul class="breadcrumb">
           <li ng-repeat="breadcrumb in breadcrumbs.getAll()">
             <ng-switch on="$last">
-              <span ng-switch-when="true">{{breadcrumb.name}}</span>
-              <span ng-switch-default><a href="#{{breadcrumb.path}}">{{breadcrumb.name}}</a>&nbsp;&nbsp;&nbsp;</span>
+              <span ng-switch-when="true" ng-cloak>{{breadcrumb.name}}</span>
+              <span ng-switch-default><a ng-cloak href="#{{breadcrumb.path}}">{{breadcrumb.name}}</a>&nbsp;&nbsp;&nbsp;</span>
             </ng-switch>
           </li>
         </ul>
@@ -76,6 +76,8 @@
   <script src="bower_components/angular-route/angular-route.js"></script>
   <script src="bower_components/angular-resource/angular-resource.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+  <script src="https://code.angularjs.org/1.3.16/i18n/angular-locale_th.js"></script>
 
   <script src="common/interceptors/spinner.js"></script>
 

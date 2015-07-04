@@ -19,7 +19,7 @@
           </td>
           <td align="right">
               <div class="pull-right">
-                <button class="btn btn-default btn-sm" ng-click="redirect('/land/create')" type="submit">
+                <button class="btn btn-default btn-sm" ng-click="redirect('/lands/create')" type="submit">
                   <span class="glyphicon glyphicon-plus"></span>
                   สร้าง
                 </button>
@@ -57,18 +57,18 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-click="redirect('/land/' + land.id)" ng-repeat="land in lands">
+          <tr ng-click="redirect('/lands/' + land.id)" ng-repeat="land in lands">
             <td align="center">{{$index + 1}}</td>
             <td>{{land.name}}</td>
             <td>{{land.address}}</td>
             <td align="center">{{land.area.rai}}</td>
             <td align="center">{{land.area.yarn}}</td>
             <td align="center">{{land.area.tarangwa}}</td>
-            <td>{{land.createdTime | date:"MMM dd, yyyy ' at ' h:mma"}}</td>
-            <td align="center" ng-click="redirect('/land/' + land.id + '/buyDetail'); $event.stopPropagation();">
+            <td>{{land.createdTime | date:"MMMM d, yyyy ' เวลา ' h:mm a"}}</td>
+            <td align="center" ng-click="redirect('/lands/' + land.id + '/buydetails'); $event.stopPropagation();">
               <span class="glyphicon glyphicon-list-alt"></span>
             </td>
-            <td align="center" ng-click="redirect('/land/' + land.id + '/buyDetail/create'); $event.stopPropagation();">
+            <td align="center" ng-click="redirect('/lands/' + land.id + '/buydetails/create'); $event.stopPropagation();">
               <span class="glyphicon glyphicon-shopping-cart"></span>
             </td>
           </tr>
