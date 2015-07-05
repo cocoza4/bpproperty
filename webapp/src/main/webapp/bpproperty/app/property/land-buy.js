@@ -184,7 +184,7 @@
 
       var buyerDialog = $('#selectBuyerDialog').on('hidden.bs.modal', function(e) {
         $scope.selectedCustomer = {};
-      }).on('show.bs.modal', function (e) {
+      }).on('show.bs.modal', function(e) {
         self.loadCustomers();
       });
 
@@ -254,7 +254,6 @@
         LandBuyService.query(criteria).then(
           function(data) {
             self.updateScope(data);
-            console.log('[Query LandBuy] - length:' + data.content.length); // TODO: remove this - this is for debugging
           },
           function(error) {
             alert('Unable to query from table LandBuy');
@@ -271,15 +270,16 @@
       };
 
       this.updateScope = function(data) {
-        $scope.land = data.land;
-        $scope.landBuys = data.landBuyDetail.content;
-        $scope.totalRecords = data.landBuyDetail.totalRecords;
-        if ($scope.totalRecords == 0) {
-          $scope.startIndex = 0;
-          $scope.endIndex = 0;
-        } else {
-          $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
-          $scope.endIndex = $scope.startIndex + data.landBuyDetail.totalDisplayRecords - 1;
+        if (data.landBuyDetail) {
+          $scope.landBuys = data.landBuyDetail.content;
+          $scope.totalRecords = data.landBuyDetail.totalRecords;
+          if ($scope.totalRecords == 0) {
+            $scope.startIndex = 0;
+            $scope.endIndex = 0;
+          } else {
+            $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
+            $scope.endIndex = $scope.startIndex + data.landBuyDetail.totalDisplayRecords - 1;
+          }
         }
 
       }
@@ -290,6 +290,7 @@
       $scope.currentPage = 1;
       $scope.recordsPerPage = 10;
 
+      $scope.land = BuyDetailList.land;
       this.updateScope(BuyDetailList);
 
     }

@@ -57,7 +57,7 @@ form while your application is loading.*/
 }
 
 .selectedRow {
-  background-color: #ddd !important;
+  background-color: #bce8f1 !important;
 }
 
 .table th {
@@ -76,7 +76,7 @@ form while your application is loading.*/
   border-right: 1px solid #ddd !important;
 }
 
-input[type="text"] {
+.text {
     max-width: 320px;
 }
 

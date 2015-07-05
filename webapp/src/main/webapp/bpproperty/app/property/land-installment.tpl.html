@@ -51,7 +51,7 @@
             <div class="form-group">
               <label class="control-label col-sm-3" for="amount">จำนวน:</label>
               <div class="col-sm-9">
-                <input class="form-control" decimal-number name="amount" ng-model="installment.amount" placeholder="Amount" required type="text">
+                <input class="form-control input-sm text" decimal-number name="amount" ng-model="installment.amount" placeholder="Amount" required type="text">
               </div>
             </div>
             <div class="form-group">
@@ -97,7 +97,7 @@
           <td align="center">{{$index + 1}}</td>
           <td align="right">{{installment.payFor | date: "MMMM yyyy"}}</td>
           <td align="right">{{installment.amount | number}}</td>
-          <td align="right">{{installment.createdTime | date:"MMMM d, yyyy ' at ' h:mm a"}}</td>
+          <td align="right">{{installment.createdTime | date:"MMMM d, yyyy ' เวลา ' h:mm a"}}</td>
           <td align="middle" ng-click="viewInstallment(installment);">
             <span class="glyphicon glyphicon-edit" style="color:#337ab7"></span>
           </td>

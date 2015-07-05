@@ -8,28 +8,25 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="lands">
         <span class="glyphicon glyphicon-home"></span>&nbsp;BP Property</a>
     </div>
 <!-- Collection of nav links and other content for toggling -->
     <div class="collapse navbar-collapse" id="navbarCollapse">
-      <ul class="nav navbar-nav">
-        <li ng-class="{active:isActive('/land')}">
-          <a href="#/land">Property</a>
+      <ul class="nav navbar-nav" ng-show="globals.currentUser.username">
+        <li ng-class="{active:isActive('/lands')}">
+          <a href="lands">Property</a>
         </li>
         <li ng-class="{active:isActive('/customers')}">
-          <a href="#/customers">Customer</a>
+          <a href="customers">Customer</a>
         </li>
-<!-- <li ng-class="{active:isActive('/employee')}"><a href="#/temp">Employee</a></li>
-                <li ng-class="{active:isActive('/report')}"><a href="#">Report</a></li>
-                <li ng-class="{active:isActive('/messages')}"><a href="#">Messages</a></li> -->
       </ul>
 
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right" ng-show="globals.currentUser.username">
         <li>
           <a href="#">
             <span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Logged in as
-            <span class="text-primary">admin</span>
+            <span class="text-primary">{{globals.currentUser.username}}</span>
           </a>
         </li>
       </ul>

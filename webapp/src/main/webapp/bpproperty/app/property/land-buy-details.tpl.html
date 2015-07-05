@@ -10,25 +10,25 @@
     <div ng-hide="buyDetail.buyType == 'CASH'" class="form-group">
       <label class="control-label col-sm-2 col-xs-3" for="annualInterest">ดอกเบี้ยต่อปี (%)</label>
       <div class="col-sm-10 col-xs-9">
-        <input class="form-control input-sm" name="annualInterest" ng-model="buyDetail.annualInterest" percentage placeholder="Annual Interest" type="text">
+        <input class="form-control input-sm text" name="annualInterest" ng-model="buyDetail.annualInterest" percentage placeholder="Annual Interest" type="text">
       </div>
     </div>
     <div ng-hide="buyDetail.buyType == 'CASH'" class="form-group">
       <label class="control-label col-sm-2 col-xs-3" for="yearsOfInstallment">จำนวนปีที่ผ่อน</label>
       <div class="col-sm-10 col-xs-9">
-        <input class="form-control input-sm" decimal-number name="yearsOfInstallment" ng-model="buyDetail.yearsOfInstallment" placeholder="Years of Installment" type="text">
+        <input class="form-control input-sm text" decimal-number name="yearsOfInstallment" ng-model="buyDetail.yearsOfInstallment" placeholder="Years of Installment" type="text">
       </div>
     </div>
     <div ng-hide="buyDetail.buyType == 'CASH'" class="form-group">
       <label class="control-label col-sm-2 col-xs-3" for="downPayment">เงินดาวน์</label>
       <div class="col-sm-10 col-xs-9">
-        <input class="form-control input-sm" decimal-number name="downPayment" ng-model="buyDetail.downPayment" placeholder="Down Payment" type="text">
+        <input class="form-control input-sm text" decimal-number name="downPayment" ng-model="buyDetail.downPayment" placeholder="Down Payment" type="text">
       </div>
     </div>
     <div class="form-group required">
       <label class="control-label col-sm-2 col-xs-3" for="buyPrice">ราคาซื้อ</label>
       <div class="col-sm-10 col-xs-9" ng-class="{'has-error': form.buyPrice.$error.required && (form.$submitted || form.buyPrice.$touched)}">
-        <input class="form-control input-sm" decimal-number name="buyPrice" ng-model="buyDetail.buyPrice" placeholder="Buy Price" type="text" required>
+        <input class="form-control input-sm text" decimal-number name="buyPrice" ng-model="buyDetail.buyPrice" placeholder="Buy Price" type="text" required>
       </div>
     </div>
     <div class="form-group required">

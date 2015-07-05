@@ -4,7 +4,7 @@
     Customer Details</div>
   <div class="panel-body">
 
-    <a ng-if="customer.id" class="btn btn-default input-sm pull-right" ng-href="{{'#/customers/' + customer.id + '/lands'}}" type="button">
+    <a ng-if="customer.id" class="btn btn-default input-sm pull-right" ng-href="{{'customers/' + customer.id + '/lands'}}" type="button">
       <span class="glyphicon glyphicon-list-alt"></span>
       ยอดการซื้อ</a>
 
@@ -14,27 +14,27 @@
       <div class="form-group required">
         <label class="control-label col-xs-2" for="firstname">ชื่อจริง</label>
         <div class="col-xs-10" ng-class="{'has-error': form.firstname.$error.required && (form.$submitted || form.firstname.$touched)}">
-          <input class="form-control input-sm" name="firstname" ng-model="customer.firstName" placeholder="First Name" type="text" required>
+          <input class="form-control input-sm text" name="firstname" ng-model="customer.firstName" placeholder="First Name" type="text" required>
           <span class="text-danger" ng-show="form.firstname.$error.required && (form.$submitted || form.firstname.$touched)">Customer's firstname is required.</span>
         </div>
       </div>
       <div class="form-group required">
         <label class="control-label col-xs-2" for="lastname">นามสกุล</label>
         <div class="col-xs-10" ng-class="{'has-error': form.lastname.$error.required && (form.$submitted || form.lastname.$touched)}">
-          <input class="form-control input-sm" name="lastname" ng-model="customer.lastName" placeholder="Last Name" type="text" required>
+          <input class="form-control input-sm text" name="lastname" ng-model="customer.lastName" placeholder="Last Name" type="text" required>
           <span class="text-danger" ng-show="form.lastname.$error.required && (form.$submitted || form.lastname.$touched)">Customer's lastname is required.</span>
         </div>
       </div>
       <div class="form-group">
         <label class="control-label col-xs-2" for="tel">โทรศัพท์</label>
         <div class="col-xs-10">
-          <input class="form-control input-sm" name="tel" ng-model="customer.tel" placeholder="Tel" type="text">
+          <input class="form-control input-sm text" name="tel" ng-model="customer.tel" placeholder="Tel" type="text">
         </div>
       </div>
       <div class="form-group">
         <label class="control-label col-xs-2" for="address">ที่อยู่</label>
         <div class="col-xs-10">
-          <input class="form-control input-sm" name="address" ng-model="customer.address" placeholder="Address" type="text">
+          <input class="form-control input-sm text" name="address" ng-model="customer.address" placeholder="Address" type="text">
         </div>
       </div>
       <div class="form-group">

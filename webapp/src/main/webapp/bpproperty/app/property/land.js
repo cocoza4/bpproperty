@@ -23,7 +23,7 @@
 
   angular
 
-    .module('land', ['ngRoute'])
+    .module('land', [])
 
   .config(['$routeProvider', function($routeProvider) {
 
@@ -45,10 +45,6 @@
       templateUrl: 'property/land.tpl.html',
       controller: 'LandDetailCtrl',
       resolve: LandDetailResolve
-    })
-
-    .otherwise({
-      redirectTo: '/lands'
     });
 
   }])
