@@ -24,9 +24,19 @@
 
       <ul class="nav navbar-nav navbar-right" ng-show="globals.currentUser.username">
         <li>
-          <a href="#">
-            <span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Logged in as
-            <span class="text-primary">{{globals.currentUser.username}}</span>
+          <a>
+            <span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;Logged in as</a>
+        </li>
+        <li>
+          <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" role="button">
+            <span class="text-primary">{{globals.currentUser.username}}
+              <span class="caret"></span>
+            </span>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="#/logout">Log out</a>
+              </li>
+            </ul>
           </a>
         </li>
       </ul>

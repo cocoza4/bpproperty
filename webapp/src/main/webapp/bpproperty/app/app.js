@@ -57,6 +57,11 @@
       controller: 'LoginCtrl'
     })
 
+    .when('/logout', {
+      templateUrl: 'authentication/login.tpl.html',
+      controller: 'LogoutCtrl'
+    })
+
     .otherwise({
       redirectTo: '/login'
     });
@@ -69,23 +74,13 @@
     // keep user logged in after page refresh
     $rootScope.globals = $cookies.getObject('globals') || {};
 
-
-    alert('new page: ' + $rootScope.globals.currentUser);
-
     if ($rootScope.globals.currentUser) {
-      alert('fuck');
       $http.defaults.headers.common.Authorization = 'Basic ' + $rootScope.globals.currentUser.authdata;
     }
 
     $rootScope.$on('$locationChangeStart', function(event, next, current) {
       // redirect to login page if not logged in
-
       var loggedIn = $rootScope.globals.currentUser;
-
-      // if ($cookies.get('globals'))
-      //   alert('loggedIn: ' + $cookies.get('globals').currentUser.username);
-
-      alert(loggedIn);
       if ($location.path() !== '/login' && !loggedIn) {
         $location.path('/login');
       }
