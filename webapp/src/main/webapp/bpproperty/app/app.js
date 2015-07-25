@@ -9,7 +9,6 @@
     'ngRoute',
     'ngCookies',
 
-    'myApp.version',
     'services.breadcrumbs',
 
     'authentication-service',
@@ -25,7 +24,6 @@
     'percentage',
 
     'customer',
-    'myApp.view2',
 
     'land',
     'land-service',
@@ -51,13 +49,8 @@
 
   }])
 
-  .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+  .config(['$routeProvider', function($routeProvider) {
     $routeProvider
-
-      .when('/bpproperty', {
-        templateUrl: 'authentication/login.tpl.html',
-        controller: 'LoginCtrl'
-      })
 
       .when('/login', {
         templateUrl: 'authentication/login.tpl.html',
@@ -65,11 +58,11 @@
       })
 
     .otherwise({
-      redirectTo: '/login'
+      redirectTo: '/lands'
     });
 
     // use the HTML5 History API
-    $locationProvider.html5Mode(true);
+    // $locationProvider.html5Mode(true);
   }])
 
   .run(['$rootScope', '$location', '$cookies', '$http', function($rootScope, $location, $cookies, $http) {
@@ -82,7 +75,8 @@
 
     $rootScope.$on('$locationChangeStart', function(event, next, current) {
       // redirect to login page if not logged in
-      if ($location.path() !== '/login' && !$rootScope.globals.currentUser) {
+      var loggedIn = $rootScope.globals.currentUser;
+      if ($location.path() !== '/login' && !loggedIn) {
         $location.path('/login');
       }
     });

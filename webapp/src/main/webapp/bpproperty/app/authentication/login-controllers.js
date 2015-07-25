@@ -8,7 +8,7 @@
 
   .controller('LoginCtrl', ['$scope', '$location', 'AuthenticationService', function($scope, $location, AuthenticationService) {
 
-    AuthenticationService.clearCredentials();
+    // AuthenticationService.clearCredentials();
     $scope.login = function() {
       AuthenticationService.login($scope.username, $scope.password, function(response) {
         if (response.success) {

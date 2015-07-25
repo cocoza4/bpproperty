@@ -7,29 +7,29 @@
 
       <div class="panel-body" style="padding-top:30px">
 
-        <!-- error message -->
-        <div ng-show="error" class="alert alert-danger col-sm-12">{{error}}</div>
+<!-- error message -->
+        <div class="alert alert-danger col-sm-12" ng-show="error">{{error}}</div>
 
-        <form class="form-horizontal" name="form" role="form" ng-submit="login()">
+        <form class="form-horizontal" name="form" ng-submit="login()" role="form">
 
           <div class="input-group" style="margin-bottom: 25px">
             <span class="input-group-addon">
               <i class="glyphicon glyphicon-user"></i>
             </span>
-            <input class="form-control" name="username" placeholder="username" type="text" ng-model="username">
+            <input class="form-control" name="username" ng-model="username" placeholder="username" type="text">
           </div>
 
           <div class="input-group" style="">
             <span class="input-group-addon">
               <i class="glyphicon glyphicon-lock"></i>
             </span>
-            <input class="form-control" name="password" placeholder="password" type="password" ng-model="password">
+            <input class="form-control" name="password" ng-model="password" placeholder="password" type="password">
           </div>
 
           <div class="input-group" style="margin-top:5px">
             <div class="checkbox">
               <label>
-                <input name="remember" type="checkbox" ng-model="loginRemember">
+                <input name="remember" ng-model="loginRemember" type="checkbox">
                 Remember me
               </label>
             </div>
@@ -37,7 +37,7 @@
 
           <div class="form-group pull-right" style="margin-top:5px">
             <div class="col-sm-12 controls">
-              <button type"submit" class="btn btn-success">Login</button>
+              <button class="btn btn-success" type"submit">Login</button>
             </div>
           </div>
 
