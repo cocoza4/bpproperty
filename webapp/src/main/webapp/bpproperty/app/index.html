@@ -48,7 +48,7 @@
           <li ng-repeat="breadcrumb in breadcrumbs.getAll()">
             <ng-switch on="$last">
               <span ng-switch-when="true" ng-cloak>{{breadcrumb.name}}</span>
-              <span ng-switch-default><a ng-cloak href="{{breadcrumb.path}}">{{breadcrumb.name}}</a>&nbsp;&nbsp;&nbsp;</span>
+              <span ng-switch-default><a ng-cloak href="#/{{breadcrumb.path}}">{{breadcrumb.name}}</a>&nbsp;&nbsp;&nbsp;</span>
             </ng-switch>
           </li>
         </ul>

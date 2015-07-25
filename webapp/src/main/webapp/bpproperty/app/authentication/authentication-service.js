@@ -21,14 +21,16 @@
 
       this.setCredentials = function(username, password) {
         var authdata = Base64.encode(username + ':' + password);
+
         $rootScope.globals = {
           currentUser: {
             username: username,
             authdata: authdata
           }
         };
-        $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata;
-        $cookies.put('globals', $rootScope.globals);
+
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; // jshint ignore:line
+        $cookies.putObject('globals', $rootScope.globals);
       };
 
       this.clearCredentials = function() {
