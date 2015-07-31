@@ -11,12 +11,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public class BPPropertyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private IUserLoginDAO iUserLoginDAO;
+    private IUserLoginDAO userLoginDAO;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserLogin userLogin = iUserLoginDAO.findByUsername(username);
+        UserLogin userLogin = userLoginDAO.findByUsername(username);
         if (userLogin == null) {
             throw new UsernameNotFoundException("can't found username:" + username);
         }

@@ -55,11 +55,6 @@
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.jdbc.driver.version}</version>
             </dependency>
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>5.1.35</version>
-            </dependency>
 
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -86,8 +81,8 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
-                <scope>test</scope>
                 <version>${spring.version}</version>
+                <scope>test</scope>
             </dependency>
             <!--<dependency>-->
                 <!--<groupId>org.springframework</groupId>-->

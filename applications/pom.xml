@@ -15,7 +15,6 @@
         <module>person</module>
         <module>property</module>
         <module>purchase</module>
-        <module>report</module>
         <module>security</module>
     </modules>
 

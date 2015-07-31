@@ -6,8 +6,8 @@
 
     .module('authentication-service', [])
 
-  .service('AuthenticationService', ['$rootScope', '$cookies', '$http', 'Base64',
-    function($rootScope, $cookies, $http, Base64) {
+  .service('AuthenticationService', ['$rootScope', '$cookies', '$http', 'Base64', 'Authentication',
+    function($rootScope, $cookies, $http, Base64, Authentication) {
 
       this.login = function(username, password, callback) {
         var response = {
@@ -41,6 +41,14 @@
 
     }
   ])
+
+  .factory('Authentication', ['$resource', function($resource) {
+    return $resource('/bpproperty/api/user', null, {
+      'login': {
+        method: 'POST'
+      }
+    });
+  }])
 
   .factory('Base64', function() {
     var keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';

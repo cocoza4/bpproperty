@@ -7,6 +7,14 @@
 
     <changeSet id="populateTables" author="coco">
 
+        <!-- init USER_LOGIN -->
+        <insert tableName="user_login">
+            <column name="username" value="admin"/>
+            <column name="password" value="admin"/>
+            <column name="created_by" valueNumeric="0" />
+            <column name="created_time" valueDate="${now}"/>
+        </insert>
+
         <!-- init Customer -->
         <insert tableName="CUSTOMER">
             <column name="FIRSTNAME" value="firstname1"/>

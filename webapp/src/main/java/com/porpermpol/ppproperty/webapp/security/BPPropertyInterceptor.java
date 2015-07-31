@@ -19,12 +19,11 @@ public class BPPropertyInterceptor implements HandlerInterceptor {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         requestAttributes.setAttribute(RequestAttributesUtils.CURRENT_TIMESTAMP, new Date(), RequestAttributes.SCOPE_REQUEST);
 
-//        Long userLoginId = null;
-//        SecurityContext securityContext = SecurityContextHolder.getContext();
-//        if (securityContext != null && securityContext.getAuthentication() != null) {
-//            userLoginId = BPPropertySecurityUtils.getUserLoginId(securityContext.getAuthentication());
-//        }
-        Long userLoginId = 1L;
+        Long userLoginId = null;
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        if (securityContext != null && securityContext.getAuthentication() != null) {
+            userLoginId = BPPropertySecurityUtils.getUserLoginId(securityContext.getAuthentication());
+        }
         requestAttributes.setAttribute(RequestAttributesUtils.USER_LOGIN_ID, userLoginId, RequestAttributes.SCOPE_REQUEST);
 
         return true;
