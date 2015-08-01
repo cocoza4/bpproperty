@@ -1,49 +1,110 @@
-<div class="container">
-  <div class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" style="margin-top:50px;">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <div class="panel-title">Sign In</div>
-      </div>
+<!DOCTYPE html>
+<html ng-app="myAuthentication" class="no-js" lang="en">
 
-      <div class="panel-body" style="padding-top:30px">
+  <meta charset="utf-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <title>BP Property - Login</title>
+  <meta content="" name="description">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
 
-<!-- error message -->
-        <div class="alert alert-danger col-sm-12" ng-show="error">{{error}}</div>
+  <!-- <meta name="_csrf_parameter" content="_csrf" />
+        <meta name="_csrf_header" content="X-CSRF-TOKEN" />
+        <meta name="_csrf" content="e62835df-f1a0-49ea-bce7-bf96f998119c" /> -->
 
-        <form class="form-horizontal" name="form" ng-submit="login()" role="form">
+  <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
-          <div class="input-group" style="margin-bottom: 25px">
-            <span class="input-group-addon">
-              <i class="glyphicon glyphicon-user"></i>
-            </span>
-            <input class="form-control" name="username" ng-model="username" placeholder="username" type="text">
-          </div>
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/angular/angular.min.js"></script>
+  <script src="bower_components/angular-route/angular-route.min.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
 
-          <div class="input-group" style="">
-            <span class="input-group-addon">
-              <i class="glyphicon glyphicon-lock"></i>
-            </span>
-            <input class="form-control" name="password" ng-model="password" placeholder="password" type="password">
-          </div>
+  <script src="i18n/angular-locale_th.js"></script>
 
-          <div class="input-group" style="margin-top:5px">
-            <div class="checkbox">
-              <label>
-                <input name="remember" ng-model="loginRemember" type="checkbox">
-                Remember me
-              </label>
+  <script src="common/interceptors/spinner.js"></script>
+
+  <script src="common/directives/loader.js"></script>
+  <script src="common/directives/tabs.js"></script>
+  <script src="common/directives/lazy-loading-tabs.js"></script>
+  <script src="common/directives/decimal-number.js"></script>
+  <script src="common/directives/percentage.js"></script>
+  <script src="common/directives/pagination/pagination.js"></script>
+  <script src="common/jquery.bootstrap-growl.min.js"></script>
+  <script src="common/notification.js"></script>
+
+  <script src="components/services/breadcrumbs.js"></script>
+
+  <script src="authentication/authentication-service.js"></script>
+  <script src="authentication/authentication-controller.js"></script>
+
+  <script src="customer/customer-service.js"></script>
+  <script src="property/land-service.js"></script>
+  <script src="property/land-buy-service.js"></script>
+
+  <script src="property/land.js"></script>
+  <script src="property/land-installment.js"></script>
+  <script src="property/land-buy.js"></script>
+  <script src="property/land-installment-service.js"></script>
+
+  <script src="customer/customer.js"></script>
+
+  <script src="authentication/main.js"></script>
+
+</head>
+
+<body ng-controller="LoginCtrl">
+
+  <div class="container">
+    <div class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" style="margin-top:50px;">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <div class="panel-title">Sign In</div>
+        </div>
+
+        <div class="panel-body" style="padding-top:30px">
+
+          <div class="alert alert-danger col-sm-12" ng-show="error">{{error}}</div>
+
+          <!-- action="j_spring_security_check" method="post"  -->
+          <form class="form-horizontal" name="form" ng-submit="login()" role="form">
+
+            <div class="input-group" style="margin-bottom: 25px">
+              <span class="input-group-addon">
+                <i class="glyphicon glyphicon-user"></i>
+              </span>
+              <input class="form-control" name="username" ng-model="username" placeholder="username" type="text">
             </div>
-          </div>
 
-          <div class="form-group pull-right" style="margin-top:5px">
-            <div class="col-sm-12 controls">
-              <button class="btn btn-success" type"submit">Login</button>
+            <div class="input-group" style="">
+              <span class="input-group-addon">
+                <i class="glyphicon glyphicon-lock"></i>
+              </span>
+              <input class="form-control" name="password" ng-model="password" placeholder="password" type="password">
             </div>
-          </div>
 
-        </form>
+            <div class="input-group" style="margin-top:5px">
+              <div class="checkbox">
+                <label>
+                  <input name="remember" ng-model="loginRemember" type="checkbox">
+                  Remember me
+                </label>
+              </div>
+            </div>
 
+            <div class="form-group pull-right" style="margin-top:5px">
+              <div class="col-sm-12 controls">
+                <button class="btn btn-success" type="submit">Login</button>
+              </div>
+            </div>
+
+          </form>
+
+        </div>
       </div>
     </div>
   </div>
-</div>
+
+</body>
+
+</html>

@@ -10,6 +10,7 @@
 
     AuthenticationService.clearCredentials();
     $scope.login = function() {
+
       AuthenticationService.login($scope.username, $scope.password, function(response) {
         if (response.success) {
           AuthenticationService.setCredentials($scope.username, $scope.password);

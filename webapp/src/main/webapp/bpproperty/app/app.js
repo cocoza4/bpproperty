@@ -7,6 +7,7 @@
 
     .module('myApp', [
     'ngRoute',
+    'ngResource',
     'ngCookies',
 
     'services.breadcrumbs',
@@ -85,8 +86,6 @@
         $location.path('/login');
       }
     });
-  }])
-
-  ;
+  }]);
 
 })();

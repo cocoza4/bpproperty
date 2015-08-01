@@ -14,7 +14,6 @@
        <mvc:annotation-driven />
 
        <mvc:resources mapping="/**" location="/bpproperty/app/"/>
-       <!--<mvc:resources mapping="/bpproperty/**" location="/bpproperty/app/"/>-->
 
        <!--<mvc:view-controller path="/bpproperty/" view-name="/bpproperty/app/index.html"/>-->
 
@@ -23,8 +22,9 @@
               <!--<property name="suffix" value=".html" />-->
        <!--</bean>-->
 
-       <!--<bean id="viewResolver"-->
-                   <!--class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+       <!--<mvc:default-servlet-handler/>-->
+
+       <!--<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
               <!--<property name="cache" value="true" />-->
               <!--<property name="prefix" value="" />-->
               <!--<property name="suffix" value=".html" />-->

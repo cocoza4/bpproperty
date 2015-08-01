@@ -6,6 +6,7 @@ import com.porpermpol.ppproperty.core.utils.ModelUtils;
 import com.porpermpol.ppproperty.security.dao.IUserLoginDAO;
 import com.porpermpol.ppproperty.security.model.UserLogin;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -22,8 +23,7 @@ public class UserLoginDAO extends JdbcRepository<UserLogin, Long> implements IUs
     @Autowired
     private JdbcOperations jdbcOperations;
 
-    private static final String SQL_SELECT_BY_USERNAME = "SELECT * FROM user_login " +
-            "WHERE username = ?";
+    private static final String SQL_SELECT_BY_USERNAME = "SELECT * FROM user_login WHERE username = ?";
 
     public UserLoginDAO() {
         super(ROW_MAPPER, ROW_UNMAPPER, "user_login", "id");
@@ -67,6 +67,11 @@ public class UserLoginDAO extends JdbcRepository<UserLogin, Long> implements IUs
 
     @Override
     public UserLogin findByUsername(String username) {
-        return jdbcOperations.queryForObject(SQL_SELECT_BY_USERNAME, ROW_MAPPER, username);
+        UserLogin userLogin = null;
+        try {
+            userLogin = jdbcOperations.queryForObject(SQL_SELECT_BY_USERNAME, ROW_MAPPER, username);
+        } catch (EmptyResultDataAccessException e) {
+        }
+        return userLogin;
     }
 }

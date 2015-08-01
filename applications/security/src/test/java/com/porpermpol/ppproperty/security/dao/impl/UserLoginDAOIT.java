@@ -47,10 +47,19 @@ public class UserLoginDAOIT {
     }
 
     @Test
-    public void testFindByUsername() throws Exception {
+    public void testSave() throws Exception {
         userLoginDAO.save(userLogin);
         assertNotNull(userLogin.getId());
         assertTrue(userLogin.isPersisted());
+    }
+
+    @Test
+    public void testFindByUsername() throws Exception {
+        userLoginDAO.save(userLogin);
+        UserLogin model = userLoginDAO.findByUsername(userLogin.getUsername());
+        assertEquals(userLogin.getId(), model.getId());
+        assertEquals(userLogin.getUsername(), model.getUsername());
+        assertEquals(userLogin.getPassword(), model.getPassword());
     }
 
     @Test

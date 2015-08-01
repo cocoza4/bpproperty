@@ -15,6 +15,7 @@ public class BPPropertyAuthenticationProvider extends DaoAuthenticationProvider 
 
     @Override
     public Authentication createSuccessAuthentication(Object principal, Authentication authentication, UserDetails user) {
+        System.out.println("Provider: " + user.getUsername() + ", " + user.getPassword());
         UsernamePasswordAuthenticationToken result
                 = new BPPropertyAuthentication(authentication.getPrincipal(),
                 authentication.getCredentials(),
