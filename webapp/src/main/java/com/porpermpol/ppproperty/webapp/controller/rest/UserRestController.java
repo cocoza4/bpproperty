@@ -8,8 +8,8 @@ import java.security.Principal;
 @RestController
 public class UserRestController {
 
-    @RequestMapping("/user")
-    public Principal user(Principal user) {
+    @RequestMapping("/postlogin")
+    public Principal login(Principal user) {
         return user; // TODO: don't return principal object. it exposes too much credentials details to the front end
     }
 

@@ -51,15 +51,16 @@
   }])
 
   .config(['$routeProvider', function($routeProvider) {
+
     $routeProvider
 
       .when('/login', {
-      templateUrl: 'authentication/login.tpl.html',
+      templateUrl: 'authentication/login.html',
       controller: 'LoginCtrl'
     })
 
     .when('/logout', {
-      templateUrl: 'authentication/login.tpl.html',
+      template: ' ', // empty template. just need to logout
       controller: 'LogoutCtrl'
     })
 
@@ -67,19 +68,15 @@
       redirectTo: '/login'
     });
 
-    // use the HTML5 History API
-    // $locationProvider.html5Mode(true);
   }])
 
   .run(['$rootScope', '$location', '$cookies', '$http', function($rootScope, $location, $cookies, $http) {
     // keep user logged in after page refresh
     $rootScope.globals = $cookies.getObject('globals') || {};
 
-    if ($rootScope.globals.currentUser) {
-      $http.defaults.headers.common.Authorization = 'Basic ' + $rootScope.globals.currentUser.authdata;
-    } else {
-      // $location.path('/login');
-    }
+    // if ($rootScope.globals.currentUser) {
+    //   $http.defaults.headers.common.Authorization = 'Basic ' + $rootScope.globals.currentUser.authdata;
+    // }
 
     $rootScope.$on('$locationChangeStart', function(event, next, current) {
       // redirect to login page if not logged in

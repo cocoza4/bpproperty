@@ -29,10 +29,13 @@
 
   }])
 
-  .controller('LogoutCtrl', ['$scope', '$location', 'AuthenticationService', function($scope, $location, AuthenticationService) {
+  .controller('LogoutCtrl', ['$window', '$location', 'AuthenticationService', function($window, $location, AuthenticationService) {
 
-    AuthenticationService.clearCredentials();
-    $location.path('/login');
+    AuthenticationService.logout(function() {
+      AuthenticationService.clearCredentials();
+      $window.location.href = $location.absUrl().split('#')[0];
+    });
+
   }]);
 
 })();

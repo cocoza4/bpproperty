@@ -1,21 +1,58 @@
 (function() {
 
-'use strict';
+  'use strict';
 
-angular
+  angular
 
-  .module('authentication-service', [])
+    .module('authentication-service', [])
 
-.service('AuthenticationService', ['$rootScope', '$cookies', '$http', 'Authentication',
-  function($rootScope, $cookies, $http, Authentication) {
+  .service('AuthenticationService', ['$rootScope', '$cookies', '$http', 'Authentication',
+    function($rootScope, $cookies, $http, Authentication) {
 
-    var self = this;
+      this.logout = function(callback) {
+        $http.post('logout', {}).success(function() {
+          callback();
+        }).error(function(data) {
+          console.log(data);
+          alert('Unable to log off');
+        });
+      }
+
+      this.login = function(username, password, callback) {
+        Authentication.authenticate(username, password, callback);
+      };
+
+      this.setCredentials = function(username, password) {
+        // var authdata = Base64.encode(username + ':' + password);
+        var authdata = btoa(username + ':' + password);
+
+        $rootScope.globals = {
+          currentUser: {
+            username: username,
+            authdata: authdata
+          }
+        };
+
+        // $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; // jshint ignore:line
+        $cookies.putObject('globals', $rootScope.globals);
+      };
+
+      this.clearCredentials = function() {
+        $rootScope.globals = {};
+        $cookies.remove('globals');
+        // $http.defaults.headers.common.Authorization = 'Basic ';
+      };
+
+    }
+  ])
+
+  .service('Authentication', ['$http', function($http) {
 
     this.authenticate = function(username, password, callback) {
       var headers = {
         authorization: "Basic " + btoa(username + ":" + password)
       };
-      $http.get('user', {
+      $http.get('postlogin', {
         'headers': headers
       }).success(function(data) {
         callback({
@@ -23,60 +60,14 @@ angular
 
         });
       }).error(function(error) {
-        console.log(error);
         callback({
           message: 'Username or password is incorrect'
-
         });
       });
     }
-
-    this.login = function(username, password, callback) {
-
-      $http.post('postlogin', {
-        username: username,
-        password: password
-      }).success(function(data) {
-        self.authenticate(username, password, callback);
-      }).error(function() {
-        callback({
-          message: 'Username or password is incorrect'
-        });
-      });
-
-    };
-
-    this.setCredentials = function(username, password) {
-      // var authdata = Base64.encode(username + ':' + password);
-      var authdata = btoa(username + ':' + password);
-
-      $rootScope.globals = {
-        currentUser: {
-          username: username,
-          authdata: authdata
-        }
-      };
-
-      $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; // jshint ignore:line
-      $cookies.putObject('globals', $rootScope.globals);
-    };
-
-    this.clearCredentials = function() {
-      $rootScope.globals = {};
-      $cookies.remove('globals');
-      $http.defaults.headers.common.Authorization = 'Basic ';
-    };
-
-  }
-])
-
-.factory('Authentication', ['$resource', function($resource) {
-    return $resource('/bpproperty/api/user', null, {
-      'login': {
-        method: 'POST'
-      }
-    });
   }])
+
+
   //
   // .factory('Base64', function() {
   // var keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
@@ -157,6 +148,6 @@ angular
   //     return output;
   //   }
   // };
-// });
+  // });
 
 })();

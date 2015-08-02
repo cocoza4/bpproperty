@@ -14,8 +14,7 @@ public class BPPropertyController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
-        return "authentication/login.tpl.html";
-//        return "index.html";
+        return "authentication/login.html";
     }
 
 
