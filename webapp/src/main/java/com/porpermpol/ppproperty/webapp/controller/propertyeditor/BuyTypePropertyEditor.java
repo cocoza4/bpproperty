@@ -1,4 +1,4 @@
-package com.porpermpol.ppproperty.webapp.controller.propertyEditor;
+package com.porpermpol.ppproperty.webapp.controller.propertyeditor;
 
 import com.porpermpol.ppproperty.purchase.model.BuyType;
 import java.beans.PropertyEditorSupport;

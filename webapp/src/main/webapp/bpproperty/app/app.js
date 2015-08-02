@@ -60,7 +60,7 @@
     })
 
     .when('/logout', {
-      template: ' ', // empty template. just need to logout
+      template: ' ', // Empty template. just need to logout
       controller: 'LogoutCtrl'
     })
 
