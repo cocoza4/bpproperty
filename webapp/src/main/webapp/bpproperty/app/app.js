@@ -77,6 +77,8 @@
 
     if ($rootScope.globals.currentUser) {
       $http.defaults.headers.common.Authorization = 'Basic ' + $rootScope.globals.currentUser.authdata;
+    } else {
+      // $location.path('/login');
     }
 
     $rootScope.$on('$locationChangeStart', function(event, next, current) {

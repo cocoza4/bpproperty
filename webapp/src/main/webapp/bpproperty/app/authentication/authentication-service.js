@@ -13,8 +13,7 @@ angular
 
     this.authenticate = function(username, password, callback) {
       var headers = {
-        authorization: "Basic " + btoa(username + ":" + password),
-        'X-Requested-With' : 'XMLHttpRequest'
+        authorization: "Basic " + btoa(username + ":" + password)
       };
       $http.get('user', {
         'headers': headers

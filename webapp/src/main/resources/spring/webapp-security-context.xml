@@ -11,9 +11,9 @@
     <http security="none" pattern="/bower_components/**"/>
     <http security="none" pattern="/login**"/>
 
-    <http auto-config="true" use-expressions="true">
+    <http auto-config="false" use-expressions="true">
         <intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
-        <form-login login-page='/login' login-processing-url="/postlogin"
+        <form-login login-page="/login" login-processing-url="/postlogin"
                     username-parameter="username" password-parameter="password"
                     default-target-url='/' always-use-default-target='true' />
         <http-basic entry-point-ref="bpPropertyBasicAuthenticationEntryPoint"/>
