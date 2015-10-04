@@ -10,15 +10,14 @@ import java.util.List;
 
 public interface ILandBuyService {
 
+    boolean existsLandBuyDetail(long landId, long customerId);
     void saveLandBuyDetail(LandBuyDetail landBuyDetail);
-
     void deleteLandBuyDetailById(long id);
     LandBuyDetail findLandBuyDetailById(long id);
     List<LandBuyDetail> findLandBuyDetailsByCustomerId(long customerId);
 
     Page<LandBuyDetailBO> findLandBuyDetailBOByLandId(long id, Pageable pageable);
 
-    Page<LandBuyDetail> findLandBuyDetailByCriteria(String name, String address, Pageable pageable);
     Page<LandBuyDetail> findAllLandBuyDetails(Pageable pageable);
 
 

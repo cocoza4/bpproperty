@@ -35,12 +35,6 @@ public class LandService implements ILandService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<Land> findByCriteria(String name, String address, Pageable pageable) {
-        return null;
-    }
-
-    @Transactional(readOnly = true)
-    @Override
     public Page<Land> findAll(Pageable pageable) {
         return landDAO.findAll(pageable);
     }

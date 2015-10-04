@@ -5,10 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-    <!--<property name="now" value="UNIX_TIMESTAMP()" dbms="mysql"/>-->
-    <!--<property name="now" value="UNIX_TIMESTAMP()" dbms="hsqldb"/>-->
-    <!--<property name="now" value="0" dbms="h2"/>-->
-
     <include file="liquibase/changesets/security-baseline-changeset.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

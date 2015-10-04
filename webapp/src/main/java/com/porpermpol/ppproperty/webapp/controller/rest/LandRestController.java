@@ -140,7 +140,9 @@ public class LandRestController {
 
     @RequestMapping(value = "/{landId}/buydetails", method = RequestMethod.POST)
     public LandBuyDetail saveBuyDetail(@PathVariable("landId") long landId, @RequestBody LandBuyDetail buyDetail) {
-        landBuyService.saveLandBuyDetail(buyDetail);
+        if (!landBuyService.existsLandBuyDetail(landId, buyDetail.getCustomerId())) {
+            landBuyService.saveLandBuyDetail(buyDetail);
+        }
         return buyDetail;
     }
 

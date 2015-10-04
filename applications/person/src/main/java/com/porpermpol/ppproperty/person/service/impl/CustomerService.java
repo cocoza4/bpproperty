@@ -33,14 +33,6 @@ public class CustomerService implements ICustomerService {
         return customerDAO.findOne(id);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Page<Customer> findByCriteria(String firstName, String lastName, String tel, Pageable pageable) {
-        return null;
-    }
-
-    @Transactional(readOnly = true)
-    @Override
     public Page<Customer> findAll(Pageable pageable) {
         return customerDAO.findAll(pageable);
     }

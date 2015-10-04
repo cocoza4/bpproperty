@@ -57,7 +57,6 @@
       }).success(function(data) {
         callback({
           success: true
-
         });
       }).error(function(error) {
         callback({

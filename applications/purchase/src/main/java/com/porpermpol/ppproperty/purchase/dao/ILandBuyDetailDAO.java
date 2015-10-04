@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ILandBuyDetailDAO extends PagingAndSortingRepository<LandBuyDetail, Long> {
 
-    List<LandBuyDetail> findByCriteria(long landId);
+    boolean exists(long landId, long customerId);
     List<LandBuyDetail> findByCustomerId(long customerId);
     long countByLandId(long id);
 

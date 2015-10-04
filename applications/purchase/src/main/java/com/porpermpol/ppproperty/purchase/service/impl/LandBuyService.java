@@ -26,6 +26,12 @@ public class LandBuyService implements ILandBuyService {
     @Autowired
     private IInstallmentDAO installmentDAO;
 
+    @Transactional(readOnly = true)
+    @Override
+    public boolean existsLandBuyDetail(long landId, long customerId) {
+        return landBuyDetailDAO.exists(landId, customerId);
+    }
+
     @Override
     public void saveLandBuyDetail(LandBuyDetail landBuyDetail) {
         ModelUtils.setAuditFields(landBuyDetail);
@@ -53,12 +59,6 @@ public class LandBuyService implements ILandBuyService {
     @Override
     public Page<LandBuyDetailBO> findLandBuyDetailBOByLandId(long id, Pageable pageable) {
         return landBuyDetailBODAO.findByLandId(id, pageable);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public Page<LandBuyDetail> findLandBuyDetailByCriteria(String name, String address, Pageable pageable) {
-        return null;
     }
 
     @Transactional(readOnly = true)

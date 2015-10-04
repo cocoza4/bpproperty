@@ -9,7 +9,6 @@ public interface ILandService {
     void saveLand(Land land);
     void deleteById(long id);
     Land findById(long id);
-    Page<Land> findByCriteria(String name, String address, Pageable pageable);
     Page<Land> findAll(Pageable pageable);
     long count();
 

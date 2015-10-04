@@ -14,14 +14,6 @@
 
     <dependencies>
 
-        <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-framework-bom</artifactId>-->
-            <!--<version>4.1.6.RELEASE</version>-->
-            <!--<type>pom</type>-->
-            <!--<scope>import</scope>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
@@ -64,52 +56,6 @@
             <groupId>com.porpermpol.ppproperty</groupId>
             <version>${project.version}</version>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>com.nurkiewicz.jdbcrepository</groupId>-->
-            <!--<artifactId>jdbcrepository</artifactId>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<artifactId>report</artifactId>-->
-            <!--<groupId>com.porpermpol.ppproperty</groupId>-->
-            <!--<version>${project.version}</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-beans</artifactId>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-test</artifactId>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-aop</artifactId>-->
-            <!--<version>${spring.version}</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-expression</artifactId>-->
-            <!--<version>${spring.version}</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-context-support</artifactId>-->
-            <!--<version>${spring.version}</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.data</groupId>-->
-            <!--<artifactId>spring-data-commons</artifactId>-->
-            <!--<version>${spring.data.version}</version>-->
-            <!--<scope>runtime</scope>-->
-        <!--</dependency>-->
 
         <dependency>
             <groupId>org.springframework</groupId>

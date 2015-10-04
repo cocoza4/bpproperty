@@ -103,7 +103,7 @@
         <label class="control-label col-xs-3 col-sm-2" for="buyer">ผู้ซื้อ</label>
         <div class="col-xs-9 col-sm-10">
           <p>
-            <a ng-href="{{'customers/' + customer.id}}">{{customer.firstName + ' ' + customer.lastName}}</a>
+            <a ng-href="{{'#/customers/' + customer.id}}">{{customer.firstName + ' ' + customer.lastName}}</a>
             <a data-target="#selectBuyerDialog" data-toggle="modal" href ng-hide="customer.id">
               <span class="glyphicon glyphicon-plus-sign"></span>
             </a>

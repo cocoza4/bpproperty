@@ -22,6 +22,8 @@ import java.util.Map;
 @Repository
 public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implements ILandBuyDetailDAO {
 
+    private static final String SQL_EXISTS = "SELECT count(*) FROM land_buy_detail WHERE land_id = ? AND customer_id = ?";
+
     private static final String SQL_SELECT_BY_CUSTOMER_ID = "SELECT * FROM land_buy_detail " +
             "WHERE customer_id = ? ORDER BY created_time DESC";
 
@@ -92,12 +94,9 @@ public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implem
         return entity.withPersisted(true);
     }
 
-    //TODO: complete this
     @Override
-    public List<LandBuyDetail> findByCriteria(long landId) {
-        String sql = "SELECT * FROM LAND_PURCHASE_INFO WHERE PROPERTY_ID = ?";
-//        return getjdbc;
-        return null;
+    public boolean exists(long landId, long customerId) {
+        return jdbcOperations.queryForObject(SQL_EXISTS, Long.class, landId, customerId) > 0;
     }
 
     @Override

@@ -105,26 +105,44 @@
   .controller('LandBuyDetailsCtrl', ['$scope', '$location', '$route', 'LandBuyService', 'NotificationService',
     function($scope, $location, $route, LandBuyService, NotificationService) {
 
-
+      var validateBuyDetail = function() {
+        if ($scope.customer.id == null) {
+          NotificationService.notify({
+            type: 'error',
+            msg: 'Please select a buyer'
+          });
+          return false;
+        }
+        return true;
+      }
 
       $scope.saveLandBuyDetail = function(isValid) {
 
-        if (isValid) {
+        if (isValid && validateBuyDetail()) {
 
           var isNew = $scope.buyDetail.id == null;
 
           if (isNew) {
             $scope.buyDetail.customerId = $scope.customer.id;
             LandBuyService.create($scope.buyDetail).then(function(data) {
-              NotificationService.notify({
-                type: 'success',
-                msg: 'BuyDetail created'
-              });
-              $scope.buyDetail = data;
 
-              // reload the page
-              var url = '/lands/' + $route.current.params['landId'] + '/buydetails/' + $scope.buyDetail.id;
-              $location.path(url);
+              console.log(data);
+              if (data.id != null) {
+                $scope.buyDetail = data;
+                NotificationService.notify({
+                  type: 'success',
+                  msg: 'BuyDetail created'
+                });
+                // reload the page
+                var url = '/lands/' + $route.current.params['landId'] + '/buydetails/' + $scope.buyDetail.id;
+                $location.path(url);
+              } else {
+                // TODO: update customer name on screen
+                NotificationService.notify({
+                  type: 'error',
+                  msg: 'The selected cutomer has purchased this land'
+                });
+              }
 
             }, function(error) {
               NotificationService.notify({
@@ -228,6 +246,7 @@
       var recordsPerPage = 10;
 
       $scope.currentPage = 1;
+      $scope.customer = {};
       $scope.selectedCustomer = {};
 
       $scope.land = Land;

@@ -7,7 +7,6 @@ import mockit.Mock;
 import mockit.MockUp;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,9 +82,4 @@ public class CustomerServiceIT {
         assertEquals(CURRENT_DATE, returnCustomer.getUpdatedTime());
     }
 
-    //TODO: implement this
-    @Ignore
-    @Test
-    public void testFindByCriteria() throws Exception {
-    }
 }

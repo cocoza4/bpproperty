@@ -11,7 +11,6 @@
     <include file="liquibase/changesets/person-baseline-changeset.xml" relativeToChangelogFile="false"/>
     <include file="liquibase/changesets/property-baseline-changeset.xml" relativeToChangelogFile="false"/>
     <include file="liquibase/changesets/purchase-baseline-changeset.xml" relativeToChangelogFile="false"/>
-    <!--<include file="liquibase/changesets/report-baseline-changeset.xml" relativeToChangelogFile="false"/>-->
     <include file="liquibase/changesets/security-baseline-changeset.xml" relativeToChangelogFile="false"/>
 
     <include file="liquibase/changesets/baseline-changeset.xml" relativeToChangelogFile="false"/>
