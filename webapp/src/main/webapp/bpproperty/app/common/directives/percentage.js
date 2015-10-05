@@ -31,7 +31,7 @@
 
             if(!angular.isUndefined(decimalCheck[1])) {
                 decimalCheck[1] = decimalCheck[1].slice(0,2);
-                clean =decimalCheck[0] + '.' + decimalCheck[1];
+                clean = decimalCheck[0] + '.' + decimalCheck[1];
             }
 
             if (val !== clean) {

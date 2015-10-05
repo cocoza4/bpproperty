@@ -4,7 +4,7 @@
 
   angular
 
-    .module('authentication', [])
+    .module('authentication', ['authentication-service'])
 
   .controller('LoginCtrl', ['$scope', '$window', '$location', 'AuthenticationService', function($scope, $window, $location, AuthenticationService) {
 
@@ -24,17 +24,19 @@
         } else {
           $scope.error = response.message;
         }
-      })
+      });
     };
 
   }])
 
   .controller('LogoutCtrl', ['$window', '$location', 'AuthenticationService', function($window, $location, AuthenticationService) {
 
-    AuthenticationService.logout(function() {
+    this.callback = function() {
       AuthenticationService.clearCredentials();
       $window.location.href = $location.absUrl().split('#')[0];
-    });
+    };
+
+    AuthenticationService.logout(this.callback);
 
   }]);
 
