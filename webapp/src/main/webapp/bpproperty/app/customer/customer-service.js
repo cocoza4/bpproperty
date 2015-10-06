@@ -18,7 +18,7 @@
 
     this.create = function(customer) {
       return Customer.save(customer).$promise;
-    };
+    }
 
     this.update = function(customer) {
       return Customer.update(customer).$promise;

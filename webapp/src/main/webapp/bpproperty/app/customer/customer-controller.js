@@ -39,7 +39,7 @@
 
   angular
 
-    .module('customer', ['ngRoute'])
+    .module('customer', ['ngRoute', 'my-notification', 'customer-service'])
 
   .config(['$routeProvider', function($routeProvider) {
 
@@ -70,8 +70,9 @@
 
   }])
 
-  .controller('CustomerCtrl', ['$scope', '$routeParams', 'Customer', 'CustomerService', 'NotificationService',
-    function($scope, $routeParams, Customer, CustomerService, NotificationService) {
+  .controller('CustomerCtrl', ['$scope', 'Customer', 'CustomerService', 'NotificationService',
+    function($scope, Customer, CustomerService, NotificationService) {
+
       $scope.submit = function(isValid) {
 
         if (isValid) {
@@ -96,6 +97,13 @@
 
   .controller('CreateCustomerCtrl', ['$scope', '$location', 'CustomerService', 'NotificationService',
     function($scope, $location, CustomerService, NotificationService) {
+
+      var self = this;
+      this.redirectToCustomerPage = function(id) {
+        var url = '/customers/' + id;
+        $location.path(url);
+      }
+
       $scope.submit = function(isValid) {
 
         if (isValid) {
@@ -108,9 +116,7 @@
               msg: 'Customer created'
             });
 
-            // redirect to customer details page
-            var url = '/customers/' + data.id;
-            $location.path(url);
+            self.redirectToCustomerPage(data.id);
 
           }, function(error) {
             NotificationService.notify({
@@ -138,50 +144,56 @@
 
   }])
 
-  .controller('CustomerListCtrl', ['$scope', '$location', 'Customer', 'Customers', function($scope, $location, Customer, Customers) {
+  .controller('CustomerListCtrl', ['$scope', '$location', 'CustomerService', 'Customers',
+    function($scope, $location, CustomerService, Customers) {
 
-    $scope.redirect = function(customer) {
-      var url = '/customers/' + customer.id;
-      $location.path(url);
-    };
-
-    $scope.onRecordsPerPageChanged = function() {
-      $scope.currentPage = 1; // TODO: should remove this - added to prevent calling "updateCustomerTable()" twice
-      $scope.updateCustomerTable();
-    };
-
-    $scope.updateCustomerTable = function() {
-
-      var criteria = {
-        page: $scope.currentPage - 1, // zero-based page index
-        length: $scope.recordsPerPage
+      $scope.redirect = function(customer) {
+        var url = '/customers/' + customer.id;
+        $location.path(url);
       };
 
-      Customer.query(criteria).$promise.then(
-        function(data) {
-          self.updateScope(data);
-          console.log('[Query Customer] - length:' + data.content.length);
-        },
-        function(error) {
-          alert('Unable to query from table Customer');
+      $scope.onRecordsPerPageChanged = function() {
+        $scope.currentPage = 1;
+        $scope.updateCustomerTable();
+      };
+
+      $scope.updateCustomerTable = function() {
+
+        var criteria = {
+          page: $scope.currentPage - 1, // zero-based page index
+          length: $scope.recordsPerPage
+        };
+
+        CustomerService.query(criteria).then(
+          function(data) {
+            self.updateScope(data);
+          },
+          function(error) {
+            alert('Unable to query from table Customer');
+          }
+        );
+      };
+
+      var self = this;
+
+      this.updateScope = function(data) {
+        $scope.customers = data.content;
+        $scope.totalRecords = data.totalRecords;
+        if ($scope.totalRecords == 0) {
+          $scope.startIndex = 0;
+          $scope.endIndex = 0;
+        } else {
+          $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
+          $scope.endIndex = $scope.startIndex + data.totalDisplayRecords - 1;
         }
-      );
-    };
+      }
 
-    var self = this;
+      $scope.recordsPerPageList = [10, 25, 50, 100];
+      $scope.currentPage = 1;
+      $scope.recordsPerPage = 10;
 
-    this.updateScope = function(data) {
-      $scope.customers = data.content;
-      $scope.totalRecords = data.totalRecords;
-      $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
-      $scope.endIndex = $scope.startIndex + data.totalDisplayRecords - 1;
+      this.updateScope(Customers);
+
     }
-
-    $scope.recordsPerPageList = [10, 25, 50, 100];
-    $scope.currentPage = 1;
-    $scope.recordsPerPage = 10;
-
-    this.updateScope(Customers);
-
-  }]);
+  ]);
 })();

@@ -59,10 +59,6 @@ describe('Authentication', function() {
 
   describe('LoginCtrl', function() {
 
-    beforeEach(function() {
-
-    });
-
     it('AuthenticationService.clearCredentials() should be called once', function() {
 
       spyOn(AuthenticationService, 'clearCredentials');
