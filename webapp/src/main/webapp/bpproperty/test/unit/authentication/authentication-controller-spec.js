@@ -12,18 +12,17 @@ describe('Authentication', function() {
     module('authentication')
   });
 
+  beforeEach(inject(function($injector, _$controller_) {
+    $window = $injector.get('$window');
+    $location = $injector.get('$location');
+    $rootScope = $injector.get('$rootScope');
+    $scope = $rootScope.$new();
+    $controller = _$controller_;
+    AuthenticationService = $injector.get('AuthenticationService');
+
+  }));
+
   describe('LogoutCtrl', function() {
-
-    var AuthenticationService, $window;
-
-    beforeEach(inject(function($injector, _$controller_) {
-
-      $controller = _$controller_;
-      $window = $injector.get('$window');
-      $location = $injector.get('$location');
-      AuthenticationService = $injector.get('AuthenticationService');
-
-    }));
 
     it('should logout', function() {
 
@@ -58,28 +57,11 @@ describe('Authentication', function() {
 
   });
 
-
-// TODO: complete LoginCtrl unit test
   describe('LoginCtrl', function() {
 
-    var $controller;
-    var loginCtrl, $window, $location, $rootScope, $scope;
+    beforeEach(function() {
 
-    var AuthenticationService = {
-      clearCredentials: function() {}
-    };
-
-    beforeEach(inject(function($injector, _$controller_) {
-
-      $controller = _$controller_;
-      $rootScope = $injector.get('$rootScope');
-      $scope = $rootScope.$new();
-      $window = $injector.get('$window');
-      $location = $injector.get('$location');
-
-
-
-    }));
+    });
 
     it('AuthenticationService.clearCredentials() should be called once', function() {
 
@@ -92,12 +74,59 @@ describe('Authentication', function() {
         AuthenticationService: AuthenticationService,
       });
 
-      $scope.$digest();
-      // console.log(AuthenticationService.clearCredentials);
       expect(AuthenticationService.clearCredentials).toHaveBeenCalled();
     });
 
     describe('Login', function() {
+
+      beforeEach(function() {
+        spyOn(AuthenticationService, 'clearCredentials');
+
+        loginCtrl = $controller('LoginCtrl', {
+          $scope: $scope,
+          $window: $window,
+          $location: $location,
+          AuthenticationService: AuthenticationService,
+        });
+      });
+
+      it('validate login', function() {
+        spyOn(AuthenticationService, 'login');
+
+        $scope.username = 'username';
+        $scope.password = 'password';
+
+        $scope.login();
+
+        expect(AuthenticationService.login).toHaveBeenCalledWith($scope.username,
+          $scope.password, loginCtrl.callback);
+      });
+
+      it('login callback - should return error messsage', function() {
+        spyOn(AuthenticationService, 'setCredentials');
+        loginCtrl.callback({
+          message: 'error message'
+        });
+        expect($scope.error).toEqual('error message');
+        expect(AuthenticationService.setCredentials).not.toHaveBeenCalled();
+      });
+
+      it('login callback - should return success', function() {
+
+        $scope.username = 'username';
+        $scope.password = 'password';
+
+        spyOn(AuthenticationService, 'setCredentials');
+        spyOn(loginCtrl, 'redirectToHome');
+
+        loginCtrl.callback({
+          success: true
+        });
+
+        expect($scope.error).toBeUndefined();
+        expect(loginCtrl.redirectToHome).toHaveBeenCalled();
+        expect(AuthenticationService.setCredentials).toHaveBeenCalledWith($scope.username, $scope.password);
+      });
 
     });
 

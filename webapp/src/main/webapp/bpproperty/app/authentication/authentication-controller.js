@@ -8,23 +8,26 @@
 
   .controller('LoginCtrl', ['$scope', '$window', '$location', 'AuthenticationService', function($scope, $window, $location, AuthenticationService) {
 
+    var self = this;
     AuthenticationService.clearCredentials();
-    $scope.login = function() {
 
-      var redirectToHome = function() {
-        var baseUrl = $location.absUrl().split('#')[0];
-        baseUrl = baseUrl.replace('login', '') + '#/lands';
-        $window.location.href = baseUrl;
+    this.redirectToHome = function() {
+      var baseUrl = $location.absUrl().split('#')[0];
+      baseUrl = baseUrl.replace('login', '') + '#/lands';
+      $window.location.href = baseUrl;
+    }
+
+    this.callback = function(response) {
+      if (response.success) {
+        AuthenticationService.setCredentials($scope.username, $scope.password);
+        self.redirectToHome();
+      } else {
+        $scope.error = response.message;
       }
+    }
 
-      AuthenticationService.login($scope.username, $scope.password, function(response) {
-        if (response.success) {
-          AuthenticationService.setCredentials($scope.username, $scope.password);
-          redirectToHome();
-        } else {
-          $scope.error = response.message;
-        }
-      });
+    $scope.login = function() {
+      AuthenticationService.login($scope.username, $scope.password, self.callback);
     };
 
   }])
