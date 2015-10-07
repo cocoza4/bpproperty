@@ -16,7 +16,6 @@ describe('customer', function() {
     $q = $injector.get('$q');
     NotificationService = $injector.get('NotificationService');
     CustomerService = $injector.get('CustomerService');
-
   }));
 
   describe('CreateCustomerCtrl', function() {
@@ -37,7 +36,6 @@ describe('customer', function() {
     });
 
     it('should create a new customer', function() {
-
       $scope.customer = mockCustomer;
       var deferred = $q.defer();
       spyOn(CustomerService, 'create').and.returnValue(deferred.promise);
@@ -58,7 +56,6 @@ describe('customer', function() {
     });
 
     it('should fail to create a new customer', function() {
-
       $scope.customer = mockCustomer;
       var deferred = $q.defer();
       spyOn(CustomerService, 'create').and.returnValue(deferred.promise);

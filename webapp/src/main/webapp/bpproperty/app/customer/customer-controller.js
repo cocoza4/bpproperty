@@ -174,8 +174,6 @@
         );
       };
 
-      var self = this;
-
       this.updateScope = function(data) {
         $scope.customers = data.content;
         $scope.totalRecords = data.totalRecords;
@@ -188,12 +186,12 @@
         }
       }
 
+      var self = this;
       $scope.recordsPerPageList = [10, 25, 50, 100];
       $scope.currentPage = 1;
       $scope.recordsPerPage = 10;
 
       this.updateScope(Customers);
-
     }
   ]);
 })();

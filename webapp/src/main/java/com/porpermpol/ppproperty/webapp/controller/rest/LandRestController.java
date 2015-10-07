@@ -128,8 +128,9 @@ public class LandRestController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void saveLand(@RequestBody Land land) {
+    public Land saveLand(@RequestBody Land land) {
         landService.saveLand(land);
+        return land;
     }
 
     @RequestMapping(value = "/{landId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
