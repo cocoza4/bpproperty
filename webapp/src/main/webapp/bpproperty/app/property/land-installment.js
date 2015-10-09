@@ -4,7 +4,7 @@
 
   angular
 
-    .module('land-installment', ['ngRoute'])
+    .module('land-installment', ['ngRoute', 'my-notification', 'land-installment-service'])
 
   .controller('InstallmentListCtrl', ['$scope', '$route', 'LandBuyService', 'InstallmentService', 'NotificationService',
     function($scope, $route, LandBuyService, InstallmentService, NotificationService) {
@@ -122,18 +122,12 @@
       this.loadInstallments = function() {
 
         InstallmentService.query(installmentCriteria).then(function(data) {
-
           $scope.installments = data;
-
           return LandBuyService.query(landBuyCriteria);
-
         }).then(function(data) {
-
           $scope.landBuy = data;
-
           $scope.totalAmount = InstallmentService.getTotalPayment($scope.installments);
           $scope.remaining = data.buyPrice - data.downPayment - $scope.totalAmount;
-
         });
       };
 

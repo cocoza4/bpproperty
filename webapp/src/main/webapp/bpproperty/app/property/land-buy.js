@@ -76,7 +76,7 @@
 
   angular
 
-    .module('land-buy', ['ngRoute'])
+    .module('land-buy', ['ngRoute', 'my-notification', 'land-buy-service', 'land-service', 'customer-service'])
 
   .config(['$routeProvider', function($routeProvider) {
 
@@ -200,7 +200,7 @@
   .controller('CreateLandBuyDetailCtrl', ['$scope', '$routeParams', 'CustomerService', 'Land',
     function($scope, $routeParams, CustomerService, Land) {
 
-      var buyerDialog = $('#selectBuyerDialog').on('hidden.bs.modal', function(e) {
+      this.buyerDialog = $('#selectBuyerDialog').on('hidden.bs.modal', function(e) {
         $scope.selectedCustomer = {};
       }).on('show.bs.modal', function(e) {
         self.loadCustomers();
@@ -238,9 +238,9 @@
       };
 
       $scope.updateOnScreen = function() {
-        buyerDialog.modal('hide'); // hide dialog
+        self.buyerDialog.modal('hide'); // hide dialog
         $scope.customer = $scope.selectedCustomer;
-      }
+      };
 
       var self = this;
       var recordsPerPage = 10;
@@ -250,6 +250,7 @@
       $scope.selectedCustomer = {};
 
       $scope.land = Land;
+
 
     }
   ])
@@ -269,7 +270,6 @@
           page: $scope.currentPage - 1, // zero-based page index
           length: $scope.recordsPerPage
         };
-
         LandBuyService.query(criteria).then(
           function(data) {
             self.updateScope(data);
@@ -301,10 +301,9 @@
           }
         }
 
-      }
+      };
 
       var self = this;
-
       $scope.recordsPerPageList = [10, 25, 50, 100];
       $scope.currentPage = 1;
       $scope.recordsPerPage = 10;

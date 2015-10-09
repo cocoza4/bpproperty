@@ -107,6 +107,9 @@
             <a data-target="#selectBuyerDialog" data-toggle="modal" href ng-hide="customer.id">
               <span class="glyphicon glyphicon-plus-sign"></span>
             </a>
+            <a data-target="#selectBuyerDialog" data-toggle="modal" href ng-hide="!customer.id || buyDetail.customerId">
+              <span class="glyphicon glyphicon-pencil"></span>
+            </a>
           </p>
         </div>
       </div>
