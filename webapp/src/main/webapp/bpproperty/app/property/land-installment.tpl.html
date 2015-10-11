@@ -1,29 +1,27 @@
 <div style="padding-top: 15px"></div>
-<div ng-controller="InstallmentListCtrl">
-<!-- Confirm Delete -->
-  <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="confirmDeleteDialog" role="dialog" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
-          <h4 class="modal-title">Confirm Delete</h4>
-        </div>
-        <div class="modal-body">
-          <p>You are about to delete one payment record,
-            <strong class="text-info">฿{{installment.amount}}</strong>
-            for
-            <strong class="text-info">{{installment.payFor | date: "MMM, yyyy"}}</strong>, this procedure is irreversible.</p>
-          <p>Do you want to proceed?</p>
-          <p class="debug-url"></p>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-default btn-sm" data-dismiss="modal" type="button">Cancel</button>
-          <a class="btn btn-danger btn-ok btn-sm" ng-click="deleteInstallment()">Delete</a>
-        </div>
-      </div>
+
+<div ng-controller="InstallmentListCtrl as installmentListCtrl">
+  <!-- Confirm Delete -->
+  <script id="myModalContent.html" type="text/ng-template">
+    <div class="modal-header">
+      <button aria-hidden="true" class="close" ng-click='closeModal()' type="button">&times;</button>
+      <h4 class="modal-title">Confirm Delete</h4>
     </div>
-  </div>
-<!-- Modal -->
+    <div class="modal-body">
+      <p>You are about to delete one payment record,
+        <strong class="text-info">฿{{ installment.amount }}</strong>
+        for
+        <strong class="text-info">{{ installment.payFor | date: "MMMM, yyyy" }}</strong>, this procedure is irreversible.</p>
+      <p>Do you want to proceed?</p>
+      <p class="debug-url"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default btn-sm" ng-click="closeModal()" type="button">Cancel</button>
+      <a class="btn btn-danger btn-ok btn-sm" href ng-click="delete()">Delete</a>
+    </div>
+  </script>
+
+  <!-- Modal -->
   <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="installmentDialog" role="dialog" tabindex="-1">
     <div class="modal-dialog">
       <form class="form-horizontal" name="installmentForm" ng-submit="saveInstallment(installmentForm.$valid)" role="form">
@@ -69,6 +67,7 @@
       </form>
     </div>
   </div>
+  
   <div class="pull-right" style="padding-bottom: 10px;">
     <button class="btn btn-default btn-sm" data-target="#installmentDialog" data-toggle="modal" ng-click="installment = {}" type="button">
       <span class="glyphicon glyphicon-plus"></span>
@@ -82,18 +81,14 @@
         <tr valign="middle">
           <th>No.</th>
           <th>ประจำเดือน</th>
-          <th class="sortable">จำนวน
-            <span class="glyphicon glyphicon-sort"></span>
-          </th>
-          <th class="sortable">วันที่จ่าย
-            <span class="glyphicon glyphicon-sort"></span>
-          </th>
+          <th>จำนวน</th>
+          <th>วันที่จ่าย</th>
           <th>แก้ไข</th>
           <th>ลบ</th>
         </tr>
       </thead>
       <tbody>
-        <tr ng-show="installments.length" ng-repeat="installment in installments">
+        <tr ng-repeat="installment in installments" ng-show="installments.length">
           <td align="center">{{$index + 1}}</td>
           <td align="right">{{installment.payFor | date: "MMMM yyyy"}}</td>
           <td align="right">{{installment.amount | number}}</td>
@@ -101,7 +96,7 @@
           <td align="middle" ng-click="viewInstallment(installment);">
             <span class="glyphicon glyphicon-edit" style="color:#337ab7"></span>
           </td>
-          <td align="middle" ng-click="confirmDeleteDialog(installment)">
+          <td align="middle" ng-click="installmentListCtrl.confirmDeleteModal(installment)">
             <span class="glyphicon glyphicon-remove" style="color:#d9534f"></span>
           </td>
         </tr>
