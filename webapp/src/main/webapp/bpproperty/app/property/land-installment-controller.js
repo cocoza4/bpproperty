@@ -123,7 +123,7 @@
         var selectedYear = selectedDate.getFullYear();
         var selectedMonth = selectedDate.getMonth();
 
-        $scope.selectedMonth = months[selectedMonth];
+        $scope.selectedMonth = $scope.months[selectedMonth];
         $scope.selectedYear = selectedYear;
 
         $scope.installment = angular.copy(installment);
