@@ -18,6 +18,7 @@
     'authentication-service',
     'authentication',
 
+    'buy-type-filter',
     'lazy-loading-tabset',
     'my-spinner',
     'my-loader',
