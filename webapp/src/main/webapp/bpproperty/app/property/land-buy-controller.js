@@ -3,13 +3,13 @@
   'use strict';
 
   var LandResolve = {
-    Land: function($route, LandService) {
+    Land: ['$route', 'LandService', function($route, LandService) {
       var criteria = {
         landId: $route.current.params['landId']
       };
       return LandService.query(criteria);
-    }
-  }
+    }]
+  };
 
   var LandBuyDetailListResolve = {
     BuyDetailList: ['$q', '$route', 'LandService', 'LandBuyService',
@@ -76,7 +76,7 @@
 
   angular
 
-    .module('land-buy', ['ngRoute', 'my-notification', 'land-buy-service', 'land-service', 'customer-service'])
+    .module('land-buy', ['ngRoute', 'ui.bootstrap', 'my-notification', 'land-buy-service', 'land-service', 'customer-service'])
 
   .config(['$routeProvider', function($routeProvider) {
 
@@ -84,7 +84,8 @@
 
       .when('/lands/:landId/buydetails/create', {
       templateUrl: 'property/land-buy-main.tpl.html',
-      controller: 'CreateLandBuyDetailCtrl',
+      controller: 'SelectBuyerCtrl',
+      controllerAs: 'selectBuyerCtrl',
       resolve: LandResolve
     })
 
@@ -105,8 +106,8 @@
   .controller('LandBuyDetailsCtrl', ['$scope', '$location', '$route', 'LandBuyService', 'NotificationService',
     function($scope, $location, $route, LandBuyService, NotificationService) {
 
-      var validateBuyDetail = function() {
-        if ($scope.customer.id == null) {
+      this.validateBuyDetail = function() {
+        if (!$scope.customer) {
           NotificationService.notify({
             type: 'error',
             msg: 'Please select a buyer'
@@ -116,9 +117,14 @@
         return true;
       }
 
+      this.redirectToBuyDetailPage = function() {
+        var url = '/lands/' + $route.current.params['landId'] + '/buydetails/' + $scope.buyDetail.id;
+        $location.path(url);
+      };
+
       $scope.saveLandBuyDetail = function(isValid) {
 
-        if (isValid && validateBuyDetail()) {
+        if (isValid && self.validateBuyDetail()) {
 
           var isNew = $scope.buyDetail.id == null;
 
@@ -126,23 +132,14 @@
             $scope.buyDetail.customerId = $scope.customer.id;
             LandBuyService.create($scope.buyDetail).then(function(data) {
 
-              console.log(data);
-              if (data.id != null) {
-                $scope.buyDetail = data;
-                NotificationService.notify({
-                  type: 'success',
-                  msg: 'BuyDetail created'
-                });
-                // reload the page
-                var url = '/lands/' + $route.current.params['landId'] + '/buydetails/' + $scope.buyDetail.id;
-                $location.path(url);
-              } else {
-                // TODO: update customer name on screen
-                NotificationService.notify({
-                  type: 'error',
-                  msg: 'The selected cutomer has purchased this land'
-                });
-              }
+              $scope.buyDetail = data;
+              NotificationService.notify({
+                type: 'success',
+                msg: 'BuyDetail created'
+              });
+
+              // reload the page
+              self.redirectToBuyDetailPage();
 
             }, function(error) {
               NotificationService.notify({
@@ -168,6 +165,7 @@
         }
       };
 
+      var self = this;
       $scope.buyTypeItems = ['CASH', 'INSTALLMENT'];
 
       if ($location.path().endsWith('create')) {
@@ -197,14 +195,8 @@
     }
   ])
 
-  .controller('CreateLandBuyDetailCtrl', ['$scope', '$routeParams', 'CustomerService', 'Land',
-    function($scope, $routeParams, CustomerService, Land) {
-
-      this.buyerDialog = $('#selectBuyerDialog').on('hidden.bs.modal', function(e) {
-        $scope.selectedCustomer = {};
-      }).on('show.bs.modal', function(e) {
-        self.loadCustomers();
-      });
+  .controller('SelectBuyerModalCtrl', ['$scope', '$modalInstance', 'CustomerService', 'dataTableObject',
+    function($scope, $modalInstance, CustomerService, dataTableObject) {
 
       this.loadCustomers = function() {
         var criteria = {
@@ -212,46 +204,81 @@
           length: recordsPerPage
         };
         CustomerService.query(criteria).then(function(data) {
-          $scope.customers = data.content;
-          $scope.totalRecords = data.totalRecords;
+          self.updateScope(data);
+        });
+      };
+
+      this.updateScope = function(data) {
+        $scope.customers = data.content;
+        $scope.totalRecords = data.totalRecords;
+        if ($scope.totalRecords == 0) {
+          $scope.startIndex = 0;
+          $scope.endIndex = 0;
+        } else {
           $scope.startIndex = (($scope.currentPage - 1) * recordsPerPage) + 1;
           $scope.endIndex = $scope.startIndex + data.totalDisplayRecords - 1;
-        });
+        }
       };
 
       $scope.onNextPageChanged = function() {
         if ($scope.customers.length < 10) return;
         $scope.currentPage = $scope.currentPage + 1;
         self.loadCustomers();
-        $scope.selectedCustomer = {};
+        $scope.selected = null;
       };
 
       $scope.onPreviousPageChanged = function() {
         if ($scope.currentPage === 1) return;
         $scope.currentPage = $scope.currentPage - 1;
         self.loadCustomers();
-        $scope.selectedCustomer = {};
+        $scope.selected = null;
       };
 
-      $scope.selectBuyer = function(customer) {
-        $scope.selectedCustomer = customer;
+      $scope.setSelected = function(customer) {
+        $scope.selected = customer;
       };
 
-      $scope.updateOnScreen = function() {
-        self.buyerDialog.modal('hide'); // hide dialog
-        $scope.customer = $scope.selectedCustomer;
+      $scope.selectBuyer = function() {
+        $modalInstance.close($scope.selected);
+      };
+
+      $scope.closeModal = function() {
+        $modalInstance.dismiss('cancel');
       };
 
       var self = this;
       var recordsPerPage = 10;
 
       $scope.currentPage = 1;
-      $scope.customer = {};
-      $scope.selectedCustomer = {};
+      $scope.selected = null;
 
+      this.updateScope(dataTableObject);
+    }
+  ])
+
+  .controller('SelectBuyerCtrl', ['$scope', '$uibModal', 'CustomerService', 'Land',
+    function($scope, $uibModal, CustomerService, Land) {
+
+      this.selectBuyerModal = function() {
+        $scope.modalInstance = $uibModal.open({
+          animation: true,
+          templateUrl: 'myModalContent.html',
+          controller: 'SelectBuyerModalCtrl',
+          resolve: {
+            dataTableObject: function() {
+              return CustomerService.query();
+            }
+          }
+        });
+
+        $scope.modalInstance.result.then(function(selected) {
+          $scope.customer = selected;
+        });
+      };
+
+      var self = this;
+      $scope.customer = null;
       $scope.land = Land;
-
-
     }
   ])
 
@@ -300,7 +327,6 @@
             $scope.endIndex = $scope.startIndex + data.landBuyDetail.totalDisplayRecords - 1;
           }
         }
-
       };
 
       var self = this;
@@ -310,7 +336,6 @@
 
       $scope.land = BuyDetailList.land;
       this.updateScope(BuyDetailList);
-
     }
   ]);
 

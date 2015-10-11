@@ -45,7 +45,7 @@ describe('customer', function() {
       $scope.submit(true);
 
       deferred.resolve($scope.customer);
-      $rootScope.$digest();
+      $scope.$digest();
 
       expect(CustomerService.create).toHaveBeenCalledWith($scope.customer);
       expect(NotificationService.notify).toHaveBeenCalledWith({
@@ -65,7 +65,7 @@ describe('customer', function() {
       $scope.submit(true);
 
       deferred.reject();
-      $rootScope.$digest();
+      $scope.$digest();
 
       expect(CustomerService.create).toHaveBeenCalledWith($scope.customer);
       expect(NotificationService.notify).toHaveBeenCalledWith({

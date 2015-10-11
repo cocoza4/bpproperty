@@ -13,6 +13,7 @@
     "html5-boilerplate": "5.1.x",
     "bootstrap": "~3.3.4",
     "angular-resource": "~1.4.x",
-    "angular-cookies": "~1.4.x"
+    "angular-cookies": "~1.4.x",
+    "angular-bootstrap": "~0.14.0"
   }
 }

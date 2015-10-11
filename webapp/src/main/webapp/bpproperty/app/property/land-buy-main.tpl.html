@@ -1,67 +1,61 @@
 <!-- Select Buyer Dialog -->
-<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="selectBuyerDialog" role="dialog" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
-        <h4 class="modal-title"><i class="glyphicon glyphicon-user"></i> Select Buyer</h4>
-      </div>
-      <div class="modal-body">
-
-        <div class="inline pull-right">
-          Showing
-          <strong>{{startIndex}}</strong>
-          to
-          <strong>{{endIndex}}</strong>
-          of
-          <strong class="text-primary">{{totalRecords}}</strong>
-          entries
-        </div>
-
-        <div style="clear:both; padding-top: 10px"></div>
-
-        <div class="table-responsive">
-          <table cellspacing="0" class="table table-striped table-bordered table-hover table-condensed"
-                  style="margin-bottom: 0px;" width="100%">
-            <thead>
-              <tr valign="middle">
-                <th></th>
-                <th>No.</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Tel.</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-class="{'selectedRow': selectedCustomer.id === customer.id}" ng-click="selectBuyer(customer)" ng-repeat="customer in customers">
-                <td align="center"><input ng-model="selectedCustomer" ng-value="customer" type="radio"></td>
-                <td align="center">{{startIndex + $index}}</td>
-                <td>{{customer.firstName}}
-                  {{customer.lastName}}</td>
-                <td>{{customer.address}}</td>
-                <td>{{customer.tel}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <nav>
-          <ul class="pager">
-            <li ng-class="{'disabled': currentPage == 1}">
-              <a href="" ng-click="onPreviousPageChanged()"><< Previous</a>
-            </li>
-            <li ng-class="{'disabled': customers.length < 10}"> <!-- no more customer -->
-              <a href="" ng-click="onNextPageChanged()" disabled>Next >></a>
-            </li>
-          </ul>
-        </nav>
-        <div class="modal-footer">
-          <button class="btn btn-default btn-sm" data-dismiss="modal" type="button">Cancel</button>
-          <button class="btn btn-primary btn-ok btn-sm" ng-class="{'disabled': !selectedCustomer.id }" ng-click="updateOnScreen()">Select</button>
-        </div>
-      </div>
-    </div>
+<script id="myModalContent.html" type="text/ng-template">
+  <div class="modal-header">
+    <button aria-hidden="true" class="close" ng-click='closeModal()' type="button">&times;</button>
+    <h4 class="modal-title">
+      <i class="glyphicon glyphicon-user"></i>
+      Select Buyer</h4>
   </div>
-</div>
+  <div class="modal-body">
+
+    <div class="inline pull-right">
+      Showing
+      <strong>{{ startIndex }}</strong>
+      to
+      <strong>{{ endIndex }}</strong>
+      of
+      <strong class="text-primary">{{ totalRecords }}</strong>
+      entries
+    </div>
+
+    <div style="clear:both; padding-top: 10px"></div>
+
+    <div class="table-responsive">
+      <table cellspacing="0" class="table table-striped table-bordered table-hover table-condensed" style="margin-bottom: 0px;" width="100%">
+        <thead>
+          <tr valign="middle">
+            <th></th>
+            <th>No.</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Tel.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-class="{'selectedRow': customer.id === selected.id}" ng-click="setSelected(customer)" ng-repeat="customer in customers">
+            <td align="center"><input ng-model="selected" ng-value="customer" type="radio"></td>
+            <td align="center">{{ startIndex + $index }}</td>
+            <td>{{ customer.firstName + ' ' + customer.lastName }}</td>
+            <td>{{ customer.address }}</td>
+            <td>{{ customer.tel }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <nav>
+      <ul class="pager">
+        <li ng-class="{'disabled': currentPage == 1}">
+          <a href="" ng-click="onPreviousPageChanged()"><< Previous</a> </li> <li ng-class="{'disabled': customers.length < 10}"> <!-- no more customer --> <a href="" ng-click="onNextPageChanged()" disabled>Next >></a>
+        </li>
+      </ul>
+    </nav>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default btn-sm" ng-click="closeModal()" type="button">Cancel</button>
+    <button class="btn btn-primary btn-ok btn-sm" ng-class="{'disabled': !selected }" ng-click="selectBuyer()">Select</button>
+  </div>
+</script>
 <!-- End Customer Dialog -->
 
 <div class="panel panel-default">
@@ -78,7 +72,7 @@
         </div>
         <div class="col-xs-9 col-sm-10">
           <span name="name">
-            {{land.name}}
+            {{ land.name }}
           </span>
         </div>
       </div>
@@ -89,11 +83,11 @@
         </div>
         <div class="col-xs-9 col-sm-10">
           <span name="totalArea">
-            <strong class="text-info">{{land.area.rai}}</strong>
+            <strong class="text-info">{{ land.area.rai }}</strong>
             <font color="grey">ไร่</font>,
-            <strong class="text-info">{{land.area.yarn}}</strong>
+            <strong class="text-info">{{ land.area.yarn }}</strong>
             <font color="grey">งาน</font>,
-            <strong class="text-info">{{land.area.tarangwa}}</strong>
+            <strong class="text-info">{{ land.area.tarangwa }}</strong>
             <font color="grey">ตารางวา</font>
           </span>
         </div>
@@ -103,11 +97,11 @@
         <label class="control-label col-xs-3 col-sm-2" for="buyer">ผู้ซื้อ</label>
         <div class="col-xs-9 col-sm-10">
           <p>
-            <a ng-href="{{'#/customers/' + customer.id}}">{{customer.firstName + ' ' + customer.lastName}}</a>
-            <a data-target="#selectBuyerDialog" data-toggle="modal" href ng-hide="customer.id">
+            <a ng-href="{{'#/customers/' + customer.id}}">{{ customer.firstName + ' ' + customer.lastName }}</a>
+            <a href ng-click="selectBuyerCtrl.selectBuyerModal()" ng-hide="customer.id">
               <span class="glyphicon glyphicon-plus-sign"></span>
             </a>
-            <a data-target="#selectBuyerDialog" data-toggle="modal" href ng-hide="!customer.id || buyDetail.customerId">
+            <a href ng-click="selectBuyerCtrl.selectBuyerModal()" ng-hide="!customer.id || buyDetail.customerId">
               <span class="glyphicon glyphicon-pencil"></span>
             </a>
           </p>
@@ -115,10 +109,13 @@
       </div>
     </div>
     <hr>
+
     <div style="padding: 5px;"></div>
-    <tabset>
-      <tab template-url="property/land-buy-details.tpl.html" title="Buy Details"></tab>
-      <tab ng-if="buyDetail.customerId && buyDetail.buyType == 'INSTALLMENT'" template-url="property/land-installment.tpl.html" title="Payment Records"></tab>
-    </tabset>
+
+    <my-tabset>
+      <my-tab template-url="property/land-buy-details.tpl.html" title="Buy Details"></my-tab>
+      <my-tab ng-if="buyDetail.customerId && buyDetail.buyType == 'INSTALLMENT'" template-url="property/land-installment.tpl.html" title="Payment Records"></my-tab>
+    </my-tabset>
+
   </div>
 </div>

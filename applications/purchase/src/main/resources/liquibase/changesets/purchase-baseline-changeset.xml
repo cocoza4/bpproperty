@@ -48,7 +48,6 @@
             <column name="updated_by" type="bigint"/>
             <column name="updated_time" type="bigint"/>
         </createTable>
-        <addUniqueConstraint tableName="land_buy_detail" columnNames="land_id, customer_id"/>
 
         <createTable tableName="installment">
             <column name="id" type="bigint" autoIncrement="true">

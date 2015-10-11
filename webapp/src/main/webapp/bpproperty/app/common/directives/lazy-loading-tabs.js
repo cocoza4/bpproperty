@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('lazy-loading-tabset', [])
-    .directive('tabset', function() {
+    .directive('myTabset', function() {
       return {
         restrict: 'E',
         replace: true,
@@ -41,11 +41,11 @@
           '</div>'
       };
     })
-    .directive('tab', function() {
+    .directive('myTab', function() {
       return {
         restrict: 'E',
         replace: true,
-        require: '^tabset',
+        require: '^myTabset',
         scope: {
           title: '@',
           templateUrl: '@'

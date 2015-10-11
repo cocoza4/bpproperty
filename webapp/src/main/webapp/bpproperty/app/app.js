@@ -5,10 +5,13 @@
   // Declare app level module which depends on views, and components
   angular
 
-    .module('myApp', [
+    .module('bpPropertyApp', [
+
     'ngRoute',
     'ngResource',
     'ngCookies',
+
+    'ui.bootstrap',
 
     'services.breadcrumbs',
 
