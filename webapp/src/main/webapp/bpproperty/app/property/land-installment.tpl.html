@@ -1,8 +1,8 @@
 <div style="padding-top: 15px"></div>
 
 <div ng-controller="InstallmentListCtrl as installmentListCtrl">
-  <!-- Confirm Delete -->
-  <script id="myModalContent.html" type="text/ng-template">
+  <!-- Confirm Delete Modal-->
+  <script id="confirmDeleteModal.html" type="text/ng-template">
     <div class="modal-header">
       <button aria-hidden="true" class="close" ng-click='closeModal()' type="button">&times;</button>
       <h4 class="modal-title">Confirm Delete</h4>
@@ -21,8 +21,48 @@
     </div>
   </script>
 
-  <!-- Modal -->
-  <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="installmentDialog" role="dialog" tabindex="-1">
+  <!-- Update Modal -->
+  <script id="saveInstallmentModal.html" type="text/ng-template">
+    <form class="form-horizontal" name="installmentForm" ng-submit="saveInstallment(installmentForm.$valid)" role="form">
+      <div class="modal-header">
+        <button aria-hidden="true" class="close" ng-click='closeModal()' type="button">&times;</button>
+        <h4 class="modal-title">Payment Record</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="control-label col-sm-3" for="month">ประจำเดือน:
+          </label>
+          <div class="col-sm-9">
+            <select class="form-control input-sm" name="month" ng-model="selectedMonth" ng-options="month.value for month in months" style="width: 320px;"></select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-3" for="year">ประจำปี:</label>
+          <div class="col-sm-9">
+            <select class="form-control input-sm" name="year" ng-model="selectedYear" ng-options="year for year in years" style="width: 320px;"></select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-3" for="amount">จำนวน:</label>
+          <div class="col-sm-9">
+            <input class="form-control input-sm text" decimal-number name="amount" ng-model="installment.amount" placeholder="Amount" required type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-3" for="description">หมายเหตุ:</label>
+          <div class="col-sm-9">
+            <textarea class="form-control input-sm" name="description" ng-model="installment.description" placeholder="Description" rows="5" style="width: 320px;"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" ng-click="closeModal()" type="button">Close</button>
+        <button class="btn btn-primary btn-sm" type="submit">Save</button>
+      </div>
+    </form>
+  </script>
+
+  <!--<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="installmentDialog" role="dialog" tabindex="-1">
     <div class="modal-dialog">
       <form class="form-horizontal" name="installmentForm" ng-submit="saveInstallment(installmentForm.$valid)" role="form">
         <div class="modal-content">
@@ -66,10 +106,10 @@
         </div>
       </form>
     </div>
-  </div>
-  
+  </div>-->
+
   <div class="pull-right" style="padding-bottom: 10px;">
-    <button class="btn btn-default btn-sm" data-target="#installmentDialog" data-toggle="modal" ng-click="installment = {}" type="button">
+    <button class="btn btn-default btn-sm" ng-click="installmentListCtrl.saveInstallmentModal(null)" type="button">
       <span class="glyphicon glyphicon-plus"></span>
       สร้าง
     </button>
@@ -89,11 +129,11 @@
       </thead>
       <tbody>
         <tr ng-repeat="installment in installments" ng-show="installments.length">
-          <td align="center">{{$index + 1}}</td>
-          <td align="right">{{installment.payFor | date: "MMMM yyyy"}}</td>
-          <td align="right">{{installment.amount | number}}</td>
-          <td align="right">{{installment.createdTime | date:"MMMM d, yyyy ' เวลา ' h:mm a"}}</td>
-          <td align="middle" ng-click="viewInstallment(installment);">
+          <td align="center">{{ $index + 1 }}</td>
+          <td align="right">{{ installment.payFor | date: "MMMM yyyy" }}</td>
+          <td align="right">{{ installment.amount | number }}</td>
+          <td align="right">{{ installment.createdTime | date:"MMMM d, yyyy ' เวลา ' h:mm a" }}</td>
+          <td align="middle" ng-click="installmentListCtrl.saveInstallmentModal(installment)">
             <span class="glyphicon glyphicon-edit" style="color:#337ab7"></span>
           </td>
           <td align="middle" ng-click="installmentListCtrl.confirmDeleteModal(installment)">

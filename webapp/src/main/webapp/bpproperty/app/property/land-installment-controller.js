@@ -6,8 +6,8 @@
 
     .module('land-installment', ['ngRoute', 'ui.bootstrap', 'my-notification', 'land-installment-service'])
 
-  .controller('ConfirmDeleteModalCtrl', ['$rootScope', '$scope', '$route', '$modalInstance',
-    'InstallmentService', 'NotificationService', 'installment',
+  .controller('ConfirmDeleteModalCtrl', ['$rootScope', '$scope', '$route', '$modalInstance', 'InstallmentService',
+    'NotificationService', 'installment',
     function($rootScope, $scope, $route, $modalInstance, InstallmentService, NotificationService, installment) {
 
       $scope.delete = function() {
@@ -44,14 +44,26 @@
     }
   ])
 
-  .controller('InstallmentListCtrl', ['$scope', '$route', '$uibModal', 'LandBuyService', 'InstallmentService', 'NotificationService',
-    function($scope, $route, $uibModal, LandBuyService, InstallmentService, NotificationService) {
+  .controller('InstallmentListCtrl', ['$scope', '$route', '$uibModal', 'LandBuyService', 'InstallmentService',
+    function($scope, $route, $uibModal, LandBuyService, InstallmentService) {
+
+      this.saveInstallmentModal = function(selected) {
+        $scope.saveInstallmentModal = $uibModal.open({
+          animation: true,
+          templateUrl: 'saveInstallmentModal.html',
+          controller: 'SaveInstallmentModalCtrl',
+          resolve: {
+            installment: function() {
+              return selected;
+            }
+          }
+        });
+      };
 
       this.confirmDeleteModal = function(selected) {
-
-        $scope.modalInstance = $uibModal.open({
+        $scope.confirmDeleteModal = $uibModal.open({
           animation: true,
-          templateUrl: 'myModalContent.html',
+          templateUrl: 'confirmDeleteModal.html',
           controller: 'ConfirmDeleteModalCtrl',
           resolve: {
             installment: function() {
@@ -61,88 +73,17 @@
         });
       };
 
-      var installmentDialog = $('#installmentDialog').on('hidden.bs.modal', function(e) {
-        $scope.installment = {};
-      });
-
-      $scope.$on('loadInstallments', function() {
-        self.loadInstallments();
-      });
-
-      $scope.saveInstallment = function(isValid) {
-
-        if (isValid) {
-
-          $scope.installment.buyDetailId = $route.current.params['buyDetailId'];
-
-          var selectedMonth = $scope.selectedMonth.key;
-          var selectedYear = $scope.selectedYear;
-
-          var isNew = $scope.installment.createdTime == null;
-
-          if (isNew) {
-            InstallmentService.create(installmentCriteria, $scope.installment, selectedMonth, selectedYear).then(function(data) {
-              installmentDialog.modal('hide'); // hide dialog
-              self.loadInstallments();
-              $scope.installment = {}; // reset data
-              NotificationService.notify({
-                type: 'success',
-                msg: 'Installment created'
-              });
-            }, function(error) {
-              NotificationService.notify({
-                type: 'error',
-                msg: 'Unable to create Installment'
-              });
-              $scope.installment = {}; // reset data
-            });
-          } else {
-            InstallmentService.update(installmentCriteria, $scope.installment, selectedMonth, selectedYear).then(function(data) {
-              installmentDialog.modal('hide'); // hide dialog
-              self.loadInstallments();
-              $scope.installment = {}; // reset data
-              NotificationService.notify({
-                type: 'success',
-                msg: 'Installment updated'
-              });
-            }, function(error) {
-              NotificationService.notify({
-                type: 'error',
-                msg: 'Unable to update existing Installment'
-              });
-              $scope.installment = {}; // reset data
-            });
-          }
-
-        }
-      };
-
-      $scope.viewInstallment = function(installment) {
-
-        var selectedDate = new Date(installment.payFor);
-        var selectedYear = selectedDate.getFullYear();
-        var selectedMonth = selectedDate.getMonth();
-
-        $scope.selectedMonth = $scope.months[selectedMonth];
-        $scope.selectedYear = selectedYear;
-
-        $scope.installment = angular.copy(installment);
-
-        installmentDialog.modal();
-      };
-
-      var self = this;
-      var installmentCriteria = {
-        landId: $route.current.params['landId'],
-        buyDetailId: $route.current.params['buyDetailId'],
-      };
-
-      var landBuyCriteria = {
-        landId: $route.current.params['landId'],
-        buyDetailId: $route.current.params['buyDetailId']
-      };
-
       this.loadInstallments = function() {
+        var installmentCriteria = {
+          landId: $route.current.params['landId'],
+          buyDetailId: $route.current.params['buyDetailId'],
+        };
+
+        var landBuyCriteria = {
+          landId: $route.current.params['landId'],
+          buyDetailId: $route.current.params['buyDetailId']
+        };
+
         InstallmentService.query(installmentCriteria).then(function(data) {
           $scope.installments = data;
           return LandBuyService.query(landBuyCriteria);
@@ -153,9 +94,78 @@
         });
       };
 
-      var currentTime = new Date();
-      var currentYear = currentTime.getFullYear();
-      var currentMonth = currentTime.getMonth();
+      $scope.$on('loadInstallments', function() {
+        self.loadInstallments();
+      });
+
+      var self = this;
+      this.loadInstallments();
+    }
+  ])
+
+  .controller('SaveInstallmentModalCtrl', ['$rootScope', '$scope', '$route', '$modalInstance',
+    'InstallmentService', 'NotificationService', 'installment',
+    function($rootScope, $scope, $route, $modalInstance, InstallmentService, NotificationService, installment) {
+
+      $scope.closeModal = function() {
+        $modalInstance.dismiss('cancel');
+      };
+
+      $scope.saveInstallment = function(isValid) {
+        if (isValid) {
+
+          $scope.installment.buyDetailId = $route.current.params['buyDetailId'];
+
+          var installmentCriteria = {
+            landId: $route.current.params['landId'],
+            buyDetailId: $route.current.params['buyDetailId'],
+          };
+          var selectedMonth = $scope.selectedMonth.key;
+          var selectedYear = $scope.selectedYear;
+
+          var isNew = $scope.installment.createdTime == null;
+
+          if (isNew) {
+            InstallmentService.create(installmentCriteria, $scope.installment, selectedMonth, selectedYear).then(function(data) {
+
+              $modalInstance.dismiss('cancel'); // hide dialog
+
+              NotificationService.notify({
+                type: 'success',
+                msg: 'Installment created'
+              });
+
+              // emit to load installments
+              $rootScope.$broadcast('loadInstallments');
+
+            }, function(error) {
+              NotificationService.notify({
+                type: 'error',
+                msg: 'Unable to create Installment'
+              });
+            });
+          } else {
+            InstallmentService.update(installmentCriteria, $scope.installment, selectedMonth, selectedYear).then(function(data) {
+              $modalInstance.dismiss('cancel'); // hide dialog
+
+              NotificationService.notify({
+                type: 'success',
+                msg: 'Installment updated'
+              });
+
+              // emit to load installments
+              $rootScope.$broadcast('loadInstallments');
+
+            }, function(error) {
+              NotificationService.notify({
+                type: 'error',
+                msg: 'Unable to update existing Installment'
+              });
+            });
+          }
+
+        }
+      };
 
       $scope.months = [{
         key: 0,
@@ -195,13 +205,26 @@
         value: '\u0e18\u0e31\u0e19\u0e27\u0e32\u0e04\u0e21' // December
       }];
 
-      this.loadInstallments();
+      var currentTime = new Date();
+      var currentYear = currentTime.getFullYear();
+      var currentMonth = currentTime.getMonth();
 
-      $scope.installment = {};
-      $scope.years = [currentYear - 3, currentYear - 2, currentYear - 1, currentYear];
-      $scope.selectedMonth = $scope.months[currentMonth];
-      $scope.selectedYear = currentYear;
+      $scope.years = [currentYear, currentYear - 1, currentYear - 2, currentYear - 3];
 
+      if (installment) { // update installment
+        var selectedDate = new Date(installment.payFor);
+        var selectedYear = selectedDate.getFullYear();
+        var selectedMonth = selectedDate.getMonth();
+
+        $scope.selectedMonth = $scope.months[selectedMonth];
+        $scope.selectedYear = selectedYear;
+
+      } else { // create new installment
+        $scope.selectedMonth = $scope.months[currentMonth];
+        $scope.selectedYear = currentYear;
+      }
+
+      $scope.installment = angular.copy(installment);
     }
   ]);
 
