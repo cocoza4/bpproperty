@@ -4,7 +4,7 @@
 
   angular
 
-    .module('land-installment', ['ngRoute', 'ui.bootstrap', 'my-notification', 'land-installment-service'])
+    .module('land-installment', ['ngRoute', 'ui.bootstrap', 'my-notification', 'land-buy', 'land-installment-service'])
 
   .controller('ConfirmDeleteModalCtrl', ['$rootScope', '$scope', '$route', '$modalInstance', 'InstallmentService',
     'NotificationService', 'installment',
@@ -48,7 +48,7 @@
     function($scope, $route, $uibModal, LandBuyService, InstallmentService) {
 
       this.saveInstallmentModal = function(selected) {
-        $scope.saveInstallmentModal = $uibModal.open({
+        $uibModal.open({
           animation: true,
           templateUrl: 'saveInstallmentModal.html',
           controller: 'SaveInstallmentModalCtrl',
@@ -61,7 +61,7 @@
       };
 
       this.confirmDeleteModal = function(selected) {
-        $scope.confirmDeleteModal = $uibModal.open({
+        $uibModal.open({
           animation: true,
           templateUrl: 'confirmDeleteModal.html',
           controller: 'ConfirmDeleteModalCtrl',

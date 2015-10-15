@@ -62,7 +62,7 @@
             <td align="center">{{ $index + 1 }}</td>
             <td>{{ landBuy.buyType | buyType }}</td>
             <td>{{ landBuy.buyerFirstName + ' ' + landBuy.buyerLastName }}</td>
-            <td>{{ landBuy.buyPrice }}</td>
+            <td>{{ landBuy.buyPrice | number }}</td>
             <td>{{ landBuy.annualInterest }}</td>
             <td>{{ landBuy.yearsOfInstallment }}</td>
             <td align="center">{{ landBuy.area.rai }}</td>
