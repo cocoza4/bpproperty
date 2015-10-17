@@ -423,9 +423,82 @@ describe('land-buy', function() {
 
   });
 
+  describe('ConfirmDeleteLandBuyModalCtrl', function() {
+    beforeEach(inject(function($injector) {
+      mockBuyDetail = {
+        "id": 2,
+        "landId": 1,
+        "buyType": "CASH",
+        "buyerFirstName": "firstname2",
+        "buyerLastName": "lastname2",
+        "downPayment": 100.55,
+        "buyPrice": 10.8,
+        "annualInterest": 10.0,
+        "yearsOfInstallment": 3,
+        "description": null,
+        "area": {
+          "rai": 5,
+          "yarn": 5,
+          "tarangwa": 10
+        },
+        "createdTime": 0
+      };
+
+      $modalInstance = jasmine.createSpyObj('$modalInstance', ['close', 'dismiss']);
+
+      ConfirmDeleteLandBuyModalCtrl = $controller('ConfirmDeleteLandBuyModalCtrl', {
+        $scope: $scope,
+        $location: $location,
+        $modalInstance: $modalInstance,
+        NotificationService: NotificationService,
+        LandBuyService: LandBuyService,
+        buyDetail: mockBuyDetail,
+      });
+    }));
+
+    it('init', function() {
+      expect($scope.buyDetail).toEqual(mockBuyDetail);
+    });
+
+    it('validate $scope.delete() - success', function() {
+      var deferred = $q.defer();
+      spyOn(LandBuyService, 'delete').and.returnValue(deferred.promise);
+      spyOn(NotificationService, 'notify');
+
+      $scope.delete();
+      deferred.resolve();
+      $scope.$digest();
+
+      expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+      expect(LandBuyService.delete).toHaveBeenCalledWith($scope.buyDetail);
+      expect(NotificationService.notify).toHaveBeenCalledWith({
+        type: 'success',
+        msg: 'BuyDetail deleted'
+      });
+    });
+
+    it('validate $scope.delete() - failure', function() {
+      var deferred = $q.defer();
+      spyOn(LandBuyService, 'delete').and.returnValue(deferred.promise);
+      spyOn(NotificationService, 'notify');
+
+      $scope.delete();
+      deferred.reject();
+      $scope.$digest();
+
+      expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+      expect(LandBuyService.delete).toHaveBeenCalledWith($scope.buyDetail);
+      expect(NotificationService.notify).toHaveBeenCalledWith({
+        type: 'error',
+        msg: 'Unable to delete'
+      });
+    });
+
+  });
+
   describe('LandBuyDetailsCtrl', function() {
 
-    beforeEach(function() {
+    beforeEach(inject(function($injector) {
 
       mockCustomer = {
         "id": 1,
@@ -447,17 +520,20 @@ describe('land-buy', function() {
         }
       };
 
+      $uibModal = $injector.get('$uibModal');
+
       spyOn($location, 'path').and.returnValue('#/lands/1/buydetails/create');
 
       LandBuyDetailsCtrl = $controller('LandBuyDetailsCtrl', {
         $scope: $scope,
+        $uibModal: $uibModal,
         $location: $location,
         $route: $route,
         LandBuyService: LandBuyService,
         NotificationService: NotificationService,
       });
       $scope.$digest();
-    });
+    }));
 
     it('init', function() {
       expect($scope.buyTypeItems).toEqual(['CASH', 'INSTALLMENT']);
@@ -467,7 +543,7 @@ describe('land-buy', function() {
       });
     });
 
-    it('validate validateBuyDetail - no cusotmer selected', function() {
+    it('validate validateBuyDetail() - no cusotmer selected', function() {
       spyOn(NotificationService, 'notify');
       expect(LandBuyDetailsCtrl.validateBuyDetail()).toBeFalsy();
       expect(NotificationService.notify).toHaveBeenCalledWith({
@@ -476,14 +552,28 @@ describe('land-buy', function() {
       });
     });
 
-    it('validate validateBuyDetail - customer selected', function() {
+    it('validate deleteModal()', function() {
+      spyOn($uibModal, 'open');
+      LandBuyDetailsCtrl.deleteModal();
+      $scope.$digest();
+      expect($uibModal.open).toHaveBeenCalledWith({
+        animation: true,
+        templateUrl: 'confirmDeleteModal.html',
+        controller: 'ConfirmDeleteLandBuyModalCtrl',
+        resolve: {
+          buyDetail: jasmine.any(Function)
+        }
+      });
+    });
+
+    it('validate validateBuyDetail() - customer selected', function() {
       spyOn(NotificationService, 'notify');
       $scope.customer = 'something';
       expect(LandBuyDetailsCtrl.validateBuyDetail()).toBeTruthy();
       expect(NotificationService.notify).not.toHaveBeenCalled();
     });
 
-    describe('$scope.saveLandBuyDetail', function() {
+    describe('$scope.saveLandBuyDetail()', function() {
 
       beforeEach(function() {
         $scope.customer = mockCustomer;

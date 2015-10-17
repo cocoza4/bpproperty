@@ -14,7 +14,6 @@ import mockit.Mock;
 import mockit.MockUp;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,12 +120,6 @@ public class LandBuyServiceIT {
         assertEquals(CURRENT_DATE, returnLandBuyDetail.getUpdatedTime());
     }
 
-    @Ignore
-    @Test
-    public void testFindLandBuyDetailByCriteria() throws Exception {
-
-    }
-
     @Test
     public void testSaveInstallment_newInstance() throws Exception {
         landBuyService.saveLandBuyDetail(landBuyDetail);
@@ -139,6 +132,17 @@ public class LandBuyServiceIT {
         Installment returnInstallment = landBuyService.findInstallmentById(installment.getId());
         assertEquals(USER_LOGIN_ID, returnInstallment.getCreatedBy());
         assertEquals(CURRENT_DATE, returnInstallment.getCreatedTime());
+    }
+
+    @Test
+    public void testDeleteLandBuyDetailById() throws Exception {
+        landBuyService.saveLandBuyDetail(landBuyDetail);
+        installment.setBuyDetailId(landBuyDetail.getId());
+        landBuyService.saveInstallment(installment);
+
+        landBuyService.deleteLandBuyDetailById(landBuyDetail.getId());
+        assertNull(landBuyService.findLandBuyDetailById(landBuyDetail.getId()));
+        assertNull(landBuyService.findInstallmentById(installment.getId()));
     }
 
     @Test

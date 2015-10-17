@@ -103,8 +103,56 @@
 
   }])
 
-  .controller('LandBuyDetailsCtrl', ['$scope', '$location', '$route', 'LandBuyService', 'NotificationService',
-    function($scope, $location, $route, LandBuyService, NotificationService) {
+  .controller('ConfirmDeleteLandBuyModalCtrl', ['$scope', '$location', '$modalInstance',
+    'NotificationService', 'LandBuyService', 'buyDetail',
+    function($scope, $location, $modalInstance, NotificationService, LandBuyService, buyDetail) {
+
+      function redirectToBuyDetailListPage() {
+        var url = '/lands/' + $scope.buyDetail.landId + '/buydetails';
+        $location.path(url);
+      }
+
+      $scope.delete = function() {
+        LandBuyService.delete($scope.buyDetail).then(function(response) {
+            NotificationService.notify({
+              type: 'success',
+              msg: 'BuyDetail deleted'
+            });
+            redirectToBuyDetailListPage();
+          },
+          function(error) {
+            NotificationService.notify({
+              type: 'error',
+              msg: 'Unable to delete'
+            });
+          });
+
+        $modalInstance.dismiss('cancel');
+      };
+
+      $scope.closeModal = function() {
+        $modalInstance.dismiss('cancel');
+      };
+
+      $scope.buyDetail = buyDetail;
+    }
+  ])
+
+  .controller('LandBuyDetailsCtrl', ['$scope', '$uibModal', '$location', '$route', 'LandBuyService', 'NotificationService',
+    function($scope, $uibModal, $location, $route, LandBuyService, NotificationService) {
+
+      this.deleteModal = function() {
+        $uibModal.open({
+          animation: true,
+          templateUrl: 'confirmDeleteModal.html',
+          controller: 'ConfirmDeleteLandBuyModalCtrl',
+          resolve: {
+            buyDetail: function() {
+              return $scope.buyDetail;
+            }
+          }
+        });
+      };
 
       this.validateBuyDetail = function() {
         if (!$scope.customer) {

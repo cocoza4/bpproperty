@@ -1,10 +1,28 @@
 <div style="padding-top: 15px"></div>
-<div class="container-fluid" ng-controller="LandBuyDetailsCtrl">
+<div class="container-fluid" ng-controller="LandBuyDetailsCtrl as landBuyDetailsCtrl">
+
+  <!-- Confirm Delete Modal-->
+  <script id="confirmDeleteModal.html" type="text/ng-template">
+    <div class="modal-header">
+      <button aria-hidden="true" class="close" ng-click='closeModal()' type="button">&times;</button>
+      <h4 class="modal-title">Confirm Delete</h4>
+    </div>
+    <div class="modal-body">
+      <p>You are about to delete a BuyDetail record, this procedure will delete its associated
+      installment records (if any) and you cannot undo this action.</p>
+      <p>Do you want to proceed?</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-default btn-sm" ng-click="closeModal()" type="button">Cancel</button>
+      <a class="btn btn-danger btn-ok btn-sm" href ng-click="delete()">Delete</a>
+    </div>
+  </script>
+
   <form novalidate class="form-horizontal" name="form" ng-submit="saveLandBuyDetail(form.$valid)">
     <div class="form-group required">
       <label class="col-sm-2 col-xs-3 control-label" for="buyType">ประเภทการซื้อ</label>
       <div class="col-sm-10 col-xs-9">
-        <select class="form-control input-sm" name="buyType" ng-model="buyDetail.buyType" ng-options="buyTypeItem | buyType for buyTypeItem in buyTypeItems" style="width: 130px" required></select>
+        <select class="form-control input-sm" ng-disabled="{{ buyDetail.id != null }}" name="buyType" ng-model="buyDetail.buyType" ng-options="buyTypeItem | buyType for buyTypeItem in buyTypeItems" style="width: 130px" required></select>
       </div>
     </div>
     <div ng-hide="buyDetail.buyType == 'CASH'" class="form-group">
@@ -68,7 +86,7 @@
     <div class="form-group">
       <div class="col-xs-offset-3 col-xs-9 col-sm-offset-2 col-sm-10">
         <button class="btn btn-primary" type="submit">Save</button>
-        <a class="btn btn-danger" type="button">Delete</a>
+        <a class="btn btn-danger" type="button" ng-click="landBuyDetailsCtrl.deleteModal()">Delete</a>
       </div>
     </div>
   </form>

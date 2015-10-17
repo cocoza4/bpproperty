@@ -17,18 +17,18 @@
     };
 
     this.update = function(landBuy) {
-      // alert(landBuy.buyType == 'ผ่อน');
-      // if (landBuy.buyType == 'ผ่อน') {
-      //   landBuy.buyType = 'INSTALLMENT';
-      // } else {
-      //   landBuy.buyType = 'CASH';
-      // }
-
       return LandBuy.update({
         landId: landBuy.landId,
         buyDetailId: landBuy.id
       }, landBuy).$promise;
-    }
+    };
+
+    this.delete = function(landBuy) {
+      return LandBuy.delete({
+        landId: landBuy.landId,
+        buyDetailId: landBuy.id
+      }).$promise;
+    };
 
   }])
 
@@ -40,6 +40,9 @@
       }, {
         'update': {
           method: 'PUT'
+        },
+        'delete': {
+          method: 'DELETE'
         },
         'query': {
           method: 'GET',

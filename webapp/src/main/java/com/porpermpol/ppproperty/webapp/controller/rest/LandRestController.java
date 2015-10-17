@@ -97,6 +97,12 @@ public class LandRestController {
         return buyDetail;
     }
 
+    @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}", method = RequestMethod.DELETE)
+    public void deleteBuyDetailById(@PathVariable("landId") long landId,
+                                          @PathVariable("buyDetailId") long buyDetailId) {
+        landBuyService.deleteLandBuyDetailById(buyDetailId);
+    }
+
     @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/installments", method = RequestMethod.GET)
     public List<Installment> getInstallmentsByBuyDetailId(@PathVariable("landId") long landId,
                                           @PathVariable("buyDetailId") long buyDetailId) {
