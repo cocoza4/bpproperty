@@ -4,11 +4,7 @@
 
   var CustomerListResolve = {
     Customers: ['CustomerService', function(CustomerService) {
-      var criteria = {
-        page: 0, // zero-based page index
-        length: 10
-      };
-      return CustomerService.query(criteria);
+      return CustomerService.query();
     }]
   };
 
@@ -39,7 +35,7 @@
 
   angular
 
-    .module('customer', ['ngRoute', 'my-notification', 'customer-service'])
+    .module('customer', ['ngRoute', 'ui.bootstrap', 'my-notification', 'customer-service'])
 
   .config(['$routeProvider', function($routeProvider) {
 
@@ -59,6 +55,7 @@
     .when('/customers/:id', {
       templateUrl: 'customer/customer-detail.tpl.html',
       controller: 'CustomerCtrl',
+      controllerAs: 'customerCtrl',
       resolve: CustomerResolve
     })
 
@@ -70,8 +67,59 @@
 
   }])
 
-  .controller('CustomerCtrl', ['$scope', 'Customer', 'CustomerService', 'NotificationService',
-    function($scope, Customer, CustomerService, NotificationService) {
+  .controller('ConfirmDeleteCustomerModalCtrl', ['$scope', '$location', '$modalInstance',
+    'NotificationService', 'CustomerService', 'customer', 'exists',
+    function($scope, $location, $modalInstance, NotificationService, CustomerService, customer, exists) {
+
+      $scope.delete = function() {
+        CustomerService.delete($scope.customer).then(function(response) {
+            NotificationService.notify({
+              type: 'success',
+              msg: 'Customer deleted'
+            });
+            $location.path('/customers');
+          },
+          function(error) {
+            NotificationService.notify({
+              type: 'error',
+              msg: 'Unable to delete'
+            });
+          });
+
+        $modalInstance.dismiss('cancel');
+      };
+
+      $scope.closeModal = function() {
+        $modalInstance.dismiss('cancel');
+      };
+
+      $scope.customer = customer;
+      $scope.exists = exists;
+    }
+  ])
+
+  .controller('CustomerCtrl', ['$scope', '$uibModal', 'Customer', 'CustomerService', 'NotificationService',
+    function($scope, $uibModal, Customer, CustomerService, NotificationService) {
+
+      this.deleteModal = function() {
+        $uibModal.open({
+          animation: true,
+          templateUrl: 'confirmDeleteModal.html',
+          controller: 'ConfirmDeleteCustomerModalCtrl',
+          resolve: {
+            customer: function() {
+              return $scope.customer;
+            },
+            exists: function() {
+              return CustomerService.exists($scope.customer).then(function() {
+                return true;
+              }).catch(function() {
+                return false;
+              });
+            }
+          }
+        });
+      };
 
       $scope.submit = function(isValid) {
 

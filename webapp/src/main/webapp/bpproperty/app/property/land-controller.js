@@ -4,11 +4,7 @@
 
   var LandListResolve = {
     Lands: ['LandService', function(LandService) {
-      var criteria = {
-        page: 0, // zero-based page index
-        length: 10
-      };
-      return LandService.query(criteria);
+      return LandService.query();
     }]
   };
 

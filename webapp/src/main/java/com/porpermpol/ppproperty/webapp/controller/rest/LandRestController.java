@@ -92,7 +92,7 @@ public class LandRestController {
 
     @RequestMapping(value = "/{landId}/buydetails", method = RequestMethod.HEAD)
     public ResponseEntity existsLandBuyDetailsByLandId(@PathVariable("landId") long id) {
-        if (landBuyService.existsLandBuyDetail(id)) {
+        if (landBuyService.existsLandBuyDetailByLandId(id)) {
             return new ResponseEntity(HttpStatus.OK);
         }
         return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -108,7 +108,6 @@ public class LandRestController {
         if (buyDetail == null) {
             throw new ResourceNotFoundException();
         }
-
         return buyDetail;
     }
 

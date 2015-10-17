@@ -24,6 +24,7 @@ public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implem
 
     private static final String SQL_EXISTS = "SELECT count(*) FROM land_buy_detail WHERE land_id = ? AND customer_id = ?";
     private static final String SQL_EXISTS_BY_LAND_ID = "SELECT count(*) FROM land_buy_detail WHERE land_id = ?";
+    private static final String SQL_EXISTS_BY_CUSTOMER_ID = "SELECT count(*) FROM land_buy_detail WHERE customer_id = ?";
 
     private static final String SQL_SELECT_BY_CUSTOMER_ID = "SELECT * FROM land_buy_detail " +
             "WHERE customer_id = ? ORDER BY created_time DESC";
@@ -96,8 +97,13 @@ public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implem
     }
 
     @Override
-    public boolean existsByLandId(long landId) {
-        return jdbcOperations.queryForObject(SQL_EXISTS_BY_LAND_ID, Long.class, landId) > 0;
+    public boolean existsByCustomerId(long id) {
+        return jdbcOperations.queryForObject(SQL_EXISTS_BY_CUSTOMER_ID, Long.class, id) > 0;
+    }
+
+    @Override
+    public boolean existsByLandId(long id) {
+        return jdbcOperations.queryForObject(SQL_EXISTS_BY_LAND_ID, Long.class, id) > 0;
     }
 
     @Override

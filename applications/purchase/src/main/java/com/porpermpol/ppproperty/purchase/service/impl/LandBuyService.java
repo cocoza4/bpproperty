@@ -28,8 +28,14 @@ public class LandBuyService implements ILandBuyService {
 
     @Transactional(readOnly = true)
     @Override
-    public boolean existsLandBuyDetail(long landId) {
-        return landBuyDetailDAO.existsByLandId(landId);
+    public boolean existsLandBuyDetailByCustomerId(long id) {
+        return landBuyDetailDAO.existsByCustomerId(id);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean existsLandBuyDetailByLandId(long id) {
+        return landBuyDetailDAO.existsByLandId(id);
     }
 
     @Transactional(readOnly = true)

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,9 +67,22 @@ public class CustomerRestController {
         customerService.saveCustomer(customer);
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable("id") long id) {
+        customerService.deleteById(id);
+    }
+
     @RequestMapping(value = "/{id}/lands", method = RequestMethod.GET)
-    public List<LandBuyDetail> update(@PathVariable("id") long id) {
+    public List<LandBuyDetail> getLandBuyDetailsByCustomerId(@PathVariable("id") long id) {
         return landBuyService.findLandBuyDetailsByCustomerId(id);
+    }
+
+    @RequestMapping(value = "/{id}/lands", method = RequestMethod.HEAD)
+    public ResponseEntity existsByCustomerId(@PathVariable("id") long id) {
+        if (landBuyService.existsLandBuyDetailByCustomerId(id)) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
 }

@@ -93,17 +93,33 @@ describe('customer', function() {
 
   describe('CustomerCtrl', function() {
 
-    beforeEach(function() {
+    beforeEach(inject(function($injector) {
+      $uibModal = $injector.get('$uibModal');
       customerCtrl = $controller('CustomerCtrl', {
         $scope: $scope,
+        $uibModal: $uibModal,
         Customer: mockCustomer,
         CustomerService: CustomerService,
         NotificationService: NotificationService,
       });
-    });
+    }));
 
     it('init', function() {
       expect($scope.customer).toEqual(mockCustomer);
+    });
+
+    it('validate deleteModal()', function() {
+      spyOn($uibModal, 'open');
+      customerCtrl.deleteModal();
+      expect($uibModal.open).toHaveBeenCalledWith({
+        animation: true,
+        templateUrl: 'confirmDeleteModal.html',
+        controller: 'ConfirmDeleteCustomerModalCtrl',
+        resolve: {
+          customer: jasmine.any(Function),
+          exists: jasmine.any(Function)
+        }
+      });
     });
 
     it('should update a customer successfully', function() {
@@ -270,6 +286,64 @@ describe('customer', function() {
       expect($scope.totalRecords).toEqual(mockCustomerObjTable.totalRecords);
       expect($scope.startIndex).toEqual(0);
       expect($scope.endIndex).toEqual(0);
+    });
+
+  });
+
+  describe('ConfirmDeleteCustomerModalCtrl', function() {
+
+    beforeEach(inject(function($injector) {
+      $modalInstance = jasmine.createSpyObj('$modalInstance', ['close', 'dismiss']);
+      ConfirmDeleteCustomerModalCtrl = $controller('ConfirmDeleteCustomerModalCtrl', {
+        $scope: $scope,
+        $location: $location,
+        $modalInstance: $modalInstance,
+        NotificationService: NotificationService,
+        CustomerService: CustomerService,
+        customer: mockCustomer,
+        exists: true,
+      });
+    }));
+
+    it('init', function() {
+      expect($scope.customer).toEqual(mockCustomer);
+      expect($scope.exists).toBeTruthy();
+    });
+
+    it('validate $scope.delete() - success', function() {
+      var deferred = $q.defer();
+      spyOn($location, 'path');
+      spyOn(CustomerService, 'delete').and.returnValue(deferred.promise);
+      spyOn(NotificationService, 'notify');
+
+      $scope.delete();
+      deferred.resolve();
+      $scope.$digest();
+
+      expect($location.path).toHaveBeenCalledWith('/customers');
+      expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+      expect(CustomerService.delete).toHaveBeenCalledWith($scope.customer);
+      expect(NotificationService.notify).toHaveBeenCalledWith({
+        type: 'success',
+        msg: 'Customer deleted'
+      });
+    });
+
+    it('validate $scope.delete() - failure', function() {
+      var deferred = $q.defer();
+      spyOn(CustomerService, 'delete').and.returnValue(deferred.promise);
+      spyOn(NotificationService, 'notify');
+
+      $scope.delete();
+      deferred.reject();
+      $scope.$digest();
+
+      expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+      expect(CustomerService.delete).toHaveBeenCalledWith($scope.customer);
+      expect(NotificationService.notify).toHaveBeenCalledWith({
+        type: 'error',
+        msg: 'Unable to delete'
+      });
     });
 
   });

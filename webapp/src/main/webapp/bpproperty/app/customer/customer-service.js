@@ -10,19 +10,31 @@
 
     this.query = function(criteria) {
       return Customer.query(criteria).$promise;
-    }
+    };
 
-    this.queryByCustomerId = function(id) {
-      return CustomerLands.query(id).$promise;
-    }
+    this.queryByCustomerId = function(criteria) {
+      return CustomerLands.query(criteria).$promise;
+    };
 
     this.create = function(customer) {
       return Customer.save(customer).$promise;
-    }
+    };
 
     this.update = function(customer) {
       return Customer.update(customer).$promise;
-    }
+    };
+
+    this.delete = function(customer) {
+      return Customer.delete({
+        id: customer.id
+      }).$promise;
+    };
+
+    this.exists = function(customer) {
+      return CustomerLands.exists({
+        id: customer.id
+      }).$promise;
+    };
 
   }])
 
@@ -49,6 +61,10 @@
     return $resource(
       '/bpproperty/api/customers/:id/lands', {
         id: '@id'
+      }, {
+        'exists': {
+          method: 'HEAD'
+        },
       });
   }]);
 
