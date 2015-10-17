@@ -5,7 +5,7 @@
   <script id="confirmDeleteModal.html" type="text/ng-template">
     <div class="modal-header">
       <button aria-hidden="true" class="close" ng-click='closeModal()' type="button">&times;</button>
-      <h4 class="modal-title">Confirm Delete</h4>
+      <h4 class="modal-title"><i class="warning glyphicon glyphicon-alert"></i> Confirm Delete</h4>
     </div>
     <div class="modal-body">
       <p>You are about to delete one payment record,
@@ -13,7 +13,6 @@
         for
         <strong class="text-info">{{ installment.payFor | date: "MMMM, yyyy" }}</strong>, this procedure is irreversible.</p>
       <p>Do you want to proceed?</p>
-      <p class="debug-url"></p>
     </div>
     <div class="modal-footer">
       <button class="btn btn-default btn-sm" ng-click="closeModal()" type="button">Cancel</button>
@@ -26,7 +25,7 @@
     <form class="form-horizontal" name="installmentForm" ng-submit="saveInstallment(installmentForm.$valid)" role="form">
       <div class="modal-header">
         <button aria-hidden="true" class="close" ng-click='closeModal()' type="button">&times;</button>
-        <h4 class="modal-title">Payment Record</h4>
+        <h4 class="modal-title"><i class="warning glyphicon glyphicon-list-alt"></i> Payment Record</h4>
       </div>
       <div class="modal-body">
         <div class="form-group">

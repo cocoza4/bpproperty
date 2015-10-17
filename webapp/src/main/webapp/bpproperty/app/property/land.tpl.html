@@ -1,3 +1,25 @@
+<!-- Confirm Delete Modal-->
+<script id="confirmDeleteModal.html" type="text/ng-template">
+  <div class="modal-header">
+    <button aria-hidden="true" class="close" ng-click='closeModal()' type="button">&times;</button>
+    <h4 class="modal-title"><i class="warning glyphicon glyphicon-alert"></i> Confirm Delete</h4>
+  </div>
+  <div class="modal-body">
+    <p ng-show="exists">You are unable to delete land,
+      <strong class="text-info">{{ land.name }}</strong>, because it has associated with BuyDetail records.</p>
+    <div ng-show="!exists">
+      <p>You are about to delete land,
+        <strong class="text-info">{{ land.name }}</strong>, this procedure is irreversible.</p>
+      <p>Do you want to proceed?</p>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default btn-sm" ng-click="closeModal()" type="button">Cancel</button>
+    <a class="btn btn-primary btn-ok btn-sm" href ng-click="closeModal()" ng-show="exists">OK</a>
+    <a class="btn btn-danger btn-ok btn-sm" href ng-click="delete()" ng-show="!exists">Delete</a>
+  </div>
+</script>
 
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -44,7 +66,8 @@
                 <div class="has-feedback">
                   <input class="form-control input-sm area" data-placement="top" data-toggle="tooltip" decimal-number name="tarangwa" ng-model="land.area.tarangwa" required title="ตารางวา" type="text">
                   <i class="text-info form-control-feedback">วา
-                    <sup>2</sup></i>
+                    <sup>2</sup>
+                  </i>
                 </div>
               </td>
             </tr>
@@ -60,7 +83,7 @@
       <div class="form-group">
         <div class="col-xs-offset-3 col-xs-9">
           <button class="btn btn-primary input-sm" type="submit">Save</button>
-          <a class="btn btn-danger input-sm" type="button">Delete</a>
+          <a class="btn btn-danger input-sm" ng-click="landDetailCtrl.deleteModal()" ng-show="land.id" type="button">Delete</a>
         </div>
       </div>
     </form>

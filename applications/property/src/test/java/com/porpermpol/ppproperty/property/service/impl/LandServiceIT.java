@@ -70,6 +70,13 @@ public class LandServiceIT {
     }
 
     @Test
+    public void testDeleteById() throws Exception {
+        landService.saveLand(land);
+        landService.deleteById(land.getId());
+        assertNull(landService.findById(land.getId()));
+    }
+
+    @Test
     public void testSaveLand_updateLand() throws Exception {
         landService.saveLand(land);
 

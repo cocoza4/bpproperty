@@ -84,8 +84,8 @@ form while your application is loading.*/
     max-width: 100px !important;
 }
 
-.sortable:hover {
-  cursor: pointer;
+.warning {
+  color: orange;
 }
 
 .form-group.required .control-label:after {

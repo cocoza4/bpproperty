@@ -108,6 +108,13 @@ public class LandBuyDetailDAOIT {
     }
 
     @Test
+    public void testExistsByLandId() throws Exception {
+        assertFalse(buyDetailDAO.existsByLandId(landBuyDetail.getLandId()));
+        buyDetailDAO.save(landBuyDetail);
+        assertTrue(buyDetailDAO.existsByLandId(landBuyDetail.getLandId()));
+    }
+
+    @Test
     public void testFindByCustomerId() throws Exception {
         buyDetailDAO.save(landBuyDetail);
         List<LandBuyDetail> models = buyDetailDAO.findByCustomerId(landBuyDetail.getCustomerId());

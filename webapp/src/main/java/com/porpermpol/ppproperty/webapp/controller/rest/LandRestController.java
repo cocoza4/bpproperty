@@ -13,7 +13,9 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,6 +57,11 @@ public class LandRestController {
         return Land;
     }
 
+    @RequestMapping(value = "/{landId}", method = RequestMethod.DELETE)
+    public void deleteLandById(@PathVariable("landId") long id) {
+        landService.deleteById(id);
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public DataTableObject<Land> getAllLands(@RequestParam(value = "page", defaultValue = "0") int page,
                                             @RequestParam(value = "length", defaultValue = "10") int length) {
@@ -81,6 +88,14 @@ public class LandRestController {
                                                                             landBuyPage.getTotalElements());
 
         return dataTableObject;
+    }
+
+    @RequestMapping(value = "/{landId}/buydetails", method = RequestMethod.HEAD)
+    public ResponseEntity existsLandBuyDetailsByLandId(@PathVariable("landId") long id) {
+        if (landBuyService.existsLandBuyDetail(id)) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}", method = RequestMethod.GET)

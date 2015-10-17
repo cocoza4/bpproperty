@@ -30,6 +30,12 @@
       }).$promise;
     };
 
+    this.exists = function(id) {
+      return LandBuy.exists({
+        landId: id
+      }).$promise;
+    };
+
   }])
 
   .factory('LandBuy', ['$resource', function($resource) {
@@ -43,6 +49,9 @@
         },
         'delete': {
           method: 'DELETE'
+        },
+        'exists': {
+          method: 'HEAD'
         },
         'query': {
           method: 'GET',

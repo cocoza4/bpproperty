@@ -20,7 +20,13 @@
       return Land.update({
         landId: land.id
       }, land).$promise;
-    }
+    };
+
+    this.delete = function(land) {
+      return Land.delete({
+        landId: land.id
+      }).$promise;
+    };
 
   }])
 
@@ -31,6 +37,9 @@
       }, {
         'update': {
           method: 'PUT'
+        },
+        'delete': {
+          method: 'DELETE'
         },
         'query': {
           method: 'GET',

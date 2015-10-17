@@ -214,17 +214,36 @@ describe('land', function() {
 
   describe('LandDetailCtrl', function() {
 
-    beforeEach(function() {
+    beforeEach(inject(function($injector) {
+      $uibModal = $injector.get('$uibModal');
+      LandBuyService = $injector.get('LandBuyService');
+
       LandDetailCtrl = $controller('LandDetailCtrl', {
         $scope: $scope,
+        $uibModal: $uibModal,
         Land: mockLand,
         LandService: LandService,
+        LandBuyService: LandBuyService,
         NotificationService: NotificationService,
       });
-    });
+    }));
 
     it('init', function() {
       expect($scope.land).toEqual(mockLand);
+    });
+
+    it('validate deleteModal()', function() {
+      spyOn($uibModal, 'open');
+      LandDetailCtrl.deleteModal();
+      expect($uibModal.open).toHaveBeenCalledWith({
+        animation: true,
+        templateUrl: 'confirmDeleteModal.html',
+        controller: 'ConfirmDeleteLandModalCtrl',
+        resolve: {
+          land: jasmine.any(Function),
+          exists: jasmine.any(Function)
+        }
+      });
     });
 
     it('should update a land successfully', function() {
@@ -272,6 +291,62 @@ describe('land', function() {
 
       expect(LandService.update).not.toHaveBeenCalled();
       expect(NotificationService.notify).not.toHaveBeenCalledWith();
+    });
+
+  });
+
+  describe('ConfirmDeleteLandModalCtrl', function() {
+
+    beforeEach(inject(function($injector) {
+      $modalInstance = jasmine.createSpyObj('$modalInstance', ['close', 'dismiss']);
+      ConfirmDeleteLandModalCtrl = $controller('ConfirmDeleteLandModalCtrl', {
+        $scope: $scope,
+        $location: $location,
+        $modalInstance: $modalInstance,
+        NotificationService: NotificationService,
+        LandService: LandService,
+        land: mockLand,
+        exists: true,
+      });
+    }));
+
+    it('init', function() {
+      expect($scope.land).toEqual(mockLand);
+      expect($scope.exists).toBeTruthy();
+    });
+
+    it('validate $scope.delete() - success', function() {
+      var deferred = $q.defer();
+      spyOn(LandService, 'delete').and.returnValue(deferred.promise);
+      spyOn(NotificationService, 'notify');
+
+      $scope.delete();
+      deferred.resolve();
+      $scope.$digest();
+
+      expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+      expect(LandService.delete).toHaveBeenCalledWith($scope.land);
+      expect(NotificationService.notify).toHaveBeenCalledWith({
+        type: 'success',
+        msg: 'Land deleted'
+      });
+    });
+
+    it('validate $scope.delete() - failure', function() {
+      var deferred = $q.defer();
+      spyOn(LandService, 'delete').and.returnValue(deferred.promise);
+      spyOn(NotificationService, 'notify');
+
+      $scope.delete();
+      deferred.reject();
+      $scope.$digest();
+
+      expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+      expect(LandService.delete).toHaveBeenCalledWith($scope.land);
+      expect(NotificationService.notify).toHaveBeenCalledWith({
+        type: 'error',
+        msg: 'Unable to delete'
+      });
     });
 
   });

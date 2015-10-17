@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface ILandBuyService {
 
+    boolean existsLandBuyDetail(long landId);
     boolean existsLandBuyDetail(long landId, long customerId);
     void saveLandBuyDetail(LandBuyDetail landBuyDetail);
     void deleteLandBuyDetailById(long id);

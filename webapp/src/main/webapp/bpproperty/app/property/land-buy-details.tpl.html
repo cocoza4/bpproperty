@@ -5,7 +5,7 @@
   <script id="confirmDeleteModal.html" type="text/ng-template">
     <div class="modal-header">
       <button aria-hidden="true" class="close" ng-click='closeModal()' type="button">&times;</button>
-      <h4 class="modal-title">Confirm Delete</h4>
+      <h4 class="modal-title"><i class="warning glyphicon glyphicon-alert"></i> Confirm Delete</h4>
     </div>
     <div class="modal-body">
       <p>You are about to delete a BuyDetail record, this procedure will delete its associated
@@ -86,7 +86,7 @@
     <div class="form-group">
       <div class="col-xs-offset-3 col-xs-9 col-sm-offset-2 col-sm-10">
         <button class="btn btn-primary" type="submit">Save</button>
-        <a class="btn btn-danger" type="button" ng-click="landBuyDetailsCtrl.deleteModal()">Delete</a>
+        <a class="btn btn-danger" ng-show="buyDetail.id" type="button" ng-click="landBuyDetailsCtrl.deleteModal()">Delete</a>
       </div>
     </div>
   </form>
