@@ -209,17 +209,25 @@
       var currentYear = currentTime.getFullYear();
       var currentMonth = currentTime.getMonth();
 
-      $scope.years = [currentYear, currentYear - 1, currentYear - 2, currentYear - 3];
+      function generateYears(current, selected) {
+        var years = [];
+        for (var i = current; i >= selected; i--) {
+          years.push(i);
+        }
+        return years;
+      };
 
-      if (installment) { // update installment
+      if (installment.id != null) { // update installment
         var selectedDate = new Date(installment.payFor);
         var selectedYear = selectedDate.getFullYear();
         var selectedMonth = selectedDate.getMonth();
 
         $scope.selectedMonth = $scope.months[selectedMonth];
         $scope.selectedYear = selectedYear;
+        $scope.years = generateYears(currentYear, selectedYear);
 
       } else { // create new installment
+        $scope.years = [currentYear];
         $scope.selectedMonth = $scope.months[currentMonth];
         $scope.selectedYear = currentYear;
       }

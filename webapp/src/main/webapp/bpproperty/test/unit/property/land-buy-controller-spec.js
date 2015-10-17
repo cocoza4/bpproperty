@@ -101,13 +101,6 @@ describe('land-buy', function() {
     beforeEach(inject(function($injector) {
       $modalInstance = jasmine.createSpyObj('$modalInstance', ['close', 'dismiss']);
 
-      SelectBuyerModalCtrl = $controller('SelectBuyerModalCtrl', {
-        $scope: $scope,
-        $modalInstance: $modalInstance,
-        CustomerService: CustomerService,
-        dataTableObject: mockCustomerObjTable,
-      });
-
       mockCustomerObjTable = {
         "totalRecords": 31,
         "totalDisplayRecords": 10,
@@ -143,6 +136,13 @@ describe('land-buy', function() {
           "tel": "074-360999"
         }]
       };
+
+      SelectBuyerModalCtrl = $controller('SelectBuyerModalCtrl', {
+        $scope: $scope,
+        $modalInstance: $modalInstance,
+        CustomerService: CustomerService,
+        dataTableObject: mockCustomerObjTable,
+      });
 
     }));
 
@@ -490,7 +490,7 @@ describe('land-buy', function() {
       });
 
       describe('create new buyDetail', function() {
-        it('should successfully create new buyDetail', function() {
+        it('should successfully create a new buyDetail', function() {
           var deferred = $q.defer();
           spyOn(LandBuyService, 'create').and.returnValue(deferred.promise);
           spyOn(NotificationService, 'notify');

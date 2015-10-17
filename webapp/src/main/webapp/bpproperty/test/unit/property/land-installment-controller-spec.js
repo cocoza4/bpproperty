@@ -3,7 +3,6 @@ describe('land-installment', function() {
   beforeEach(module('land-installment'));
 
   beforeEach(inject(function($injector, _$controller_) {
-    $location = $injector.get('$location');
     $rootScope = $injector.get('$rootScope');
     $scope = $rootScope.$new();
     $controller = _$controller_;
@@ -101,6 +100,186 @@ describe('land-installment', function() {
         type: 'error',
         msg: 'Unable to delete the selected Installment'
       });
+    });
+
+  });
+
+  describe('SaveInstallmentModalCtrl', function() {
+
+    beforeEach(inject(function($injector) {
+
+      var baseTime = new Date(2015, 0, 1);
+      jasmine.clock().mockDate(baseTime);
+
+      mockInstallment = {
+        "id": 1,
+        "createdBy": 0,
+        "createdTime": 1422631659000,
+        "updatedBy": 1,
+        "updatedTime": 1444840281934,
+        "buyDetailId": 1,
+        "payFor": new Date(2014, 1, 1).getTime(),
+        "amount": 1.0,
+        "description": "description"
+      };
+
+      $modalInstance = jasmine.createSpyObj('$modalInstance', ['close', 'dismiss']);
+
+      $route = {
+        current: {
+          params: {
+            landId: 1,
+            buyDetailId: 1,
+            installmentId: 1
+          }
+        }
+      };
+
+    }));
+
+    describe('Save a new Installment', function() {
+
+      beforeEach(function() {
+        SaveInstallmentModalCtrl = $controller('SaveInstallmentModalCtrl', {
+          $rootScope: $rootScope,
+          $scope: $scope,
+          $route: $route,
+          $modalInstance: $modalInstance,
+          InstallmentService: InstallmentService,
+          NotificationService: NotificationService,
+          installment: {},
+        });
+        $scope.$digest();
+      });
+
+      it('init - new installment', function() {
+        expect($scope.installment).toEqual({});
+        expect($scope.years).toEqual([2015]);
+        expect($scope.selectedYear).toEqual(2015);
+        expect($scope.selectedMonth).toEqual({
+          key: 0,
+          value: '\u0e21\u0e01\u0e23\u0e32\u0e04\u0e21' // January
+        });
+      });
+
+      it('should successfully create a new Installment', function() {
+        var deferred = $q.defer();
+        spyOn(NotificationService, 'notify');
+        spyOn($rootScope, '$broadcast').and.callThrough();
+        spyOn(InstallmentService, 'create').and.returnValue(deferred.promise);
+
+        $scope.saveInstallment(true);
+        deferred.resolve();
+        $scope.$digest();
+
+        expect($scope.installment.buyDetailId).toEqual(1);
+        expect(InstallmentService.create).toHaveBeenCalledWith({
+          landId: 1,
+          buyDetailId: 1,
+        }, $scope.installment, $scope.selectedMonth.key, $scope.selectedYear);
+        expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+        expect($rootScope.$broadcast).toHaveBeenCalledWith('loadInstallments');
+        expect(NotificationService.notify).toHaveBeenCalledWith({
+          type: 'success',
+          msg: 'Installment created'
+        });
+      });
+
+      it('should fail to create a new Installment', function() {
+        var deferred = $q.defer();
+        spyOn(NotificationService, 'notify');
+        spyOn($rootScope, '$broadcast').and.callThrough();
+        spyOn(InstallmentService, 'create').and.returnValue(deferred.promise);
+
+        $scope.saveInstallment(true);
+        deferred.reject();
+        $scope.$digest();
+
+        expect($scope.installment.buyDetailId).toEqual(1);
+        expect(InstallmentService.create).toHaveBeenCalledWith({
+          landId: 1,
+          buyDetailId: 1,
+        }, $scope.installment, $scope.selectedMonth.key, $scope.selectedYear);
+        expect($modalInstance.dismiss).not.toHaveBeenCalledWith('cancel');
+        expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadInstallments');
+        expect(NotificationService.notify).toHaveBeenCalledWith({
+          type: 'error',
+          msg: 'Unable to create Installment'
+        });
+      });
+
+    });
+
+    describe('Save an existing Installment', function() {
+      beforeEach(function() {
+        SaveInstallmentModalCtrl = $controller('SaveInstallmentModalCtrl', {
+          $rootScope: $rootScope,
+          $scope: $scope,
+          $route: $route,
+          $modalInstance: $modalInstance,
+          InstallmentService: InstallmentService,
+          NotificationService: NotificationService,
+          installment: mockInstallment,
+        });
+        $scope.$digest();
+      });
+
+      it('init - existing installment', function() {
+        expect($scope.installment).toEqual(mockInstallment);
+        expect($scope.years).toEqual([2015, 2014]);
+        expect($scope.selectedYear).toEqual(2014);
+        expect($scope.selectedMonth).toEqual({
+          key: 1,
+          value: '\u0e01\u0e38\u0e21\u0e20\u0e32\u0e1e\u0e31\u0e19\u0e18\u0e4c' // February
+        });
+      });
+
+      it('should successfully update an existing Installment', function() {
+        var deferred = $q.defer();
+        spyOn(NotificationService, 'notify');
+        spyOn($rootScope, '$broadcast').and.callThrough();
+        spyOn(InstallmentService, 'update').and.returnValue(deferred.promise);
+
+        $scope.saveInstallment(true);
+        deferred.resolve();
+        $scope.$digest();
+
+        expect($scope.installment.buyDetailId).toEqual(1);
+        expect(InstallmentService.update).toHaveBeenCalledWith({
+          landId: 1,
+          buyDetailId: 1,
+        }, $scope.installment, $scope.selectedMonth.key, $scope.selectedYear);
+        expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+        expect($rootScope.$broadcast).toHaveBeenCalledWith('loadInstallments');
+        expect(NotificationService.notify).toHaveBeenCalledWith({
+          type: 'success',
+          msg: 'Installment updated'
+        });
+      });
+
+      it('should fail to create a new Installment', function() {
+        var deferred = $q.defer();
+        spyOn(NotificationService, 'notify');
+        spyOn($rootScope, '$broadcast').and.callThrough();
+        spyOn(InstallmentService, 'update').and.returnValue(deferred.promise);
+
+        $scope.saveInstallment(true);
+        deferred.reject();
+        $scope.$digest();
+
+        expect($scope.installment.buyDetailId).toEqual(1);
+        expect(InstallmentService.update).toHaveBeenCalledWith({
+          landId: 1,
+          buyDetailId: 1,
+        }, $scope.installment, $scope.selectedMonth.key, $scope.selectedYear);
+        expect($modalInstance.dismiss).not.toHaveBeenCalledWith('cancel');
+        expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadInstallments');
+        expect(NotificationService.notify).toHaveBeenCalledWith({
+          type: 'error',
+          msg: 'Unable to update existing Installment'
+        });
+      });
+
     });
 
   });
