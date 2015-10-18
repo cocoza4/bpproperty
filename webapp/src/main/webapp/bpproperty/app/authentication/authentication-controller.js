@@ -6,12 +6,18 @@
 
     .module('authentication', ['authentication-service'])
 
-  .controller('SessionExpiredModalCtrl', ['$scope', '$interval', '$location', '$modalInstance',
-    function($scope, $interval, $location, $modalInstance) {
+  .controller('SessionExpiredModalCtrl', ['$scope', '$interval', '$location', '$modalInstance', 'AuthenticationService',
+    function($scope, $interval, $location, $modalInstance, AuthenticationService) {
 
       $scope.stayLogggedIn = function() {
         $interval.cancel(timer);
         $modalInstance.dismiss('cancel');
+        AuthenticationService.heartbeat(function(response) {
+          if (!response.success) {
+            alert('Unable to stay logged in');
+            $location.path('/logout');
+          }
+        })
       };
 
       var timer = $interval(function() {

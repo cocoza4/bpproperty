@@ -9,6 +9,20 @@
   .service('AuthenticationService', ['$rootScope', '$cookies', '$http', 'Authentication',
     function($rootScope, $cookies, $http, Authentication) {
 
+      this.heartbeat = function(callback) {
+        $http.get('heartbeat')
+          .success(function(data) {
+            callback({
+              success: true
+            });
+          })
+          .error(function(error) {
+            callback({
+              success: false
+            });
+          });
+      };
+
       this.logout = function(callback) {
         $http.post('logout', {}).success(function() {
           callback();

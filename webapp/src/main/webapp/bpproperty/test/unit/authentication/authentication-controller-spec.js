@@ -34,6 +34,7 @@ describe('Authentication', function() {
         $interval: $interval,
         $location: $location,
         $modalInstance: $modalInstance,
+        AuthenticationService: AuthenticationService
       });
       $scope.$digest();
     }));
@@ -53,10 +54,12 @@ describe('Authentication', function() {
     });
 
     it('validate $scope.stayLogggedIn()', function() {
+      spyOn(AuthenticationService, 'heartbeat');
       spyOn($interval, 'cancel');
       $scope.stayLogggedIn();
       expect($interval.cancel).toHaveBeenCalled();
       expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+      expect(AuthenticationService.heartbeat).toHaveBeenCalled();
     });
 
     it('validate $interval - final', function() {
@@ -66,6 +69,7 @@ describe('Authentication', function() {
         $interval: $interval,
         $location: $location,
         $modalInstance: $modalInstance,
+        AuthenticationService: AuthenticationService
       });
 
       $interval.flush(60000);
