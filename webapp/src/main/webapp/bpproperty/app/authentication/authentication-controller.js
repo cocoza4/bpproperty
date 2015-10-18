@@ -17,11 +17,11 @@
             alert('Unable to stay logged in');
             $location.path('/logout');
           }
-        })
+        });
       };
 
       var timer = $interval(function() {
-        if ($scope.counter == 0) {
+        if ($scope.counter === 0) {
           $location.path('/logout');
         } else {
           $scope.counter--;
@@ -41,7 +41,7 @@
       var baseUrl = $location.absUrl().split('#')[0];
       baseUrl = baseUrl.replace('login', '') + '#/lands';
       $window.location.href = baseUrl;
-    }
+    };
 
     this.callback = function(response) {
       if (response.success) {
@@ -50,7 +50,7 @@
       } else {
         $scope.error = response.message;
       }
-    }
+    };
 
     $scope.login = function() {
       AuthenticationService.login($scope.username, $scope.password, self.callback);

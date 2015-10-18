@@ -14,6 +14,7 @@
        <mvc:annotation-driven />
 
        <mvc:resources mapping="/**/bower_components/**" location="/bpproperty/"/>
+       <mvc:resources mapping="/**/build/**" location="/bpproperty/"/>
        <mvc:resources mapping="/**" location="/bpproperty/app/"/>
 
        <mvc:interceptors>

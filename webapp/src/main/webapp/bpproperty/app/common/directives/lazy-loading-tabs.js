@@ -8,7 +8,7 @@
         restrict: 'E',
         replace: true,
         transclude: true,
-        controller: function($scope) {
+        controller: ['$scope', function($scope) {
           $scope.templateUrl = '';
           var tabs = $scope.tabs = [];
           var controller = this;
@@ -30,7 +30,7 @@
             }
             tabs.push(tab);
           };
-        },
+        }],
         template: '<div class="row-fluid">' +
           '<div class="row-fluid">' +
           '<div class="nav nav-tabs" ng-transclude></div>' +

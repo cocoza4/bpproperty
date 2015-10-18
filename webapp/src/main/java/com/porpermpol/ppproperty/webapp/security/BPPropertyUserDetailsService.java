@@ -23,9 +23,7 @@ public class BPPropertyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        System.out.println("input username: " + username);
         UserLogin userLogin = userLoginDAO.findByUsername(username);
-        System.out.println("username: " + userLogin);
 
         if (userLogin == null) {
             throw new UsernameNotFoundException("can't found username:" + username);

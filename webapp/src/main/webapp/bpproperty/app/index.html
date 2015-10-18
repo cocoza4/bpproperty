@@ -6,19 +6,11 @@
 <title>BP Property</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- <link rel="stylesheet" href="bower_components/html5-boilerplate/src/css/normalize.css"> -->
-<!--<link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">-->
+
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="stylesheet" href="bower_components/html5-boilerplate/src/css/main.css">
-
-
-<link rel="stylesheet" href="app.css">
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-
-<!-- <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css"> -->
-
-<!--<script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>-->
-<script src="bower_components/html5-boilerplate/src/js/vendor/modernizr-2.8.3.min.js"></script>
+<link rel="stylesheet" href="app.css">
 
 </head>
 
@@ -53,8 +45,8 @@
         <ul class="breadcrumb">
           <li ng-repeat="breadcrumb in breadcrumbs.getAll()">
             <ng-switch on="$last">
-              <span ng-switch-when="true" ng-cloak>{{breadcrumb.name}}</span>
-              <span ng-switch-default><a ng-cloak href="#/{{breadcrumb.path}}">{{breadcrumb.name}}</a>&nbsp;&nbsp;&nbsp;</span>
+              <span ng-switch-when="true" ng-cloak>{{ breadcrumb.name }}</span>
+              <span ng-switch-default><a ng-cloak href="#/{{breadcrumb.path}}">{{ breadcrumb.name }}</a>&nbsp;&nbsp;&nbsp;</span>
             </ng-switch>
           </li>
         </ul>
@@ -82,15 +74,11 @@
   <script src="bower_components/angular-resource/angular-resource.min.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
-
   <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-
   <script src="i18n/angular-locale_th.js"></script>
 
   <script src="common/interceptors/spinner.js"></script>
-
   <script src="common/filters/buy-type.js"></script>
-
   <script src="common/directives/loader.js"></script>
   <script src="common/directives/lazy-loading-tabs.js"></script>
   <script src="common/directives/decimal-number.js"></script>
@@ -98,23 +86,21 @@
   <script src="common/directives/pagination/pagination.js"></script>
   <script src="common/jquery.bootstrap-growl.min.js"></script>
   <script src="common/notification.js"></script>
-
-  <script src="components/services/breadcrumbs.js"></script>
+  <script src="common/breadcrumbs.js"></script>
 
   <script src="authentication/authentication-service.js"></script>
   <script src="authentication/authentication-controller.js"></script>
-
   <script src="customer/customer-service.js"></script>
+  <script src="customer/customer-controller.js"></script>
   <script src="property/land-service.js"></script>
   <script src="property/land-buy-service.js"></script>
-
   <script src="property/land-controller.js"></script>
   <script src="property/land-installment-controller.js"></script>
   <script src="property/land-buy-controller.js"></script>
   <script src="property/land-installment-service.js"></script>
-
-  <script src="customer/customer-controller.js"></script>
   <script src="app.js"></script>
+
+  <!--<script src="build/bpproperty-app.min.js"></script>-->
 
 </body>
 

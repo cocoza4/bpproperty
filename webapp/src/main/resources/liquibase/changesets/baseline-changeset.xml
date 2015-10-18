@@ -15,385 +15,385 @@
             <column name="created_time" valueDate="${now}"/>
         </insert>
 
-        <!--&lt;!&ndash; init Customer &ndash;&gt;-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname1"/>-->
-            <!--<column name="LASTNAME" value="lastname1"/>-->
-            <!--<column name="ADDRESS" value="address1"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname2"/>-->
-            <!--<column name="LASTNAME" value="lastname2"/>-->
-            <!--<column name="ADDRESS" value="address2"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname3"/>-->
-            <!--<column name="LASTNAME" value="lastname3"/>-->
-            <!--<column name="ADDRESS" value="address3"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname4"/>-->
-            <!--<column name="LASTNAME" value="lastname4"/>-->
-            <!--<column name="ADDRESS" value="address4"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname5"/>-->
-            <!--<column name="LASTNAME" value="lastname5"/>-->
-            <!--<column name="ADDRESS" value="address5"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname6"/>-->
-            <!--<column name="LASTNAME" value="lastname6"/>-->
-            <!--<column name="ADDRESS" value="address6"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname7"/>-->
-            <!--<column name="LASTNAME" value="lastname7"/>-->
-            <!--<column name="ADDRESS" value="address7"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname8"/>-->
-            <!--<column name="LASTNAME" value="lastname8"/>-->
-            <!--<column name="ADDRESS" value="address8"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname9"/>-->
-            <!--<column name="LASTNAME" value="lastname9"/>-->
-            <!--<column name="ADDRESS" value="address9"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname10"/>-->
-            <!--<column name="LASTNAME" value="lastname10"/>-->
-            <!--<column name="ADDRESS" value="address10"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname11"/>-->
-            <!--<column name="LASTNAME" value="lastname11"/>-->
-            <!--<column name="ADDRESS" value="address11"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname12"/>-->
-            <!--<column name="LASTNAME" value="lastname12"/>-->
-            <!--<column name="ADDRESS" value="address12"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname13"/>-->
-            <!--<column name="LASTNAME" value="lastname13"/>-->
-            <!--<column name="ADDRESS" value="address13"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname14"/>-->
-            <!--<column name="LASTNAME" value="lastname14"/>-->
-            <!--<column name="ADDRESS" value="address14"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname15"/>-->
-            <!--<column name="LASTNAME" value="lastname15"/>-->
-            <!--<column name="ADDRESS" value="address15"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname16"/>-->
-            <!--<column name="LASTNAME" value="lastname16"/>-->
-            <!--<column name="ADDRESS" value="address16"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname17"/>-->
-            <!--<column name="LASTNAME" value="lastname17"/>-->
-            <!--<column name="ADDRESS" value="address17"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname18"/>-->
-            <!--<column name="LASTNAME" value="lastname18"/>-->
-            <!--<column name="ADDRESS" value="address18"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname19"/>-->
-            <!--<column name="LASTNAME" value="lastname19"/>-->
-            <!--<column name="ADDRESS" value="address19"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname20"/>-->
-            <!--<column name="LASTNAME" value="lastname20"/>-->
-            <!--<column name="ADDRESS" value="address20"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname21"/>-->
-            <!--<column name="LASTNAME" value="lastname21"/>-->
-            <!--<column name="ADDRESS" value="address21"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname22"/>-->
-            <!--<column name="LASTNAME" value="lastname22"/>-->
-            <!--<column name="ADDRESS" value="address22"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname23"/>-->
-            <!--<column name="LASTNAME" value="lastname23"/>-->
-            <!--<column name="ADDRESS" value="address23"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname24"/>-->
-            <!--<column name="LASTNAME" value="lastname24"/>-->
-            <!--<column name="ADDRESS" value="address24"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname25"/>-->
-            <!--<column name="LASTNAME" value="lastname25"/>-->
-            <!--<column name="ADDRESS" value="address25"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname26"/>-->
-            <!--<column name="LASTNAME" value="lastname26"/>-->
-            <!--<column name="ADDRESS" value="address26"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname27"/>-->
-            <!--<column name="LASTNAME" value="lastname27"/>-->
-            <!--<column name="ADDRESS" value="address27"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname28"/>-->
-            <!--<column name="LASTNAME" value="lastname28"/>-->
-            <!--<column name="ADDRESS" value="address28"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname29"/>-->
-            <!--<column name="LASTNAME" value="lastname29"/>-->
-            <!--<column name="ADDRESS" value="address29"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname30"/>-->
-            <!--<column name="LASTNAME" value="lastname30"/>-->
-            <!--<column name="ADDRESS" value="address30"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="CUSTOMER">-->
-            <!--<column name="FIRSTNAME" value="firstname31"/>-->
-            <!--<column name="LASTNAME" value="lastname31"/>-->
-            <!--<column name="ADDRESS" value="address31"/>-->
-            <!--<column name="TEL" value="074-360999"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
+        <!-- init Customer -->
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname1"/>
+            <column name="LASTNAME" value="lastname1"/>
+            <column name="ADDRESS" value="address1"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname2"/>
+            <column name="LASTNAME" value="lastname2"/>
+            <column name="ADDRESS" value="address2"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname3"/>
+            <column name="LASTNAME" value="lastname3"/>
+            <column name="ADDRESS" value="address3"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname4"/>
+            <column name="LASTNAME" value="lastname4"/>
+            <column name="ADDRESS" value="address4"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname5"/>
+            <column name="LASTNAME" value="lastname5"/>
+            <column name="ADDRESS" value="address5"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname6"/>
+            <column name="LASTNAME" value="lastname6"/>
+            <column name="ADDRESS" value="address6"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname7"/>
+            <column name="LASTNAME" value="lastname7"/>
+            <column name="ADDRESS" value="address7"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname8"/>
+            <column name="LASTNAME" value="lastname8"/>
+            <column name="ADDRESS" value="address8"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname9"/>
+            <column name="LASTNAME" value="lastname9"/>
+            <column name="ADDRESS" value="address9"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname10"/>
+            <column name="LASTNAME" value="lastname10"/>
+            <column name="ADDRESS" value="address10"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname11"/>
+            <column name="LASTNAME" value="lastname11"/>
+            <column name="ADDRESS" value="address11"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname12"/>
+            <column name="LASTNAME" value="lastname12"/>
+            <column name="ADDRESS" value="address12"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname13"/>
+            <column name="LASTNAME" value="lastname13"/>
+            <column name="ADDRESS" value="address13"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname14"/>
+            <column name="LASTNAME" value="lastname14"/>
+            <column name="ADDRESS" value="address14"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname15"/>
+            <column name="LASTNAME" value="lastname15"/>
+            <column name="ADDRESS" value="address15"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname16"/>
+            <column name="LASTNAME" value="lastname16"/>
+            <column name="ADDRESS" value="address16"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname17"/>
+            <column name="LASTNAME" value="lastname17"/>
+            <column name="ADDRESS" value="address17"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname18"/>
+            <column name="LASTNAME" value="lastname18"/>
+            <column name="ADDRESS" value="address18"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname19"/>
+            <column name="LASTNAME" value="lastname19"/>
+            <column name="ADDRESS" value="address19"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname20"/>
+            <column name="LASTNAME" value="lastname20"/>
+            <column name="ADDRESS" value="address20"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname21"/>
+            <column name="LASTNAME" value="lastname21"/>
+            <column name="ADDRESS" value="address21"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname22"/>
+            <column name="LASTNAME" value="lastname22"/>
+            <column name="ADDRESS" value="address22"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname23"/>
+            <column name="LASTNAME" value="lastname23"/>
+            <column name="ADDRESS" value="address23"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname24"/>
+            <column name="LASTNAME" value="lastname24"/>
+            <column name="ADDRESS" value="address24"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname25"/>
+            <column name="LASTNAME" value="lastname25"/>
+            <column name="ADDRESS" value="address25"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname26"/>
+            <column name="LASTNAME" value="lastname26"/>
+            <column name="ADDRESS" value="address26"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname27"/>
+            <column name="LASTNAME" value="lastname27"/>
+            <column name="ADDRESS" value="address27"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname28"/>
+            <column name="LASTNAME" value="lastname28"/>
+            <column name="ADDRESS" value="address28"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname29"/>
+            <column name="LASTNAME" value="lastname29"/>
+            <column name="ADDRESS" value="address29"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname30"/>
+            <column name="LASTNAME" value="lastname30"/>
+            <column name="ADDRESS" value="address30"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="CUSTOMER">
+            <column name="FIRSTNAME" value="firstname31"/>
+            <column name="LASTNAME" value="lastname31"/>
+            <column name="ADDRESS" value="address31"/>
+            <column name="TEL" value="074-360999"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
 
-        <!--&lt;!&ndash; init Property &ndash;&gt;-->
-        <!--<insert tableName="LAND">-->
-            <!--<column name="NAME" value="Por Permpol"/>-->
-            <!--<column name="ADDRESS" value="address1"/>-->
-            <!--<column name="DESCRIPTION" value="description"/>-->
-            <!--<column name="RAI" value="100"/>-->
-            <!--<column name="YARN" value="5"/>-->
-            <!--<column name="TARANGWA" value="10"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="LAND">-->
-            <!--<column name="NAME" value="property 2"/>-->
-            <!--<column name="ADDRESS" value="address2"/>-->
-            <!--<column name="DESCRIPTION" value="description"/>-->
-            <!--<column name="RAI" value="100"/>-->
-            <!--<column name="YARN" value="5"/>-->
-            <!--<column name="TARANGWA" value="10"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="LAND">-->
-            <!--<column name="NAME" value="property 3"/>-->
-            <!--<column name="ADDRESS" value="address3"/>-->
-            <!--<column name="DESCRIPTION" value="description"/>-->
-            <!--<column name="RAI" value="100"/>-->
-            <!--<column name="YARN" value="5"/>-->
-            <!--<column name="TARANGWA" value="10"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="LAND">-->
-            <!--<column name="NAME" value="property 4"/>-->
-            <!--<column name="ADDRESS" value="address4"/>-->
-            <!--<column name="DESCRIPTION" value="description"/>-->
-            <!--<column name="RAI" value="100"/>-->
-            <!--<column name="YARN" value="5"/>-->
-            <!--<column name="TARANGWA" value="10"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
+        <!-- init Property -->
+        <insert tableName="LAND">
+            <column name="NAME" value="Por Permpol"/>
+            <column name="ADDRESS" value="address1"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="RAI" value="100"/>
+            <column name="YARN" value="5"/>
+            <column name="TARANGWA" value="10"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="LAND">
+            <column name="NAME" value="property 2"/>
+            <column name="ADDRESS" value="address2"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="RAI" value="100"/>
+            <column name="YARN" value="5"/>
+            <column name="TARANGWA" value="10"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="LAND">
+            <column name="NAME" value="property 3"/>
+            <column name="ADDRESS" value="address3"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="RAI" value="100"/>
+            <column name="YARN" value="5"/>
+            <column name="TARANGWA" value="10"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="LAND">
+            <column name="NAME" value="property 4"/>
+            <column name="ADDRESS" value="address4"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="RAI" value="100"/>
+            <column name="YARN" value="5"/>
+            <column name="TARANGWA" value="10"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
 
-        <!--&lt;!&ndash; init LandBuyDetail &ndash;&gt;-->
-        <!--<insert tableName="LAND_BUY_DETAIL">-->
-            <!--<column name="LAND_ID" valueComputed="(SELECT ID FROM LAND WHERE NAME = 'Por Permpol')"/>-->
-            <!--<column name="CUSTOMER_ID" valueComputed="(SELECT ID FROM CUSTOMER WHERE FIRSTNAME = 'firstname1')"/>-->
-            <!--<column name="BUY_TYPE" value="I"/>-->
-            <!--<column name="DOWN_PAYMENT" value="100.55"/>-->
-            <!--<column name="BUY_PRICE" value="100.1"/>-->
-            <!--<column name="ANNUAL_INTEREST" value="15"/>-->
-            <!--<column name="YEARS_OF_INSTALLMENT" value="5"/>-->
-            <!--<column name="RAI" value="10"/>-->
-            <!--<column name="YARN" value="5"/>-->
-            <!--<column name="TARANGWA" value="10"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="LAND_BUY_DETAIL">-->
-            <!--<column name="LAND_ID" valueComputed="(SELECT ID FROM LAND WHERE NAME = 'Por Permpol')"/>-->
-            <!--<column name="CUSTOMER_ID" valueComputed="(SELECT ID FROM CUSTOMER WHERE FIRSTNAME = 'firstname2')"/>-->
-            <!--<column name="BUY_TYPE" value="C"/>-->
-            <!--<column name="DOWN_PAYMENT" value="100.55"/>-->
-            <!--<column name="BUY_PRICE" value="10.8"/>-->
-            <!--<column name="ANNUAL_INTEREST" value="10"/>-->
-            <!--<column name="YEARS_OF_INSTALLMENT" value="3"/>-->
-            <!--<column name="RAI" value="5"/>-->
-            <!--<column name="YARN" value="5"/>-->
-            <!--<column name="TARANGWA" value="10"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" valueDate="${now}"/>-->
-        <!--</insert>-->
+        <!-- init LandBuyDetail -->
+        <insert tableName="LAND_BUY_DETAIL">
+            <column name="LAND_ID" valueComputed="(SELECT ID FROM LAND WHERE NAME = 'Por Permpol')"/>
+            <column name="CUSTOMER_ID" valueComputed="(SELECT ID FROM CUSTOMER WHERE FIRSTNAME = 'firstname1')"/>
+            <column name="BUY_TYPE" value="I"/>
+            <column name="DOWN_PAYMENT" value="100.55"/>
+            <column name="BUY_PRICE" value="100.1"/>
+            <column name="ANNUAL_INTEREST" value="15"/>
+            <column name="YEARS_OF_INSTALLMENT" value="5"/>
+            <column name="RAI" value="10"/>
+            <column name="YARN" value="5"/>
+            <column name="TARANGWA" value="10"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
+        <insert tableName="LAND_BUY_DETAIL">
+            <column name="LAND_ID" valueComputed="(SELECT ID FROM LAND WHERE NAME = 'Por Permpol')"/>
+            <column name="CUSTOMER_ID" valueComputed="(SELECT ID FROM CUSTOMER WHERE FIRSTNAME = 'firstname2')"/>
+            <column name="BUY_TYPE" value="C"/>
+            <column name="DOWN_PAYMENT" value="100.55"/>
+            <column name="BUY_PRICE" value="10.8"/>
+            <column name="ANNUAL_INTEREST" value="10"/>
+            <column name="YEARS_OF_INSTALLMENT" value="3"/>
+            <column name="RAI" value="5"/>
+            <column name="YARN" value="5"/>
+            <column name="TARANGWA" value="10"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" valueDate="${now}"/>
+        </insert>
 
-        <!--&lt;!&ndash; init INSTALLMENT &ndash;&gt;-->
-        <!--<insert tableName="INSTALLMENT">-->
-            <!--<column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>-->
-            <!--<column name="PAY_FOR" value="1422631659000"/>-->
-            <!--<column name="AMOUNT" value="6000"/>-->
-            <!--<column name="DESCRIPTION" value="description"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" value="1422631659000"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="INSTALLMENT">-->
-            <!--<column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>-->
-            <!--<column name="PAY_FOR" value="1425310059000"/>-->
-            <!--<column name="AMOUNT" value="6000"/>-->
-            <!--<column name="DESCRIPTION" value="description"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" value="1425310059000"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="INSTALLMENT">-->
-            <!--<column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>-->
-            <!--<column name="PAY_FOR" value="1427729259000"/>-->
-            <!--<column name="AMOUNT" value="6000"/>-->
-            <!--<column name="DESCRIPTION" value="description"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" value="1427729259000"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="INSTALLMENT">-->
-            <!--<column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>-->
-            <!--<column name="PAY_FOR" value="1430407659000"/>-->
-            <!--<column name="AMOUNT" value="6000"/>-->
-            <!--<column name="DESCRIPTION" value="description"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" value="1430407659000"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="INSTALLMENT">-->
-            <!--<column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>-->
-            <!--<column name="PAY_FOR" value="1432999659000"/>-->
-            <!--<column name="AMOUNT" value="6000"/>-->
-            <!--<column name="DESCRIPTION" value="description"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" value="1432999659000"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="INSTALLMENT">-->
-            <!--<column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>-->
-            <!--<column name="PAY_FOR" value="1419953259000"/>-->
-            <!--<column name="AMOUNT" value="6000"/>-->
-            <!--<column name="DESCRIPTION" value="description"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" value="1419953259000"/>-->
-        <!--</insert>-->
-        <!--<insert tableName="INSTALLMENT">-->
-            <!--<column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>-->
-            <!--<column name="PAY_FOR" valueComputed="1417361259000"/>-->
-            <!--<column name="AMOUNT" value="6000"/>-->
-            <!--<column name="DESCRIPTION" value="description"/>-->
-            <!--<column name="CREATED_BY" valueNumeric="0" />-->
-            <!--<column name="CREATED_TIME" value="1417361259000"/>-->
-        <!--</insert>-->
+        <!-- init INSTALLMENT -->
+        <insert tableName="INSTALLMENT">
+            <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
+            <column name="PAY_FOR" value="1422631659000"/>
+            <column name="AMOUNT" value="6000"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" value="1422631659000"/>
+        </insert>
+        <insert tableName="INSTALLMENT">
+            <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
+            <column name="PAY_FOR" value="1425310059000"/>
+            <column name="AMOUNT" value="6000"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" value="1425310059000"/>
+        </insert>
+        <insert tableName="INSTALLMENT">
+            <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
+            <column name="PAY_FOR" value="1427729259000"/>
+            <column name="AMOUNT" value="6000"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" value="1427729259000"/>
+        </insert>
+        <insert tableName="INSTALLMENT">
+            <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
+            <column name="PAY_FOR" value="1430407659000"/>
+            <column name="AMOUNT" value="6000"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" value="1430407659000"/>
+        </insert>
+        <insert tableName="INSTALLMENT">
+            <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
+            <column name="PAY_FOR" value="1432999659000"/>
+            <column name="AMOUNT" value="6000"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" value="1432999659000"/>
+        </insert>
+        <insert tableName="INSTALLMENT">
+            <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
+            <column name="PAY_FOR" value="1419953259000"/>
+            <column name="AMOUNT" value="6000"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" value="1419953259000"/>
+        </insert>
+        <insert tableName="INSTALLMENT">
+            <column name="BUY_DETAIL_ID" valueComputed="(SELECT ID FROM LAND_BUY_DETAIL WHERE BUY_TYPE = 'I')"/>
+            <column name="PAY_FOR" valueComputed="1417361259000"/>
+            <column name="AMOUNT" value="6000"/>
+            <column name="DESCRIPTION" value="description"/>
+            <column name="CREATED_BY" valueNumeric="0" />
+            <column name="CREATED_TIME" value="1417361259000"/>
+        </insert>
 
     </changeSet>
 

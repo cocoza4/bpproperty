@@ -4,7 +4,7 @@
 
   angular.module('my-loader', [])
 
-  .directive("myLoader", function($rootScope) {
+  .directive("myLoader", function() {
     return function($scope, element, attrs) {
       $scope.$on("loader_show", function() {
         return element.show();
@@ -13,6 +13,6 @@
         return element.hide();
       });
     };
-  })
+  });
 
 })();
