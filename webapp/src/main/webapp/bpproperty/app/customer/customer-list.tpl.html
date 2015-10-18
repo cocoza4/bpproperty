@@ -53,6 +53,11 @@
             <td>{{customer.tel}}</td>
             <td>{{customer.createdTime | date:"MMMM d, yyyy ' เวลา ' h:mm a"}}</td>
           </tr>
+          <tr ng-show="!customers.length">
+            <td colspan="6">
+              No data found
+            </td>
+          </tr>
         </tbody>
       </table>
 
