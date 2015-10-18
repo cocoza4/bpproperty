@@ -23,6 +23,22 @@
 
 <body ng-controller="appCtrl">
 
+  <!-- Session Expired Modal-->
+  <script id="sessionExpiredModal.html" type="text/ng-template">
+    <div class="modal-header">
+      <h4 class="modal-title"><i class="warning glyphicon glyphicon-alert"></i> Sessioin expired</h4>
+    </div>
+    <div class="modal-body">
+      <p>Your session has expired. You will be logged out in
+      <strong class="text-info">{{counter}}</strong> seconds</p>
+
+      <p>Do you want to stay logged in?</p>
+    </div>
+    <div class="modal-footer">
+      <a class="btn btn-primary btn-ok btn-sm" href ng-click="stayLogggedIn()">Stay logged in</a>
+    </div>
+  </script>
+
   <div id="loaderDiv" my-loader ng-cloak>
     <img ng-src="common/interceptors/spinner.gif" class="ajax-loader" width="100" height="100"/>
   </div>

@@ -39,10 +39,8 @@ public class LandRestController {
     @Autowired
     private ILandBuyService landBuyService;
 
-    // unable to perform init binder using @RequestBody
     @InitBinder("installment")
     public void initBinder(WebDataBinder binder) {
-//        binder.registerCustomEditor(BuyType.class, new BuyTypePropertyEditor());
         binder.registerCustomEditor(Date.class, "payFor", new CustomDateEditor(
                 new SimpleDateFormat("dd/MM/yyyy"), false));
     }

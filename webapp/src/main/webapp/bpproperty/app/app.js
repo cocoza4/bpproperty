@@ -74,21 +74,37 @@
 
   }])
 
-  .run(['$rootScope', '$location', '$cookies', '$http', function($rootScope, $location, $cookies, $http) {
-    // keep user logged in after page refresh
-    $rootScope.globals = $cookies.getObject('globals') || {};
+  .run(['$rootScope', '$location', '$cookies', '$interval', '$uibModal',
+    function($rootScope, $location, $cookies, $interval, $uibModal) {
 
-    // if ($rootScope.globals.currentUser) {
-    //   $http.defaults.headers.common.Authorization = 'Basic ' + $rootScope.globals.currentUser.authdata;
-    // }
+      // keep user logged in after page refresh
+      $rootScope.globals = $cookies.getObject('globals') || {};
 
-    $rootScope.$on('$locationChangeStart', function(event, next, current) {
-      // redirect to login page if not logged in
-      var loggedIn = $rootScope.globals.currentUser;
-      if ($location.path() !== '/login' && !loggedIn) {
-        $location.path('/login');
-      }
-    });
-  }]);
+      var lastDigestRun = new Date();
+      setInterval(function() { // detect inactivity
+        var now = new Date();
+        if (now - lastDigestRun >= 30 * 60 * 1000) { // 30 mins
+          $uibModal.open({
+            animation: true,
+            templateUrl: 'sessionExpiredModal.html',
+            controller: 'SessionExpiredModalCtrl',
+          });
+        }
+
+      }, 1 * 60 * 1000); // check every minute
+
+      $rootScope.$watch(function() {
+        lastDigestRun = new Date();
+      });
+
+      $rootScope.$on('$locationChangeStart', function(event, next, current) {
+        // redirect to login page if not logged in
+        var loggedIn = $rootScope.globals.currentUser;
+        if ($location.path() !== '/login' && !loggedIn) {
+          $location.path('/login');
+        }
+      });
+    }
+  ]);
 
 })();

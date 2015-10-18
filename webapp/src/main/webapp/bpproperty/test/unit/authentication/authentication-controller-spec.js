@@ -22,6 +22,60 @@ describe('Authentication', function() {
 
   }));
 
+  describe('SessionExpiredModalCtrl', function() {
+
+    beforeEach(inject(function($injector, _$interval_) {
+
+      $modalInstance = jasmine.createSpyObj('$modalInstance', ['close', 'dismiss']);
+      $interval = jasmine.createSpy('$interval', _$interval_).and.callThrough();
+
+      SessionExpiredModalCtrl = $controller('SessionExpiredModalCtrl', {
+        $scope: $scope,
+        $interval: $interval,
+        $location: $location,
+        $modalInstance: $modalInstance,
+      });
+      $scope.$digest();
+    }));
+
+    it('init', function() {
+      expect($scope.counter).toEqual(60);
+    });
+
+    it('validate $interval', function() {
+      $interval.flush(1000);
+      expect($scope.counter).toEqual(59);
+    });
+
+    it('validate $interval - more than 60s elapsed', function() {
+      $interval.flush(65000);
+      expect($scope.counter).toEqual(0);
+    });
+
+    it('validate $scope.stayLogggedIn()', function() {
+      spyOn($interval, 'cancel');
+      $scope.stayLogggedIn();
+      expect($interval.cancel).toHaveBeenCalled();
+      expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+    });
+
+    it('validate $interval - final', function() {
+      spyOn($location, 'path');
+      SessionExpiredModalCtrl = $controller('SessionExpiredModalCtrl', {
+        $scope: $scope,
+        $interval: $interval,
+        $location: $location,
+        $modalInstance: $modalInstance,
+      });
+
+      $interval.flush(60000);
+      $scope.$digest();
+      expect($scope.counter).toEqual(0);
+      expect($location.path).toHaveBeenCalledWith('/logout');
+    });
+
+  });
+
   describe('LogoutCtrl', function() {
 
     it('should logout', function() {
