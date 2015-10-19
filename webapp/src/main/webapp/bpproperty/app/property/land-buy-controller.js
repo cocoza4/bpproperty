@@ -1,3 +1,4 @@
+/*jshint -W069 */
 (function() {
 
   'use strict';
@@ -26,7 +27,7 @@
         var promises = {
           land: land,
           landBuyDetail: landBuyDetail
-        }
+        };
         return $q.all(promises);
 
       }
@@ -66,7 +67,7 @@
                 buyDetail: buyDetails.buyDetail,
                 land: buyDetails.land,
                 customer: response
-              }
+              };
             });
           };
         return loadBuyDetail().then(loadCustomer);
@@ -163,7 +164,7 @@
           return false;
         }
         return true;
-      }
+      };
 
       this.redirectToBuyDetailPage = function() {
         var url = '/lands/' + $route.current.params['landId'] + '/buydetails/' + $scope.buyDetail.id;
@@ -174,7 +175,7 @@
 
         if (isValid && self.validateBuyDetail()) {
 
-          var isNew = $scope.buyDetail.id == null;
+          var isNew = !$scope.buyDetail.id;
 
           if (isNew) {
             $scope.buyDetail.customerId = $scope.customer.id;
@@ -259,7 +260,7 @@
       this.updateScope = function(data) {
         $scope.customers = data.content;
         $scope.totalRecords = data.totalRecords;
-        if ($scope.totalRecords == 0) {
+        if ($scope.totalRecords === 0) {
           $scope.startIndex = 0;
           $scope.endIndex = 0;
         } else {
@@ -367,7 +368,7 @@
         if (data.landBuyDetail) {
           $scope.landBuys = data.landBuyDetail.content;
           $scope.totalRecords = data.landBuyDetail.totalRecords;
-          if ($scope.totalRecords == 0) {
+          if ($scope.totalRecords === 0) {
             $scope.startIndex = 0;
             $scope.endIndex = 0;
           } else {

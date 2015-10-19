@@ -1,3 +1,4 @@
+/*jshint -W069 */
 (function() {
 
   'use strict';
@@ -15,7 +16,7 @@
       };
       return LandService.query(criteria);
     }]
-  }
+  };
 
   angular
 
@@ -53,7 +54,7 @@
       this.redirectToLandPage = function(id) {
         var url = '/lands/' + id;
         $location.path(url);
-      }
+      };
 
       $scope.submit = function(isValid) {
         if (isValid) {
@@ -111,14 +112,14 @@
       this.updateScope = function(data) {
         $scope.lands = data.content;
         $scope.totalRecords = data.totalRecords;
-        if ($scope.totalRecords == 0) {
+        if ($scope.totalRecords === 0) {
           $scope.startIndex = 0;
           $scope.endIndex = 0;
         } else {
           $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
           $scope.endIndex = $scope.startIndex + data.totalDisplayRecords - 1;
         }
-      }
+      };
 
       var self = this;
       $scope.recordsPerPageList = [10, 25, 50, 100];

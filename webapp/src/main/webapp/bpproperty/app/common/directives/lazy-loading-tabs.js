@@ -22,10 +22,10 @@
 
           this.setTabTemplate = function(templateUrl) {
             $scope.templateUrl = templateUrl;
-          }
+          };
 
           this.addTab = function(tab) {
-            if (tabs.length == 0) {
+            if (tabs.length === 0) {
               controller.selectTab(tab);
             }
             tabs.push(tab);
@@ -55,7 +55,7 @@
 
           scope.select = function() {
             tabsetController.selectTab(scope);
-          }
+          };
 
           scope.$watch('selected', function() {
             if (scope.selected) {

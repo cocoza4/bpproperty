@@ -1,3 +1,4 @@
+/*jshint esnext: true */
 describe('customer', function() {
 
   var mockCustomer = {
@@ -194,14 +195,14 @@ describe('customer', function() {
 
     it('init', function() {
       expect($scope.recordsPerPageList).toEqual([10, 25, 50, 100]);
-      expect($scope.currentPage).toEqual(1)
-      expect($scope.recordsPerPage).toEqual(10)
+      expect($scope.currentPage).toEqual(1);
+      expect($scope.recordsPerPage).toEqual(10);
     });
 
     it('validate $scope.onRecordsPerPageChanged', function() {
       spyOn($scope, 'updateCustomerTable');
       $scope.currentPage++;
-      expect($scope.currentPage).toEqual(2)
+      expect($scope.currentPage).toEqual(2);
       $scope.onRecordsPerPageChanged();
       expect($scope.currentPage).toEqual(1);
       expect($scope.updateCustomerTable).toHaveBeenCalled();

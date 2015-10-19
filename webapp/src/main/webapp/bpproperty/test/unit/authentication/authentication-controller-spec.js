@@ -9,7 +9,7 @@ describe('Authentication', function() {
       });
     });
 
-    module('authentication')
+    module('authentication');
   });
 
   beforeEach(inject(function($injector, _$controller_) {

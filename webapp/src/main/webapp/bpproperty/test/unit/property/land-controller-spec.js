@@ -1,3 +1,4 @@
+/*jshint esnext: true */
 describe('land', function() {
 
   var mockLand = {
@@ -9,7 +10,7 @@ describe('land', function() {
       yarn: 1,
       tarangwa: 1
     }
-  }
+  };
 
   beforeEach(module('land'));
 

@@ -26,7 +26,7 @@
 
     this.delete = function(criteria, id) {
       return Installment.delete(criteria, id).$promise;
-    }
+    };
 
     this.getTotalPayment = function(installments) {
       var total = 0;

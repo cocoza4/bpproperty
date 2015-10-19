@@ -1,3 +1,4 @@
+/*jshint -W069 */
 (function() {
 
   'use strict';
@@ -123,7 +124,7 @@
           var selectedMonth = $scope.selectedMonth.key;
           var selectedYear = $scope.selectedYear;
 
-          var isNew = $scope.installment.createdTime == null;
+          var isNew = !$scope.installment.id;
 
           if (isNew) {
             InstallmentService.create(installmentCriteria, $scope.installment, selectedMonth, selectedYear).then(function(data) {
@@ -215,9 +216,9 @@
           years.push(i);
         }
         return years;
-      };
+      }
 
-      if (installment.id != null) { // update installment
+      if (installment.id) { // update installment
         var selectedDate = new Date(installment.payFor);
         var selectedYear = selectedDate.getFullYear();
         var selectedMonth = selectedDate.getMonth();

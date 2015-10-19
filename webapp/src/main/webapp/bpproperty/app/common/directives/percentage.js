@@ -14,9 +14,9 @@
         }
 
         ngModelCtrl.$parsers.push(function(val) {
-          if (angular.isUndefined(val)) {
-            var val = '';
-          }
+          // if (angular.isUndefined(val)) {
+          //   val = '';
+          // }
           var clean = val.replace(/[^0-9\.]/g, '');
 
           if (parseFloat(clean) > 100.00) {
@@ -25,7 +25,7 @@
 
           var decimalCheck = clean.split('.');
 
-          if (decimalCheck[0] == '') {
+          if (decimalCheck[0] === '') {
             decimalCheck[0] = "0";
           }
 

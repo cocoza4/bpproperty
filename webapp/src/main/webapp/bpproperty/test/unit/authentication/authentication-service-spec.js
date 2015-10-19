@@ -1,3 +1,4 @@
+/*jshint -W069 */
 describe('AuthenticationService', function() {
 
   beforeEach(module('authentication-service'));
@@ -22,7 +23,7 @@ describe('AuthenticationService', function() {
         password = 'passwd';
       var callback = function(data) {
         expect(data.success).toBeTruthy();
-      }
+      };
 
       $httpBackend.expect('GET', 'postlogin', undefined, function(headers) {
         return headers['authorization'] === "Basic " + btoa(username + ":" + password);
@@ -39,7 +40,7 @@ describe('AuthenticationService', function() {
       var callback = function(data) {
         expect(data.success).toBeTruthy();
         expect(data.message).toBeUndefined();
-      }
+      };
       Authentication.authenticate('username', 'password', callback);
 
       $httpBackend.flush();
@@ -52,7 +53,7 @@ describe('AuthenticationService', function() {
       var callback = function(data) {
         expect(data.success).toBeUndefined();
         expect(data.message).toEqual('Username or password is incorrect');
-      }
+      };
       Authentication.authenticate('username', 'password', callback);
 
       $httpBackend.flush();
@@ -75,10 +76,10 @@ describe('AuthenticationService', function() {
     }));
 
     it('should authenticate user', inject(function(Authentication) {
-      var username = 'username', password = 'passwd';
+      var username = 'username',
+        password = 'passwd';
       spyOn(Authentication, 'authenticate');
-      var callback = function(data) {
-      }
+      var callback = function(data) {};
       AuthenticationService.login(username, password, callback);
       expect(Authentication.authenticate).toHaveBeenCalledWith(username, password, callback);
     }));
@@ -95,7 +96,8 @@ describe('AuthenticationService', function() {
     }));
 
     it('should set credentials and cookies', function() {
-      var username = 'username', password = 'passwd';
+      var username = 'username',
+        password = 'passwd';
       var authdata = btoa(username + ':' + password);
       AuthenticationService.setCredentials(username, password);
 
@@ -110,7 +112,8 @@ describe('AuthenticationService', function() {
     });
 
     it('should clear credentials and cookies', function() {
-      var username = 'username', password = 'passwd';
+      var username = 'username',
+        password = 'passwd';
       var authdata = btoa(username + ':' + password);
       AuthenticationService.setCredentials(username, password);
 

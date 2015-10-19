@@ -30,7 +30,7 @@
           console.log(data);
           alert('Unable to log off');
         });
-      }
+      };
 
       this.login = function(username, password, callback) {
         Authentication.authenticate(username, password, callback);
@@ -76,7 +76,8 @@
           message: 'Username or password is incorrect'
         });
       });
-    }
+    };
+
   }]);
 
 })();

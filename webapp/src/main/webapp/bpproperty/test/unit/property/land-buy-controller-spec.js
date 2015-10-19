@@ -149,7 +149,7 @@ describe('land-buy', function() {
     it('init', function() {
       expect($scope.currentPage).toEqual(1);
       expect($scope.selected).toBeNull();
-    })
+    });
 
     it('validate loadCustomers', function() {
       var deferred = $q.defer();
@@ -327,7 +327,7 @@ describe('land-buy', function() {
       expect($scope.currentPage).toEqual(1);
       expect($scope.recordsPerPage).toEqual(10);
       expect($scope.land).toEqual(mockBuyDetailList.land);
-    })
+    });
 
     it('validate $scope.onRecordsPerPageChanged', function() {
       spyOn($scope, 'updateLandBuyTable');
@@ -619,7 +619,7 @@ describe('land-buy', function() {
 
           expect($scope.buyDetail.customerId).toEqual($scope.customer.id);
         });
-      })
+      });
 
       describe('update an existing buyDetail', function() {
 
