@@ -46,14 +46,12 @@
           }
         };
 
-        // $http.defaults.headers.common['Authorization'] = 'Basic ' + authdata; // jshint ignore:line
         $cookies.putObject('globals', $rootScope.globals);
       };
 
       this.clearCredentials = function() {
         $rootScope.globals = {};
         $cookies.remove('globals');
-        // $http.defaults.headers.common.Authorization = 'Basic ';
       };
 
     }
