@@ -9,37 +9,51 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd">
 
-       <bean id="dataSource" class="org.apache.tomcat.dbcp.dbcp2.BasicDataSource">
-              <property name="username" value="admin"/>
-              <property name="password" value="admin"/>
-              <property name="url" value="jdbc:h2:mem:test"/>
-              <property name="driverClassName" value="org.h2.Driver"/>
-       </bean>
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <value>classpath:db/datasource.properties</value>
+        </property>
+    </bean>
 
-       <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-              <constructor-arg ref="dataSource"/>
-       </bean>
+    <bean id="dataSource" class="org.apache.tomcat.dbcp.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+    </bean>
 
-       <tx:annotation-driven transaction-manager="transactionManager"/>
+    <!--<bean id="dataSource" class="org.apache.tomcat.dbcp.dbcp2.BasicDataSource">-->
+    <!--<property name="username" value="admin"/>-->
+    <!--<property name="password" value="admin"/>-->
+    <!--<property name="url" value="jdbc:h2:mem:test"/>-->
+    <!--<property name="driverClassName" value="org.h2.Driver"/>-->
+    <!--</bean>-->
 
-       <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-              <property name="dataSource" ref="dataSource"/>
-       </bean>
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <constructor-arg ref="dataSource"/>
+    </bean>
 
-       <!-- Liquibase initialization -->
-       <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
-              <property name="dataSource" ref="dataSource"/>
-              <property name="changeLog" value="classpath:liquibase/bpproperty-db-changelog.xml"/>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 
-              <property name="dropFirst" value="true" /> <!-- TODO: remove this in production code -->
-       </bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
-       <context:component-scan base-package="com.porpermpol.ppproperty.person.dao.impl" />
-       <context:component-scan base-package="com.porpermpol.ppproperty.person.service.impl" />
-       <context:component-scan base-package="com.porpermpol.ppproperty.property.dao.impl" />
-       <context:component-scan base-package="com.porpermpol.ppproperty.property.service.impl" />
-       <context:component-scan base-package="com.porpermpol.ppproperty.purchase.dao.impl" />
-       <context:component-scan base-package="com.porpermpol.ppproperty.purchase.service.impl" />
-       <context:component-scan base-package="com.porpermpol.ppproperty.security.dao.impl" />
+    <!-- Liquibase initialization -->
+    <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="changeLog" value="classpath:liquibase/bpproperty-db-changelog.xml"/>
+
+        <property name="dropFirst" value="true"/>
+        <!-- TODO: remove this in production code -->
+    </bean>
+
+    <context:component-scan base-package="com.porpermpol.ppproperty.person.dao.impl"/>
+    <context:component-scan base-package="com.porpermpol.ppproperty.person.service.impl"/>
+    <context:component-scan base-package="com.porpermpol.ppproperty.property.dao.impl"/>
+    <context:component-scan base-package="com.porpermpol.ppproperty.property.service.impl"/>
+    <context:component-scan base-package="com.porpermpol.ppproperty.purchase.dao.impl"/>
+    <context:component-scan base-package="com.porpermpol.ppproperty.purchase.service.impl"/>
+    <context:component-scan base-package="com.porpermpol.ppproperty.security.dao.impl"/>
 
 </beans>

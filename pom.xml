@@ -25,6 +25,8 @@
         <junit.version>4.12</junit.version>
         <jmockit.version>1.18</jmockit.version>
 
+        <liquibase.version>3.3.5</liquibase.version>
+
         <jackson.version>2.5.2</jackson.version>
         <nurkiewicz.jdbcrepository.version>0.4.1</nurkiewicz.jdbcrepository.version>
         <tomcat.dbcp.version>8.0.21</tomcat.dbcp.version>
@@ -34,6 +36,12 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-core</artifactId>
+                <version>${liquibase.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.apache.tomcat</groupId>
@@ -82,11 +90,6 @@
                 <version>${spring.version}</version>
                 <scope>test</scope>
             </dependency>
-            <!--<dependency>-->
-                <!--<groupId>org.springframework</groupId>-->
-                <!--<artifactId>spring-tx</artifactId>-->
-                <!--<version>${spring.version}</version>-->
-            <!--</dependency>-->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-jdbc</artifactId>
