@@ -30,6 +30,7 @@ public class CustomerDAOIT {
         customer.setLastName("lastname");
         customer.setAddress("address");
         customer.setTel("111");
+        customer.setDescription("description");
         customer.setCreatedBy(0L);
         customer.setCreatedTime(new Date());
     }
@@ -75,6 +76,7 @@ public class CustomerDAOIT {
         assertEquals(customer.getLastName(), model.getLastName());
         assertEquals(customer.getAddress(), model.getAddress());
         assertEquals(customer.getTel(), model.getTel());
+        assertEquals(customer.getDescription(), model.getDescription());
         assertEquals(customer.getCreatedBy(), model.getCreatedBy());
         assertEquals(customer.getCreatedTime(), model.getCreatedTime());
         assertEquals(customer.getUpdatedBy(), model.getUpdatedBy());

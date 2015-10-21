@@ -13,6 +13,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -63,7 +64,7 @@ public class LandRestController {
     @RequestMapping(method = RequestMethod.GET)
     public DataTableObject<Land> getAllLands(@RequestParam(value = "page", defaultValue = "0") int page,
                                             @RequestParam(value = "length", defaultValue = "10") int length) {
-        Pageable pageRequest = new PageRequest(page, length);
+        Pageable pageRequest = new PageRequest(page, length, Sort.Direction.ASC, "id");
         Page<Land> landPage = landService.findAll(pageRequest);
 
         DataTableObject<Land> dataTableObject = new DataTableObject<>(landPage.getContent(),

@@ -22,6 +22,7 @@
             </column>
             <column name="address" type="text"/>
             <column name="tel" type="varchar(20)"/>
+            <column name="description" type="text"/>
             <column name="created_by" type="bigint">
                 <constraints nullable="false"/>
             </column>

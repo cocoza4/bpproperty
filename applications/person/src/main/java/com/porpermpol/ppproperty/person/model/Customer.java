@@ -10,17 +10,19 @@ public class Customer extends PersistableModel<Long> {
     private String lastName;
     private String address;
     private String tel;
+    private String description;
 
     public Customer() {
     }
 
-    public Customer(Long id, String firstName, String lastName, String address, String tel,
+    public Customer(Long id, String firstName, String lastName, String address, String tel, String description,
                     Long createdBy, Date createdTime, Long updatedBy, Date updatedTime) {
         super(id, createdBy, createdTime, updatedBy, updatedTime);
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.tel = tel;
+        this.description = description;
     }
 
     public String getFirstName() {
@@ -53,5 +55,13 @@ public class Customer extends PersistableModel<Long> {
 
     public void setTel(String tel) {
         this.tel = tel;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

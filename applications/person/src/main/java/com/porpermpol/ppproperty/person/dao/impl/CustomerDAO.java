@@ -32,6 +32,7 @@ public class CustomerDAO extends JdbcRepository<Customer, Long> implements ICust
             customer.setLastName(rs.getString("lastname"));
             customer.setAddress(rs.getString("address"));
             customer.setTel(rs.getString("tel"));
+            customer.setDescription(rs.getString("description"));
             customer.setCreatedBy(rs.getLong("created_by"));
             customer.setCreatedTime(new Date(rs.getLong("created_time")));
             customer.setUpdatedBy(ModelUtils.getNullableLongField(rs, "updated_by"));
@@ -49,6 +50,7 @@ public class CustomerDAO extends JdbcRepository<Customer, Long> implements ICust
             mapping.put("lastname", model.getLastName());
             mapping.put("address", model.getAddress());
             mapping.put("tel", model.getTel());
+            mapping.put("description", model.getDescription());
             ModelUtils.setAuditFields(mapping, model);
             return mapping;
         }

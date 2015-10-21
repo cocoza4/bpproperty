@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,7 +46,7 @@ public class CustomerRestController {
     public DataTableObject<Customer> getAll(@RequestParam(value = "page", defaultValue = "0") int page,
                                   @RequestParam(value = "length", defaultValue = "10") int length) {
 
-        Pageable pageRequest = new PageRequest(page, length);
+        Pageable pageRequest = new PageRequest(page, length, Sort.Direction.ASC, "id");
         Page<Customer> customerPage = customerService.findAll(pageRequest);
 
         DataTableObject<Customer> dataTableObject = new DataTableObject<>(customerPage.getContent(),
