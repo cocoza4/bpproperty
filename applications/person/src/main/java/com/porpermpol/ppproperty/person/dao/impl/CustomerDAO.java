@@ -2,6 +2,7 @@ package com.porpermpol.ppproperty.person.dao.impl;
 
 import com.nurkiewicz.jdbcrepository.JdbcRepository;
 import com.nurkiewicz.jdbcrepository.RowUnmapper;
+import com.nurkiewicz.jdbcrepository.sql.PostgreSqlGenerator;
 import com.porpermpol.ppproperty.core.utils.ModelUtils;
 import com.porpermpol.ppproperty.person.dao.ICustomerDAO;
 import com.porpermpol.ppproperty.person.model.Customer;
@@ -19,6 +20,7 @@ public class CustomerDAO extends JdbcRepository<Customer, Long> implements ICust
 
     public CustomerDAO() {
         super(ROW_MAPPER, ROW_UNMAPPER, "customer", "id");
+        setSqlGenerator(new PostgreSqlGenerator());
     }
 
     public static final RowMapper<Customer> ROW_MAPPER = new RowMapper<Customer>() {

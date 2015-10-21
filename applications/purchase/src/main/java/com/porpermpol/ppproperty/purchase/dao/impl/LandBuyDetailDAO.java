@@ -2,6 +2,7 @@ package com.porpermpol.ppproperty.purchase.dao.impl;
 
 import com.nurkiewicz.jdbcrepository.JdbcRepository;
 import com.nurkiewicz.jdbcrepository.RowUnmapper;
+import com.nurkiewicz.jdbcrepository.sql.PostgreSqlGenerator;
 import com.porpermpol.ppproperty.core.utils.ModelUtils;
 import com.porpermpol.ppproperty.property.model.Area;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailDAO;
@@ -37,6 +38,7 @@ public class LandBuyDetailDAO extends JdbcRepository<LandBuyDetail, Long> implem
 
     public LandBuyDetailDAO() {
         super(ROW_MAPPER, ROW_UNMAPPER, "land_buy_detail", "id");
+        setSqlGenerator(new PostgreSqlGenerator());
     }
 
     public static final RowMapper<LandBuyDetail> ROW_MAPPER = new RowMapper<LandBuyDetail>() {

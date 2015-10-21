@@ -2,6 +2,7 @@ package com.porpermpol.ppproperty.property.dao.impl;
 
 import com.nurkiewicz.jdbcrepository.JdbcRepository;
 import com.nurkiewicz.jdbcrepository.RowUnmapper;
+import com.nurkiewicz.jdbcrepository.sql.PostgreSqlGenerator;
 import com.porpermpol.ppproperty.core.utils.ModelUtils;
 import com.porpermpol.ppproperty.property.dao.ILandDAO;
 import com.porpermpol.ppproperty.property.model.Area;
@@ -20,6 +21,7 @@ public class LandDAO extends JdbcRepository<Land, Long> implements ILandDAO {
 
     public LandDAO() {
         super(ROW_MAPPER, ROW_UNMAPPER, "land", "id");
+        setSqlGenerator(new PostgreSqlGenerator());
     }
 
     public static final RowMapper<Land> ROW_MAPPER = new RowMapper<Land>() {

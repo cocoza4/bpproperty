@@ -2,6 +2,7 @@ package com.porpermpol.ppproperty.purchase.dao.impl;
 
 import com.nurkiewicz.jdbcrepository.JdbcRepository;
 import com.nurkiewicz.jdbcrepository.RowUnmapper;
+import com.nurkiewicz.jdbcrepository.sql.PostgreSqlGenerator;
 import com.porpermpol.ppproperty.core.utils.ModelUtils;
 import com.porpermpol.ppproperty.purchase.dao.IInstallmentDAO;
 import com.porpermpol.ppproperty.purchase.model.Installment;
@@ -29,6 +30,7 @@ public class InstallmentDAO extends JdbcRepository<Installment, Long> implements
 
     public InstallmentDAO() {
         super(ROW_MAPPER, ROW_UNMAPPER, "installment", "id");
+        setSqlGenerator(new PostgreSqlGenerator());
     }
 
     public static final RowMapper<Installment> ROW_MAPPER = new RowMapper<Installment>() {
