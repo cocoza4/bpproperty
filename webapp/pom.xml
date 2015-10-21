@@ -134,6 +134,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>
+                    <warName>bpproperty</warName>
                     <packagingExcludes>
                         bpproperty/node_modules/,
                         bpproperty/test/
