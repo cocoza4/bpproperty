@@ -137,7 +137,8 @@
                     <warName>bpproperty</warName>
                     <packagingExcludes>
                         bpproperty/node_modules/,
-                        bpproperty/test/
+                        bpproperty/test/,
+                        bpproperty/app/**/*.js
                     </packagingExcludes>
                 </configuration>
             </plugin>

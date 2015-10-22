@@ -40,13 +40,12 @@
     </bean>
 
     <!-- Liquibase initialization -->
-    <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="changeLog" value="classpath:liquibase/bpproperty-db-changelog.xml"/>
+    <!--<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">-->
+        <!--<property name="dataSource" ref="dataSource"/>-->
+        <!--<property name="changeLog" value="classpath:liquibase/bpproperty-db-changelog.xml"/>-->
 
-        <property name="dropFirst" value="true"/>
-        <!-- TODO: remove this in production code -->
-    </bean>
+        <!--<property name="dropFirst" value="true"/>-->
+    <!--</bean>-->
 
     <context:component-scan base-package="com.porpermpol.ppproperty.person.dao.impl"/>
     <context:component-scan base-package="com.porpermpol.ppproperty.person.service.impl"/>
