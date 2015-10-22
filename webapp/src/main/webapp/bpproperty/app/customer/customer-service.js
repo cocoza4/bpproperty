@@ -41,7 +41,7 @@
   .factory('Customer', ['$resource', function($resource) {
 
     return $resource(
-      '/bpproperty/api/customers/:id', {
+      '/api/customers/:id', {
         id: '@id'
       }, {
         'update': {
@@ -59,7 +59,7 @@
 
   .factory('CustomerLands', ['$resource', function($resource) {
     return $resource(
-      '/bpproperty/api/customers/:id/lands', {
+      '/api/customers/:id/lands', {
         id: '@id'
       }, {
         'exists': {

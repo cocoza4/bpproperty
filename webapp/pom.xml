@@ -123,7 +123,7 @@
                 <version>2.2</version>
 
                 <configuration>
-                    <path>/bpproperty</path>
+                    <path>/</path>
 
                 </configuration>
 
@@ -138,7 +138,12 @@
                     <packagingExcludes>
                         bpproperty/node_modules/,
                         bpproperty/test/,
-                        bpproperty/app/**/*.js
+                        bpproperty/*, <!-- exclude files under bpproperty directory -->
+
+                        %regex[bpproperty/app/app.js],
+
+                        <!-- exclude js files except the ones under i18n folder -->
+                        %regex[bpproperty/app/(?!i18n)(.*)/(.*).js]
                     </packagingExcludes>
                 </configuration>
             </plugin>

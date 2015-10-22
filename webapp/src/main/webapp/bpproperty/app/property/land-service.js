@@ -32,7 +32,7 @@
 
   .factory('Land', ['$resource', function($resource) {
     return $resource(
-      '/bpproperty/api/lands/:landId', {
+      '/api/lands/:landId', {
         landId: '@landId'
       }, {
         'update': {

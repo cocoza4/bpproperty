@@ -41,7 +41,7 @@
 
   .factory('Installment', ['$resource', function($resource) {
     return $resource(
-      '/bpproperty/api/lands/:landId/buydetails/:buyDetailId/installments/:installmentId', {
+      '/api/lands/:landId/buydetails/:buyDetailId/installments/:installmentId', {
         landId: '@landId',
         buyDetailId: '@buyDetailId',
         installmentId: '@installmentId'
