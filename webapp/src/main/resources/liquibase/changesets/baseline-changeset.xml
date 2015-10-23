@@ -326,10 +326,7 @@
             <column name="LAND_ID" valueComputed="(SELECT ID FROM LAND WHERE NAME = 'Por Permpol')"/>
             <column name="CUSTOMER_ID" valueComputed="(SELECT ID FROM CUSTOMER WHERE FIRSTNAME = 'firstname2')"/>
             <column name="BUY_TYPE" value="C"/>
-            <column name="DOWN_PAYMENT" value="100.55"/>
             <column name="BUY_PRICE" value="10.8"/>
-            <column name="ANNUAL_INTEREST" value="10"/>
-            <column name="YEARS_OF_INSTALLMENT" value="3"/>
             <column name="RAI" value="5"/>
             <column name="YARN" value="5"/>
             <column name="TARANGWA" value="10"/>

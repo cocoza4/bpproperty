@@ -66,7 +66,7 @@ public class InstallmentDAOIT {
         landBuyDetail.setCustomerId(customer.getId());
         landBuyDetail.setLandId(Land.getId());
         landBuyDetail.setBuyPrice(10000f);
-        landBuyDetail.setBuyType(BuyType.CASH);
+        landBuyDetail.setBuyType(BuyType.INSTALLMENT);
         landBuyDetail.setAnnualInterest(15.5f);
         landBuyDetail.setDownPayment(1000f);
         landBuyDetail.setYearsOfInstallment(5);

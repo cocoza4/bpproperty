@@ -62,7 +62,7 @@ public class LandBuyDetailDAOIT {
         landBuyDetail.setLandId(land.getId());
         landBuyDetail.setDownPayment(1000f);
         landBuyDetail.setBuyPrice(100000f);
-        landBuyDetail.setBuyType(BuyType.CASH);
+        landBuyDetail.setBuyType(BuyType.INSTALLMENT);
         landBuyDetail.setAnnualInterest(15.5f);
         landBuyDetail.setYearsOfInstallment(5);
         landBuyDetail.setCreatedBy(0L);

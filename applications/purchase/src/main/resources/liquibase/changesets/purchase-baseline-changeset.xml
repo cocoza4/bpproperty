@@ -26,11 +26,11 @@
             <column name="buy_type" type="char(1)">
                 <constraints nullable="false"/>
             </column>
-            <column name="down_payment" type="float"/>
-            <column name="buy_price" type="float">
+            <column name="down_payment" type="real"/>
+            <column name="buy_price" type="real">
                 <constraints nullable="false"/>
             </column>
-            <column name="annual_interest" type="float"/>
+            <column name="annual_interest" type="real"/>
             <column name="years_of_installment" type="smallint"/>
 
             <column name="rai" type="int"/>
@@ -61,7 +61,7 @@
             <column name="pay_for" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="amount" type="float">
+            <column name="amount" type="real">
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="text"/>
