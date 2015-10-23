@@ -539,8 +539,21 @@ describe('land-buy', function() {
       expect($scope.buyTypeItems).toEqual(['CASH', 'INSTALLMENT']);
       expect($scope.buyDetail).toEqual({
         landId: 1,
-        buyType: 'CASH'
+        buyType: 'CASH',
+        downPayment: null,
+        annualInterest: null,
+        yearsOfInstallment: null
       });
+    });
+
+    it('validate buyDetail.buyType listener', function() {
+      $scope.buyDetail = mockLandBuyDetail;
+      $scope.$digest();
+      $scope.buyDetail.buyType = 'CASH';
+      $scope.$digest();
+      expect($scope.buyDetail.downPayment).toBeNull();
+      expect($scope.buyDetail.annualInterest).toBeNull();
+      expect($scope.buyDetail.yearsOfInstallment).toBeNull();
     });
 
     it('validate validateBuyDetail() - no cusotmer selected', function() {

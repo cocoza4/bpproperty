@@ -171,6 +171,14 @@
         $location.path(url);
       };
 
+      $scope.$watch('buyDetail.buyType', function() {
+        if ($scope.buyDetail.buyType == 'CASH') {
+          $scope.buyDetail.downPayment = null;
+          $scope.buyDetail.annualInterest = null;
+          $scope.buyDetail.yearsOfInstallment = null;
+        }
+      });
+
       $scope.saveLandBuyDetail = function(isValid) {
 
         if (isValid && self.validateBuyDetail()) {
