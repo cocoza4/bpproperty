@@ -5,7 +5,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'es6-shim'],
 
     files: [
       'bower_components/jquery/dist/jquery.min.js',
@@ -15,6 +15,7 @@ module.exports = function(config) {
       'bower_components/angular-cookies/angular-cookies.min.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/angular-bootstrap/ui-bootstrap.js',
+      'bower_components/angular-ui-grid/ui-grid.min.js',
       'app/**/*.js',
       'test/unit/**/*.js'
     ],

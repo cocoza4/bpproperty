@@ -77,7 +77,9 @@
 
   angular
 
-    .module('land-buy', ['ngRoute', 'ui.bootstrap', 'my-notification', 'land-buy-service', 'land-service', 'customer-service'])
+    .module('land-buy', ['ngRoute', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection',
+    'my-notification', 'land-buy-service', 'land-service', 'customer-service'
+  ])
 
   .config(['$routeProvider', function($routeProvider) {
 
@@ -339,8 +341,154 @@
     }
   ])
 
-  .controller('LandBuyDetailListCtrl', ['$scope', '$location', '$routeParams', 'BuyDetailList', 'LandBuyService',
-    function($scope, $location, $routeParams, BuyDetailList, LandBuyService) {
+  .controller('LandBuyDetailListCtrl', ['$scope', '$location', '$routeParams', 'uiGridConstants',
+    'BuyDetailList', 'LandBuyService',
+    function($scope, $location, $routeParams, uiGridConstants, BuyDetailList, LandBuyService) {
+
+      $scope.gridOptions = {
+        enableSorting: true,
+        enableFiltering: true,
+        showColumnFooter: true,
+        showGridFooter: true,
+        enableGridMenu: true,
+
+        enableRowSelection: true,
+        enableRowHeaderSelection: false,
+        multiSelect: false,
+
+        columnDefs: [{
+          field: 'buyType',
+          displayName: '\u0e1b\u0e23\u0e30\u0e40\u0e20\u0e17',
+          cellFilter: 'buyType',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          width: '8%',
+          filter: {
+            type: uiGridConstants.filter.SELECT,
+            selectOptions: [{
+              value: 'INSTALLMENT',
+              label: '\u0e1c\u0e48\u0e2d\u0e19'
+            }, {
+              value: 'CASH',
+              label: '\u0e2a\u0e14'
+            }]
+          },
+          footerCellClass: 'right',
+          footerCellTemplate: '<div class="ui-grid-cell-contents">sub total</div>'
+        }, {
+          field: 'getName()',
+          displayName: '\u0e0a\u0e37\u0e48\u0e2d\u0e1c\u0e39\u0e49\u0e0b\u0e37\u0e49\u0e2d',
+          headerCellClass: 'center',
+          cellClass: 'right'
+        }, {
+          field: 'getUnit(area.rai)',
+          displayName: '\u0e44\u0e23\u0e48',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          enableFiltering: false,
+          width: '7%',
+          aggregationType: uiGridConstants.aggregationTypes.sum,
+          aggregationHideLabel: true,
+          footerCellClass: 'right'
+        }, {
+          field: 'getUnit(area.yarn)',
+          displayName: '\u0e07\u0e32\u0e19',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          enableFiltering: false,
+          width: '7%',
+          aggregationType: uiGridConstants.aggregationTypes.sum,
+          aggregationHideLabel: true,
+          footerCellClass: 'right'
+        }, {
+          field: 'area.tarangwa',
+          displayName: '\u0e15\u0e32\u0e23\u0e32\u0e07\u0e27\u0e32',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          enableFiltering: false,
+          width: '7%',
+          aggregationType: uiGridConstants.aggregationTypes.sum,
+          aggregationHideLabel: true,
+          footerCellClass: 'right'
+        }, {
+          field: 'buyPrice',
+          displayName: '\u0e23\u0e32\u0e04\u0e32\u0e0b\u0e37\u0e49\u0e2d',
+          cellFilter: 'number',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          enableFiltering: false,
+          width: '10%',
+          aggregationType: uiGridConstants.aggregationTypes.sum,
+          aggregationHideLabel: true,
+          footerCellClass: 'right',
+          footerCellFilter: 'number'
+        }, {
+          field: "downPayment",
+          displayName: "\u0e14\u0e32\u0e27\u0e19\u0e4c",
+          cellFilter: 'number',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          width: '10%',
+          enableFiltering: false,
+          aggregationType: uiGridConstants.aggregationTypes.sum,
+          aggregationHideLabel: true,
+          footerCellClass: 'right',
+          footerCellFilter: 'number'
+        }, {
+          field: "annualInterest",
+          displayName: "\u0e1c\u0e48\u0e2d\u0e19 \u002f \u0e40\u0e14\u0e37\u0e2d\u0e19",
+          headerCellClass: 'center',
+          cellClass: 'right',
+          width: '10%',
+          enableFiltering: false
+        }, {
+          field: "createdTime",
+          displayName: '\u0e40\u0e27\u0e25\u0e32\u0e17\u0e35\u0e48\u0e1a\u0e31\u0e19\u0e17\u0e36\u0e01',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          cellFilter: "date:\"MMMM d, yyyy h:mm a\"",
+          enableFiltering: false,
+        }],
+
+        onRegisterApi: function(gridApi) {
+          $scope.gridApi = gridApi;
+          gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+            var buyDetail = row.entity;
+            $location.path('/lands/' + buyDetail.landId + '/buydetails/' + buyDetail.id);
+          });
+        }
+      };
+
+      angular.forEach(BuyDetailList.landBuyDetail.content, function(row) {
+        row.getUnit = function(unit) {
+          return (unit === 0 ? null : unit);
+        };
+        row.getName = function() {
+          return this.buyerFirstName + ' ' + this.buyerLastName;
+        };
+      });
+      $scope.gridOptions.data = BuyDetailList.landBuyDetail.content;
+
+
+
+      // $scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);
+
+      // $scope.gridOptions.data = [{
+      //   "firstName": "Cox",
+      //   "lastName": "Carney",
+      //   "company": "Enormo",
+      //   "employed": true
+      // }, {
+      //   "firstName": "Lorraine",
+      //   "lastName": "Wise",
+      //   "company": "Comveyer",
+      //   "employed": false
+      // }, {
+      //   "firstName": "Nancy",
+      //   "lastName": "Waters",
+      //   "company": "Fuelton",
+      //   "employed": false
+      // }];
 
       $scope.onRecordsPerPageChanged = function() {
         $scope.currentPage = 1;
@@ -373,7 +521,7 @@
       };
 
       this.updateScope = function(data) {
-        if (data.landBuyDetail) {
+        if (data.landBuyDetail) { //TODO: this causes a bug when changing page
           $scope.landBuys = data.landBuyDetail.content;
           $scope.totalRecords = data.landBuyDetail.totalRecords;
           if ($scope.totalRecords === 0) {

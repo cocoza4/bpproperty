@@ -31,23 +31,31 @@
 
     <div style="clear:both"></div>
 
+    <div>
+      <div ui-grid="gridOptions" ui-grid-selection class="grid">
+
+      </div>
+    </div>
+
+    <br/>
+
     <div class="table-responsive">
       <table cellspacing="0" class="table table-striped table-bordered table-hover table-condensed">
         <thead>
           <tr valign="middle">
             <th rowspan="2">No.</th>
-            <th class="sortable" rowspan="2">ประเภทการซื้อ
+            <th rowspan="2">ประเภทการซื้อ
             </th>
-            <th class="sortable" rowspan="2">ผู้ซื้อ
+            <th rowspan="2">ผู้ซื้อ
             </th>
-            <th class="sortable" rowspan="2">ราคาซื้อ (฿)
+            <th rowspan="2">ราคาซื้อ (฿)
             </th>
-            <th class="sortable" rowspan="2">ดอกเบี้ยต่อปี (%)
+            <th rowspan="2">ดอกเบี้ยต่อปี (%)
             </th>
-            <th class="sortable" rowspan="2">จำนวนปีที่ผ่อน
+            <th rowspan="2">จำนวนปีที่ผ่อน
             </th>
             <th colspan="3">เนื้อที่</th>
-            <th class="sortable" rowspan="2">เวลาที่สร้าง
+            <th rowspan="2">เวลาที่สร้าง
             </th>
           </tr>
           <tr>
@@ -60,15 +68,15 @@
         <tbody>
           <tr ng-click="redirect(landBuy.id)" ng-repeat="landBuy in landBuys" ng-show="landBuys.length">
             <td align="center">{{ $index + 1 }}</td>
-            <td>{{ landBuy.buyType | buyType }}</td>
-            <td>{{ landBuy.buyerFirstName + ' ' + landBuy.buyerLastName }}</td>
-            <td>{{ landBuy.buyPrice | number }}</td>
-            <td>{{ landBuy.annualInterest }}</td>
-            <td>{{ landBuy.yearsOfInstallment }}</td>
+            <td align="center">{{ landBuy.buyType | buyType }}</td>
+            <td align="right">{{ landBuy.buyerFirstName + ' ' + landBuy.buyerLastName }}</td>
+            <td align="right">{{ landBuy.buyPrice | number }}</td>
+            <td align="right">{{ landBuy.annualInterest }}</td>
+            <td align="right">{{ landBuy.yearsOfInstallment }}</td>
             <td align="center">{{ landBuy.area.rai }}</td>
             <td align="center">{{ landBuy.area.yarn }}</td>
             <td align="center">{{ landBuy.area.tarangwa }}</td>
-            <td>{{ landBuy.createdTime | date:"MMMM d, yyyy ' เวลา ' h:mm a" }}</td>
+            <td align="right">{{ landBuy.createdTime | date:"MMMM d, yyyy ' เวลา ' h:mm a" }}</td>
           </tr>
           <tr ng-show="!landBuys.length">
             <td colspan="10">

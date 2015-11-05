@@ -178,11 +178,10 @@ describe('customer', function() {
       mockCustomerObjTable = {
         totalDisplayRecords: 10,
         totalRecords: 100,
-        content: [{
+        content: [
+          mockCustomer,
           mockCustomer
-        }, {
-          mockCustomer
-        }]
+        ]
       };
 
       customerListCtrl = $controller('CustomerListCtrl', {

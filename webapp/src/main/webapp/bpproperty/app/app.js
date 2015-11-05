@@ -12,6 +12,7 @@
     'ngCookies',
 
     'ui.bootstrap',
+    'ui.grid',
 
     'services.breadcrumbs',
 

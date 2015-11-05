@@ -60,6 +60,25 @@ form while your application is loading.*/
   background-color: #bce8f1 !important;
 }
 
+.grid {
+  width: 100%;
+}
+
+.ui-grid-row:nth-child(odd):hover .ui-grid-cell {
+  background:#c9dde1;
+}
+.ui-grid-row:nth-child(even):hover .ui-grid-cell {
+  background:#c9dde1;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
 .table th {
   text-align: center;
   vertical-align: middle !important;

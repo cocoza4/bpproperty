@@ -100,11 +100,10 @@ describe('land', function() {
       mockLandObjTable = {
         totalDisplayRecords: 10,
         totalRecords: 100,
-        content: [{
+        content: [
+          mockLand,
           mockLand
-        }, {
-          mockLand
-        }]
+        ]
       };
 
       landListCtrl = $controller('LandListCtrl', {
