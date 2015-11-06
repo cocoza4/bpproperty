@@ -78,7 +78,7 @@
   angular
 
     .module('land-buy', ['ngRoute', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection',
-    'my-notification', 'land-buy-service', 'land-service', 'customer-service'
+    'ui.grid.pagination', 'my-notification', 'land-buy-service', 'land-service', 'customer-service'
   ])
 
   .config(['$routeProvider', function($routeProvider) {
@@ -347,14 +347,19 @@
 
       $scope.gridOptions = {
         enableSorting: true,
-        enableFiltering: true,
         showColumnFooter: true,
-        showGridFooter: true,
         enableGridMenu: true,
 
         enableRowSelection: true,
         enableRowHeaderSelection: false,
         multiSelect: false,
+
+        useExternalFiltering: true,
+        enableFiltering: true,
+
+        useExternalPagination: true,
+        paginationPageSizes: [10, 25, 50, 100],
+        paginationPageSize: $scope.recordsPerPage,
 
         columnDefs: [{
           field: 'buyType',
@@ -374,42 +379,48 @@
             }]
           },
           footerCellClass: 'right',
-          footerCellTemplate: '<div class="ui-grid-cell-contents">sub total</div>'
+          footerCellTemplate: '<div class="ui-grid-cell-contents">Total</div>'
         }, {
-          field: 'getName()',
+          field: 'buyerName',
           displayName: '\u0e0a\u0e37\u0e48\u0e2d\u0e1c\u0e39\u0e49\u0e0b\u0e37\u0e49\u0e2d',
           headerCellClass: 'center',
           cellClass: 'right'
         }, {
-          field: 'getUnit(area.rai)',
+          field: 'area.rai',
           displayName: '\u0e44\u0e23\u0e48',
           headerCellClass: 'center',
           cellClass: 'right',
+          cellFilter: 'unit',
           enableFiltering: false,
           width: '7%',
           aggregationType: uiGridConstants.aggregationTypes.sum,
           aggregationHideLabel: true,
-          footerCellClass: 'right'
+          footerCellClass: 'right',
+          footerCellFilter: 'number'
         }, {
-          field: 'getUnit(area.yarn)',
+          field: 'area.yarn',
           displayName: '\u0e07\u0e32\u0e19',
           headerCellClass: 'center',
           cellClass: 'right',
+          cellFilter: 'unit',
           enableFiltering: false,
           width: '7%',
           aggregationType: uiGridConstants.aggregationTypes.sum,
           aggregationHideLabel: true,
-          footerCellClass: 'right'
+          footerCellClass: 'right',
+          footerCellFilter: 'number'
         }, {
           field: 'area.tarangwa',
           displayName: '\u0e15\u0e32\u0e23\u0e32\u0e07\u0e27\u0e32',
           headerCellClass: 'center',
           cellClass: 'right',
+          cellFilter: 'unit',
           enableFiltering: false,
           width: '7%',
           aggregationType: uiGridConstants.aggregationTypes.sum,
           aggregationHideLabel: true,
-          footerCellClass: 'right'
+          footerCellClass: 'right',
+          footerCellFilter: 'number'
         }, {
           field: 'buyPrice',
           displayName: '\u0e23\u0e32\u0e04\u0e32\u0e0b\u0e37\u0e49\u0e2d',
@@ -451,44 +462,45 @@
         }],
 
         onRegisterApi: function(gridApi) {
+
           $scope.gridApi = gridApi;
+
           gridApi.selection.on.rowSelectionChanged($scope, function(row) {
             var buyDetail = row.entity;
             $location.path('/lands/' + buyDetail.landId + '/buydetails/' + buyDetail.id);
           });
+
+          gridApi.pagination.on.paginationChanged($scope, function(newPage, pageSize) {
+            queryTable(newPage, pageSize);
+          });
+
+          $scope.gridApi.core.on.filterChanged( $scope, function() {
+            var nameFilter = this.grid.columns[1].filters[0].term;
+            alert(nameFilter);
+          });
+
         }
       };
 
-      angular.forEach(BuyDetailList.landBuyDetail.content, function(row) {
-        row.getUnit = function(unit) {
-          return (unit === 0 ? null : unit);
-        };
-        row.getName = function() {
-          return this.buyerFirstName + ' ' + this.buyerLastName;
-        };
-      });
       $scope.gridOptions.data = BuyDetailList.landBuyDetail.content;
+      $scope.gridOptions.totalItems = BuyDetailList.landBuyDetail.totalRecords;
 
-
-
-      // $scope.gridApi.selection.selectRow($scope.gridOptions.data[0]);
-
-      // $scope.gridOptions.data = [{
-      //   "firstName": "Cox",
-      //   "lastName": "Carney",
-      //   "company": "Enormo",
-      //   "employed": true
-      // }, {
-      //   "firstName": "Lorraine",
-      //   "lastName": "Wise",
-      //   "company": "Comveyer",
-      //   "employed": false
-      // }, {
-      //   "firstName": "Nancy",
-      //   "lastName": "Waters",
-      //   "company": "Fuelton",
-      //   "employed": false
-      // }];
+      var queryTable = function(page, pageSize) {
+        var criteria = {
+          landId: $routeParams.landId,
+          page: page - 1, // zero-based page index
+          length: pageSize
+        };
+        LandBuyService.query(criteria).then(
+          function(data) {
+            $scope.gridOptions.totalItems = data.totalRecords;
+            $scope.gridOptions.data = data.content;
+          },
+          function(error) {
+            alert('Unable to query from table LandBuy');
+          }
+        );
+      };
 
       $scope.onRecordsPerPageChanged = function() {
         $scope.currentPage = 1;

@@ -24,8 +24,8 @@ import java.util.List;
 @Repository
 public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
 
-    private static final String SQL_SELECT_BY_LAND_ID = "SELECT lbd.*, c.firstname, c.lastname FROM " +
-            "land_buy_detail lbd INNER JOIN customer c ON lbd.customer_id = c.id " +
+    private static final String SQL_SELECT_BY_LAND_ID = "SELECT lbd.*, concat(c.firstname, ' ', c.lastname) AS buyer_name " +
+            "FROM land_buy_detail lbd INNER JOIN customer c ON lbd.customer_id = c.id " +
             "WHERE lbd.land_id = ?";
 
     private static final String SQL_COUNT_BY_LAND_ID = "SELECT count(*) FROM land_buy_detail WHERE land_id = ?";
@@ -50,8 +50,7 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
             LandBuyDetailBO model = new LandBuyDetailBO();
             model.setId(rs.getLong("id"));
             model.setLandId(rs.getLong("land_id"));
-            model.setBuyerFirstName(rs.getString("firstname"));
-            model.setBuyerLastName(rs.getString("lastname"));
+            model.setBuyerName(rs.getString("buyer_name"));
             model.setBuyType(BuyType.get(rs.getString("buy_type")));
             model.setBuyPrice(rs.getFloat("buy_price"));
             model.setDownPayment((Float)rs.getObject("down_payment"));

@@ -19,6 +19,7 @@
     'authentication-service',
     'authentication',
 
+    'unit-filter',
     'buy-type-filter',
     'lazy-loading-tabset',
     'my-spinner',
