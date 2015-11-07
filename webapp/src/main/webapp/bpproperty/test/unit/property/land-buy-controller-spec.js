@@ -320,106 +320,107 @@ describe('land-buy', function() {
         BuyDetailList: mockBuyDetailList,
         LandBuyService: LandBuyService,
       });
+      $scope.$digest();
     });
 
     it('init', function() {
-      expect($scope.recordsPerPageList).toEqual([10, 25, 50, 100]);
-      expect($scope.currentPage).toEqual(1);
-      expect($scope.recordsPerPage).toEqual(10);
+      expect($scope.month).toEqual({
+        key: 0,
+        value: '\u0e21\u0e01\u0e23\u0e32\u0e04\u0e21' // January
+      });
+      expect($scope.gridOptions.paginationPageSizes).toEqual([10, 25, 50, 100, 500]);
+      expect($scope.gridOptions.paginationPageSize).toEqual(10);
       expect($scope.land).toEqual(mockBuyDetailList.land);
+      expect($scope.gridOptions.data).toEqual(mockBuyDetailObjTable.content);
+      expect($scope.gridOptions.totalItems).toEqual(mockBuyDetailObjTable.totalRecords);
+      expect(LandBuyDetailListCtrl.criteria).toEqual({
+        landId: mockBuyDetailList.land.id,
+        buyType: null,
+        firstname: null,
+        page: null,
+        length: null
+      });
     });
 
-    it('validate $scope.onRecordsPerPageChanged', function() {
-      spyOn($scope, 'updateLandBuyTable');
-      $scope.currentPage++;
-      expect($scope.currentPage).toEqual(2);
-      $scope.onRecordsPerPageChanged();
-      expect($scope.currentPage).toEqual(1);
-      expect($scope.updateLandBuyTable).toHaveBeenCalled();
-    });
-
-    it('validate $scope.updateLandBuyTable - happy path', function() {
+    it('validate queryTable() - happy path', function() {
+      LandBuyDetailListCtrl.criteria = {
+        landId: mockBuyDetailList.land.id,
+        buyType: 'I',
+        firstname: 'test',
+        page: null,
+        length: null
+      }
       var deferred = $q.defer();
       spyOn(LandBuyService, 'query').and.returnValue(deferred.promise);
-      spyOn(LandBuyDetailListCtrl, 'updateScope');
+      spyOn(LandBuyDetailListCtrl, 'calculateDebt');
 
-      $scope.updateLandBuyTable();
+      LandBuyDetailListCtrl.queryTable();
 
       deferred.resolve(mockBuyDetailObjTable);
-      $rootScope.$digest();
+      $scope.$digest();
 
-      expect(LandBuyService.query).toHaveBeenCalledWith({
-        landId: $routeParams.landId,
-        page: $scope.currentPage - 1, // zero-based page index
-        length: $scope.recordsPerPage
-      });
-      expect(LandBuyDetailListCtrl.updateScope).toHaveBeenCalledWith(mockBuyDetailObjTable);
+      expect(LandBuyService.query).toHaveBeenCalledWith(LandBuyDetailListCtrl.criteria);
+      expect(LandBuyDetailListCtrl.calculateDebt).toHaveBeenCalledWith(mockBuyDetailObjTable.content);
+      expect($scope.gridOptions.totalItems).toEqual(100);
+      expect($scope.gridOptions.data).toEqual(mockBuyDetailObjTable.content);
     });
 
-    it('validate $scope.updateLandBuyTable - non happy path', function() {
-      var deferred = $q.defer();
-      spyOn(LandBuyService, 'query').and.returnValue(deferred.promise);
-      spyOn(LandBuyDetailListCtrl, 'updateScope');
+    // it('validate gridApi.core.on.filterChanged()', function() {
+    //   console.log($scope.gridApi);
+    //   spyOn($scope.gridApi.core.on, 'filterChanged');
+    // });
 
-      $scope.updateLandBuyTable();
-
-      deferred.reject();
-      $rootScope.$digest();
-
-      expect(LandBuyService.query).toHaveBeenCalledWith({
-        landId: $routeParams.landId,
-        page: $scope.currentPage - 1, // zero-based page index
-        length: $scope.recordsPerPage
-      });
-      expect(LandBuyDetailListCtrl.updateScope).not.toHaveBeenCalled();
-    });
-
-    it('validate updateScope - totalRecords greater than totalDisplayRecords', function() {
-      LandBuyDetailListCtrl.updateScope(mockBuyDetailList);
-      expect($scope.landBuys).toEqual(mockBuyDetailObjTable.content);
-      expect($scope.totalRecords).toEqual(mockBuyDetailList.landBuyDetail.totalRecords);
-      expect($scope.startIndex).toEqual(1);
-      expect($scope.endIndex).toEqual(10);
-    });
-
-    it('validate updateScope - totalRecords equal to totalDisplayRecords', function() {
-      mockBuyDetailList.landBuyDetail.totalRecords = 10;
-      mockBuyDetailList.landBuyDetail.totalDisplayRecords = 10;
-      LandBuyDetailListCtrl.updateScope(mockBuyDetailList);
-      expect($scope.landBuys).toEqual(mockBuyDetailList.landBuyDetail.content);
-      expect($scope.totalRecords).toEqual(mockBuyDetailList.landBuyDetail.totalRecords);
-      expect($scope.startIndex).toEqual(1);
-      expect($scope.endIndex).toEqual(10);
-    });
-
-    it('validate updateScope - totalRecords less to totalDisplayRecords', function() {
-      mockBuyDetailList.landBuyDetail.totalRecords = 10;
-      mockBuyDetailList.landBuyDetail.totalDisplayRecords = 50;
-      LandBuyDetailListCtrl.updateScope(mockBuyDetailList);
-      expect($scope.landBuys).toEqual(mockBuyDetailList.landBuyDetail.content);
-      expect($scope.totalRecords).toEqual(mockBuyDetailList.landBuyDetail.totalRecords);
-      expect($scope.startIndex).toEqual(1);
-      expect($scope.endIndex).toEqual(50);
-    });
-
-    it('validate updateScope - 2nd page', function() {
-      $scope.currentPage = 2;
-      LandBuyDetailListCtrl.updateScope(mockBuyDetailList);
-      expect($scope.landBuys).toEqual(mockBuyDetailList.landBuyDetail.content);
-      expect($scope.totalRecords).toEqual(mockBuyDetailList.landBuyDetail.totalRecords);
-      expect($scope.startIndex).toEqual(11);
-      expect($scope.endIndex).toEqual(20);
-    });
-
-    it('validate updateScope - no land buy details', function() {
-      mockBuyDetailList.landBuyDetail.content = [];
-      mockBuyDetailList.landBuyDetail.totalRecords = 0;
-      LandBuyDetailListCtrl.updateScope(mockBuyDetailList);
-      expect($scope.landBuys).toEqual(mockBuyDetailList.landBuyDetail.content);
-      expect($scope.totalRecords).toEqual(mockBuyDetailList.landBuyDetail.totalRecords);
-      expect($scope.startIndex).toEqual(0);
-      expect($scope.endIndex).toEqual(0);
-    });
+    // it('init', function() {
+    //   expect($scope.recordsPerPageList).toEqual([10, 25, 50, 100]);
+    //   expect($scope.currentPage).toEqual(1);
+    //   expect($scope.recordsPerPage).toEqual(10);
+    //   expect($scope.land).toEqual(mockBuyDetailList.land);
+    // });
+    //
+    // it('validate $scope.onRecordsPerPageChanged', function() {
+    //   spyOn($scope, 'updateLandBuyTable');
+    //   $scope.currentPage++;
+    //   expect($scope.currentPage).toEqual(2);
+    //   $scope.onRecordsPerPageChanged();
+    //   expect($scope.currentPage).toEqual(1);
+    //   expect($scope.updateLandBuyTable).toHaveBeenCalled();
+    // });
+    //
+    // it('validate $scope.updateLandBuyTable - happy path', function() {
+    //   var deferred = $q.defer();
+    //   spyOn(LandBuyService, 'query').and.returnValue(deferred.promise);
+    //   spyOn(LandBuyDetailListCtrl, 'updateScope');
+    //
+    //   $scope.updateLandBuyTable();
+    //
+    //   deferred.resolve(mockBuyDetailObjTable);
+    //   $rootScope.$digest();
+    //
+    //   // expect(LandBuyService.query).toHaveBeenCalledWith({
+    //   //   landId: $routeParams.landId,
+    //   //   page: $scope.currentPage - 1, // zero-based page index
+    //   //   length: $scope.recordsPerPage
+    //   // });
+    //   expect(LandBuyDetailListCtrl.updateScope).toHaveBeenCalledWith(mockBuyDetailObjTable);
+    // });
+    //
+    // it('validate $scope.updateLandBuyTable - non happy path', function() {
+    //   var deferred = $q.defer();
+    //   spyOn(LandBuyService, 'query').and.returnValue(deferred.promise);
+    //   spyOn(LandBuyDetailListCtrl, 'updateScope');
+    //
+    //   $scope.updateLandBuyTable();
+    //
+    //   deferred.reject();
+    //   $rootScope.$digest();
+    //
+    //   expect(LandBuyService.query).toHaveBeenCalledWith({
+    //     landId: $routeParams.landId,
+    //     page: $scope.currentPage - 1, // zero-based page index
+    //     length: $scope.recordsPerPage
+    //   });
+    //   expect(LandBuyDetailListCtrl.updateScope).not.toHaveBeenCalled();
+    // });
 
   });
 

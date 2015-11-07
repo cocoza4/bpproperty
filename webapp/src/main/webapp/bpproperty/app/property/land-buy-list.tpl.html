@@ -1,12 +1,26 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <i class="glyphicon glyphicon-list-alt"></i>
-    Buy Details - <strong class="text-info">{{ land.name }}</strong>
+    Buy Details -
+    <strong class="text-info">{{ land.name }}</strong>
   </div>
   <div class="panel-body">
 
-    <div style="padding-bottom: 10px;">
-      <table width="100%">
+    <div style="padding-bottom: 23px; margin-bottom: 23px;">
+      <form class="form-inline">
+        <div class="form-group pull-left">
+          <select class="pull-left form-control" name="month" ng-model="month" ng-options="month.value for month in months"></select>
+          <select class="pull-left form-control" style="margin-left: 5px" name="month" ng-model="month" ng-options="month.value for month in months"></select>
+        </div>
+        <div class="form-group pull-right">
+          <button class="btn btn-default btn-sm" ng-click="redirectToCreateLandBuyDetailPage()" type="submit">
+            <span class="glyphicon glyphicon-plus"></span>
+            จัดสรร
+          </button>
+        </div>
+      </form>
+
+      <!-- <table width="100%">
         <tr>
           <td>
             <form class="form-inline">
@@ -26,20 +40,18 @@
             </div>
           </td>
         </tr>
-      </table>
+      </table> -->
     </div>
-
+    <!-- <br/> -->
     <div style="clear:both"></div>
 
     <div>
-      <div ui-grid="gridOptions" ui-grid-selection ui-grid-pagination class="grid">
-
-      </div>
+      <div class="grid" ui-grid-pagination ui-grid-selection ui-grid="gridOptions"></div>
     </div>
 
     <br/>
 
-    <div class="table-responsive">
+    <!-- <div class="table-responsive">
       <table cellspacing="0" class="table table-striped table-bordered table-hover table-condensed">
         <thead>
           <tr valign="middle">
@@ -104,7 +116,7 @@
           <my-pagination ng-change="updateLandBuyTable()" ng-model="currentPage" records-per-page="recordsPerPage" total-records="totalRecords"></my-pagination>
         </div>
       </div>
-    </div>
+    </div> -->
 
   </div>
 </div>

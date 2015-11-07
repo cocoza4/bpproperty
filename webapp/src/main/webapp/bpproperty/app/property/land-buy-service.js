@@ -57,6 +57,8 @@
           method: 'GET',
           params: {
             landId: '@landId',
+            firstname: '@firstname',
+            buyType: '@buyType',
             page: '@page',
             length: '@length'
           }
