@@ -26,6 +26,7 @@
         <jmockit.version>1.18</jmockit.version>
 
         <liquibase.version>3.3.5</liquibase.version>
+        <apache.common.version>3.4</apache.common.version>
 
         <jackson.version>2.5.2</jackson.version>
         <nurkiewicz.jdbcrepository.version>0.4.1</nurkiewicz.jdbcrepository.version>
@@ -48,6 +49,13 @@
                 <artifactId>tomcat-dbcp</artifactId>
                 <version>${tomcat.dbcp.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${apache.common.version}</version>
+            </dependency>
+
 
             <!-- Data Repo -->
             <dependency>

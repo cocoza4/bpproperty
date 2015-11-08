@@ -59,6 +59,8 @@
             landId: '@landId',
             firstname: '@firstname',
             buyType: '@buyType',
+            month: '@month',
+            year: '@year',
             page: '@page',
             length: '@length'
           }

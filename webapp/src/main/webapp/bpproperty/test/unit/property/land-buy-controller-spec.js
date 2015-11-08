@@ -40,8 +40,9 @@ describe('land-buy', function() {
         "buyerFirstName": "firstname1",
         "buyerLastName": "lastname1",
         "downPayment": 100.55,
-        "buyPrice": 100.1,
+        "buyPrice": 1000.1,
         "annualInterest": 15.0,
+        "totalInstallment": 500,
         "yearsOfInstallment": 5,
         "description": null,
         "area": {
@@ -49,24 +50,24 @@ describe('land-buy', function() {
           "yarn": 5,
           "tarangwa": 10
         },
-        "createdTime": 0
+        "createdTime": 1446183913864
       }, {
         "id": 2,
         "landId": 1,
         "buyType": "CASH",
         "buyerFirstName": "firstname2",
         "buyerLastName": "lastname2",
-        "downPayment": 100.55,
+        "downPayment": null,
         "buyPrice": 10.8,
-        "annualInterest": 10.0,
-        "yearsOfInstallment": 3,
+        "annualInterest": null,
+        "yearsOfInstallment": null,
         "description": null,
         "area": {
           "rai": 5,
           "yarn": 5,
           "tarangwa": 10
         },
-        "createdTime": 0
+        "createdTime": 1446183913864
       }]
     };
 
@@ -77,7 +78,7 @@ describe('land-buy', function() {
       "buyerFirstName": "firstname1",
       "buyerLastName": "lastname1",
       "downPayment": 100.55,
-      "buyPrice": 100.1,
+      "buyPrice": 1000.1,
       "annualInterest": 15.0,
       "yearsOfInstallment": 5,
       "description": null,
@@ -86,7 +87,7 @@ describe('land-buy', function() {
         "yarn": 5,
         "tarangwa": 10
       },
-      "createdTime": 0
+      "createdTime": 1446183913864
     };
 
     mockBuyDetailList = {
@@ -314,6 +315,9 @@ describe('land-buy', function() {
   describe('LandBuyDetailListCtrl', function() {
 
     beforeEach(function() {
+      var baseTime = new Date(2016, 0, 1);
+      jasmine.clock().mockDate(baseTime);
+
       LandBuyDetailListCtrl = $controller('LandBuyDetailListCtrl', {
         $scope: $scope,
         $routeParams: $routeParams,
@@ -326,8 +330,9 @@ describe('land-buy', function() {
     it('init', function() {
       expect($scope.month).toEqual({
         key: 0,
-        value: '\u0e21\u0e01\u0e23\u0e32\u0e04\u0e21' // January
+        value: '\u0e17\u0e38\u0e01\u0e40\u0e14\u0e37\u0e2d\u0e19' // Select all
       });
+      expect($scope.years).toEqual(['\u0e17\u0e38\u0e01\u0e1b\u0e35', 2016, 2015]);
       expect($scope.gridOptions.paginationPageSizes).toEqual([10, 25, 50, 100, 500]);
       expect($scope.gridOptions.paginationPageSize).toEqual(10);
       expect($scope.land).toEqual(mockBuyDetailList.land);
@@ -337,6 +342,8 @@ describe('land-buy', function() {
         landId: mockBuyDetailList.land.id,
         buyType: null,
         firstname: null,
+        month: null,
+        year: null,
         page: null,
         length: null
       });
@@ -349,10 +356,10 @@ describe('land-buy', function() {
         firstname: 'test',
         page: null,
         length: null
-      }
+      };
       var deferred = $q.defer();
       spyOn(LandBuyService, 'query').and.returnValue(deferred.promise);
-      spyOn(LandBuyDetailListCtrl, 'calculateDebt');
+      spyOn(LandBuyDetailListCtrl, 'preProcessing');
 
       LandBuyDetailListCtrl.queryTable();
 
@@ -360,67 +367,93 @@ describe('land-buy', function() {
       $scope.$digest();
 
       expect(LandBuyService.query).toHaveBeenCalledWith(LandBuyDetailListCtrl.criteria);
-      expect(LandBuyDetailListCtrl.calculateDebt).toHaveBeenCalledWith(mockBuyDetailObjTable.content);
+      expect(LandBuyDetailListCtrl.preProcessing).toHaveBeenCalledWith(mockBuyDetailObjTable.content);
       expect($scope.gridOptions.totalItems).toEqual(100);
       expect($scope.gridOptions.data).toEqual(mockBuyDetailObjTable.content);
     });
 
-    // it('validate gridApi.core.on.filterChanged()', function() {
-    //   console.log($scope.gridApi);
-    //   spyOn($scope.gridApi.core.on, 'filterChanged');
-    // });
+    it('validate minYear in preProcessing()', function() {
+      var data = mockBuyDetailObjTable.content;
+      LandBuyDetailListCtrl.preProcessing(data);
+      expect(LandBuyDetailListCtrl.minYear).toEqual(2015);
+    });
 
-    // it('init', function() {
-    //   expect($scope.recordsPerPageList).toEqual([10, 25, 50, 100]);
-    //   expect($scope.currentPage).toEqual(1);
-    //   expect($scope.recordsPerPage).toEqual(10);
-    //   expect($scope.land).toEqual(mockBuyDetailList.land);
-    // });
-    //
-    // it('validate $scope.onRecordsPerPageChanged', function() {
-    //   spyOn($scope, 'updateLandBuyTable');
-    //   $scope.currentPage++;
-    //   expect($scope.currentPage).toEqual(2);
-    //   $scope.onRecordsPerPageChanged();
-    //   expect($scope.currentPage).toEqual(1);
-    //   expect($scope.updateLandBuyTable).toHaveBeenCalled();
-    // });
-    //
-    // it('validate $scope.updateLandBuyTable - happy path', function() {
-    //   var deferred = $q.defer();
-    //   spyOn(LandBuyService, 'query').and.returnValue(deferred.promise);
-    //   spyOn(LandBuyDetailListCtrl, 'updateScope');
-    //
-    //   $scope.updateLandBuyTable();
-    //
-    //   deferred.resolve(mockBuyDetailObjTable);
-    //   $rootScope.$digest();
-    //
-    //   // expect(LandBuyService.query).toHaveBeenCalledWith({
-    //   //   landId: $routeParams.landId,
-    //   //   page: $scope.currentPage - 1, // zero-based page index
-    //   //   length: $scope.recordsPerPage
-    //   // });
-    //   expect(LandBuyDetailListCtrl.updateScope).toHaveBeenCalledWith(mockBuyDetailObjTable);
-    // });
-    //
-    // it('validate $scope.updateLandBuyTable - non happy path', function() {
-    //   var deferred = $q.defer();
-    //   spyOn(LandBuyService, 'query').and.returnValue(deferred.promise);
-    //   spyOn(LandBuyDetailListCtrl, 'updateScope');
-    //
-    //   $scope.updateLandBuyTable();
-    //
-    //   deferred.reject();
-    //   $rootScope.$digest();
-    //
-    //   expect(LandBuyService.query).toHaveBeenCalledWith({
-    //     landId: $routeParams.landId,
-    //     page: $scope.currentPage - 1, // zero-based page index
-    //     length: $scope.recordsPerPage
-    //   });
-    //   expect(LandBuyDetailListCtrl.updateScope).not.toHaveBeenCalled();
-    // });
+    it('validate preProcessing() - CASH', function() {
+      var data = mockBuyDetailObjTable.content;
+      LandBuyDetailListCtrl.preProcessing(data);
+      expect(data[1].getDebt()).toEqual(0);
+    });
+
+    it('validate preProcessing() - INSTALLMENT', function() {
+      var data = mockBuyDetailObjTable.content;
+      LandBuyDetailListCtrl.preProcessing(data);
+
+      expect(data[0].getDebt()).toBeCloseTo(399.55);
+    });
+
+    it('validate $scope.updateYear() - default year', function() {
+      spyOn(LandBuyDetailListCtrl, 'queryTable');
+      $scope.updateYear();
+      expect(LandBuyDetailListCtrl.criteria.month).toBeNull();
+      expect(LandBuyDetailListCtrl.criteria.year).toBeNull();
+      expect(LandBuyDetailListCtrl.queryTable).toHaveBeenCalled();
+    });
+
+    it('validate $scope.updateYear() - selected year', function() {
+      spyOn(LandBuyDetailListCtrl, 'queryTable');
+      $scope.year = $scope.years[1];
+      $scope.updateYear();
+      expect(LandBuyDetailListCtrl.criteria.month).toBeNull();
+      expect(LandBuyDetailListCtrl.criteria.year).toEqual($scope.year);
+      expect(LandBuyDetailListCtrl.queryTable).toHaveBeenCalled();
+    });
+
+    it('validate $scope.updateYear() when $scope.month and $scope.year are not defaults', function() {
+      spyOn(LandBuyDetailListCtrl, 'queryTable');
+      $scope.month = $scope.months[1];
+      $scope.year = $scope.years[1];
+      $scope.updateYear();
+      expect(LandBuyDetailListCtrl.criteria.month).toEqual(0);
+      expect(LandBuyDetailListCtrl.criteria.year).toEqual($scope.year);
+      expect(LandBuyDetailListCtrl.queryTable).toHaveBeenCalled();
+    });
+
+    it('validate $scope.updateYear() - when $scope.year is default and $scope.month is not', function() {
+      spyOn(LandBuyDetailListCtrl, 'queryTable');
+      $scope.month = $scope.months[1];
+      $scope.year = $scope.years[0];
+      $scope.updateYear();
+      expect(LandBuyDetailListCtrl.criteria.month).toBeNull();
+      expect(LandBuyDetailListCtrl.criteria.year).toBeNull();
+      expect(LandBuyDetailListCtrl.queryTable).toHaveBeenCalled();
+    });
+
+    it('validate $scope.updateMonth() - default $scope.month', function() {
+      spyOn(LandBuyDetailListCtrl, 'queryTable');
+      $scope.updateMonth();
+      expect(LandBuyDetailListCtrl.criteria.month).toBeNull();
+      expect(LandBuyDetailListCtrl.criteria.year).toBeNull();
+      expect(LandBuyDetailListCtrl.queryTable).toHaveBeenCalled();
+    });
+
+    it('validate $scope.updateMonth() - selected $scope.month', function() {
+      spyOn(LandBuyDetailListCtrl, 'queryTable');
+      $scope.month = $scope.months[1];
+      $scope.updateMonth();
+      expect(LandBuyDetailListCtrl.criteria.month).toEqual(0);
+      expect(LandBuyDetailListCtrl.criteria.year).toEqual($scope.year);
+      expect(LandBuyDetailListCtrl.queryTable).toHaveBeenCalled();
+    });
+
+    it('validate $scope.updateMonth() - selected $scope.month and $scope.year', function() {
+      spyOn(LandBuyDetailListCtrl, 'queryTable');
+      $scope.month = $scope.months[2];
+      $scope.year = $scope.years[2];
+      $scope.updateMonth();
+      expect(LandBuyDetailListCtrl.criteria.month).toEqual(1);
+      expect(LandBuyDetailListCtrl.criteria.year).toEqual(2015);
+      expect(LandBuyDetailListCtrl.queryTable).toHaveBeenCalled();
+    });
 
   });
 
@@ -648,8 +681,9 @@ describe('land-buy', function() {
             "customerId": 1,
             "buyType": "INSTALLMENT",
             "downPayment": 100.55,
-            "buyPrice": 100.1,
+            "buyPrice": 1000.1,
             "annualInterest": 15.0,
+            "totalInstallment": 500,
             "yearsOfInstallment": 5,
             "description": null,
             "area": {

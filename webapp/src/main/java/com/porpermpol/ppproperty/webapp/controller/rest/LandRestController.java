@@ -3,11 +3,13 @@ package com.porpermpol.ppproperty.webapp.controller.rest;
 import com.porpermpol.ppproperty.property.model.Land;
 import com.porpermpol.ppproperty.property.service.ILandService;
 import com.porpermpol.ppproperty.purchase.bo.LandBuyDetailBO;
+import com.porpermpol.ppproperty.purchase.model.BuyType;
 import com.porpermpol.ppproperty.purchase.model.Installment;
 import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
 import com.porpermpol.ppproperty.purchase.service.ILandBuyService;
 import com.porpermpol.ppproperty.webapp.exception.ResourceNotFoundException;
 import com.porpermpol.ppproperty.webapp.utils.DataTableObject;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
@@ -63,28 +65,34 @@ public class LandRestController {
 
     @RequestMapping(method = RequestMethod.GET)
     public DataTableObject<Land> getAllLands(@RequestParam(value = "page", defaultValue = "0") int page,
-                                            @RequestParam(value = "length", defaultValue = "10") int length) {
+                                             @RequestParam(value = "length", defaultValue = "10") int length) {
         Pageable pageRequest = new PageRequest(page, length, Sort.Direction.ASC, "id");
         Page<Land> landPage = landService.findAll(pageRequest);
 
         DataTableObject<Land> dataTableObject = new DataTableObject<>(landPage.getContent(),
-                                                                landPage.getContent().size(),
-                                                                landPage.getTotalElements());
+                landPage.getContent().size(),
+                landPage.getTotalElements());
 
         return dataTableObject;
     }
 
     @RequestMapping(value = "/{landId}/buydetails", method = RequestMethod.GET)
-    public DataTableObject<LandBuyDetailBO> getLandBuyDetailsBOByLandId(@PathVariable("landId") long id,
-                                                @RequestParam(value = "page", defaultValue = "0") int page,
-                                                @RequestParam(value = "length", defaultValue = "10") int length) {
+    public DataTableObject<LandBuyDetailBO> getLandBuyDetailsBO(@PathVariable("landId") long id,
+                                                                @RequestParam(value = "buyType", required = false) String buyTypeCode,
+                                                                @RequestParam(value = "firstname", required = false) String firstname,
+                                                                @RequestParam(value = "month", required = false) Integer month,
+                                                                @RequestParam(value = "year", required = false) Integer year,
+                                                                @RequestParam(value = "page", defaultValue = "0") int page,
+                                                                @RequestParam(value = "length", defaultValue = "10") int length) {
+        Pageable pageRequest = new PageRequest(page, length, Sort.Direction.ASC, "id");
+        BuyType buyType = buyTypeCode == null ? null : BuyType.get(buyTypeCode);
 
-        Pageable pageRequest = new PageRequest(page, length);
-        Page<LandBuyDetailBO> landBuyPage = landBuyService.findLandBuyDetailBOByLandId(id, pageRequest);
+        Page<LandBuyDetailBO> landBuyPage = landBuyService.findLandBuyDetailBOByCriteria(buyType,
+                firstname, id, month, year, pageRequest);
 
         DataTableObject<LandBuyDetailBO> dataTableObject = new DataTableObject<>(landBuyPage.getContent(),
-                                                                            landBuyPage.getContent().size(),
-                                                                            landBuyPage.getTotalElements());
+                landBuyPage.getContent().size(),
+                landBuyPage.getTotalElements());
 
         return dataTableObject;
     }
@@ -112,13 +120,13 @@ public class LandRestController {
 
     @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}", method = RequestMethod.DELETE)
     public void deleteBuyDetailById(@PathVariable("landId") long landId,
-                                          @PathVariable("buyDetailId") long buyDetailId) {
+                                    @PathVariable("buyDetailId") long buyDetailId) {
         landBuyService.deleteLandBuyDetailById(buyDetailId);
     }
 
     @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/installments", method = RequestMethod.GET)
     public List<Installment> getInstallmentsByBuyDetailId(@PathVariable("landId") long landId,
-                                          @PathVariable("buyDetailId") long buyDetailId) {
+                                                          @PathVariable("buyDetailId") long buyDetailId) {
 
         return landBuyService.findInstallmentsByLandBuyDetailId(buyDetailId);
     }
@@ -133,8 +141,8 @@ public class LandRestController {
 
     @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/installments", method = RequestMethod.PUT)
     public void updateInstallment(@PathVariable("landId") long landId,
-                                @PathVariable("buyDetailId") long buyDetailId,
-                                @RequestBody Installment installment) {
+                                  @PathVariable("buyDetailId") long buyDetailId,
+                                  @RequestBody Installment installment) {
         installment.setPersisted(true);
         landBuyService.saveInstallment(installment);
     }
@@ -166,8 +174,8 @@ public class LandRestController {
 
     @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}", method = RequestMethod.PUT)
     public void updateBuyDetail(@PathVariable("landId") long landId,
-                                  @PathVariable("buyDetailId") long buyDetailId,
-                                 @RequestBody LandBuyDetail buyDetail) {
+                                @PathVariable("buyDetailId") long buyDetailId,
+                                @RequestBody LandBuyDetail buyDetail) {
         buyDetail.setPersisted(true);
         landBuyService.saveLandBuyDetail(buyDetail);
     }

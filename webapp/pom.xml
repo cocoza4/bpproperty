@@ -95,7 +95,6 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${liquibase.version}</version>
                 <configuration>
-
                     <changeLogFile>src/main/resources/liquibase/bpproperty-db-changelog.xml</changeLogFile>
                     <propertyFile>src/main/resources/db/datasource.properties</propertyFile>
                 </configuration>
@@ -124,7 +123,7 @@
 
                 <configuration>
                     <path>/</path>
-
+                    <uriEncoding>UTF-8</uriEncoding>
                 </configuration>
 
             </plugin>

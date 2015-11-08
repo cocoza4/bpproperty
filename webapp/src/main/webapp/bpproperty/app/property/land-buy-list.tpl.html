@@ -9,8 +9,8 @@
     <div style="padding-bottom: 23px; margin-bottom: 23px;">
       <form class="form-inline">
         <div class="form-group pull-left">
-          <select class="pull-left form-control" name="month" ng-model="month" ng-options="month.value for month in months"></select>
-          <select class="pull-left form-control" style="margin-left: 5px" name="month" ng-model="month" ng-options="month.value for month in months"></select>
+          <select class="pull-left form-control" name="month" ng-model="month" ng-options="month.value for month in months" ng-change="updateMonth()"></select>
+          <select class="pull-left form-control" style="margin-left: 5px" name="year" ng-model="year" ng-options="year for year in years" ng-change="updateYear()"></select>
         </div>
         <div class="form-group pull-right">
           <button class="btn btn-default btn-sm" ng-click="redirectToCreateLandBuyDetailPage()" type="submit">
@@ -20,103 +20,13 @@
         </div>
       </form>
 
-      <!-- <table width="100%">
-        <tr>
-          <td>
-            <form class="form-inline">
-              <div class="form-group">
-                Show
-                <select class="form-control input-sm" ng-change="onRecordsPerPageChanged()" ng-model="recordsPerPage" ng-options="recordsPerPage for recordsPerPage in recordsPerPageList" style="width: 70px"></select>
-                Entries
-              </div>
-            </form>
-          </td>
-          <td align="right">
-            <div class="pull-right">
-              <button class="btn btn-default btn-sm" ng-click="redirectToCreateLandBuyDetailPage()" type="submit">
-                <span class="glyphicon glyphicon-plus"></span>
-                จัดสรร
-              </button>
-            </div>
-          </td>
-        </tr>
-      </table> -->
     </div>
-    <!-- <br/> -->
+
     <div style="clear:both"></div>
 
     <div>
-      <div class="grid" ui-grid-pagination ui-grid-selection ui-grid="gridOptions"></div>
+      <div class="grid" ui-grid-pagination ui-grid-selection ui-grid-resize-columns ui-grid="gridOptions"></div>
     </div>
-
-    <br/>
-
-    <!-- <div class="table-responsive">
-      <table cellspacing="0" class="table table-striped table-bordered table-hover table-condensed">
-        <thead>
-          <tr valign="middle">
-            <th rowspan="2">No.</th>
-            <th rowspan="2">ประเภทการซื้อ
-            </th>
-            <th rowspan="2">ผู้ซื้อ
-            </th>
-            <th rowspan="2">ราคาซื้อ (฿)
-            </th>
-            <th rowspan="2">ดอกเบี้ยต่อปี (%)
-            </th>
-            <th rowspan="2">จำนวนปีที่ผ่อน
-            </th>
-            <th colspan="3">เนื้อที่</th>
-            <th rowspan="2">เวลาที่สร้าง
-            </th>
-          </tr>
-          <tr>
-            <th>ไร่
-            </th>
-            <th>งาน</th>
-            <th>ตารางวา</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-click="redirect(landBuy.id)" ng-repeat="landBuy in landBuys" ng-show="landBuys.length">
-            <td align="center">{{ $index + 1 }}</td>
-            <td align="center">{{ landBuy.buyType | buyType }}</td>
-            <td align="right">{{ landBuy.buyerFirstName + ' ' + landBuy.buyerLastName }}</td>
-            <td align="right">{{ landBuy.buyPrice | number }}</td>
-            <td align="right">{{ landBuy.annualInterest }}</td>
-            <td align="right">{{ landBuy.yearsOfInstallment }}</td>
-            <td align="center">{{ landBuy.area.rai }}</td>
-            <td align="center">{{ landBuy.area.yarn }}</td>
-            <td align="center">{{ landBuy.area.tarangwa }}</td>
-            <td align="right">{{ landBuy.createdTime | date:"MMMM d, yyyy ' เวลา ' h:mm a" }}</td>
-          </tr>
-          <tr ng-show="!landBuys.length">
-            <td colspan="10">
-              No data found
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div style="clear:both"></div>
-
-    <div class="row-fluid">
-      <div class="span12">
-        <div class="inline pull-left">
-          Showing
-          <strong>{{ startIndex }}</strong>
-          to
-          <strong>{{ endIndex }}</strong>
-          of
-          <strong class="text-primary">{{ totalRecords }}</strong>
-          entries
-        </div>
-        <div class="inline pull-right">
-          <my-pagination ng-change="updateLandBuyTable()" ng-model="currentPage" records-per-page="recordsPerPage" total-records="totalRecords"></my-pagination>
-        </div>
-      </div>
-    </div> -->
 
   </div>
 </div>

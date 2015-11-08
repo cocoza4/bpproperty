@@ -48,6 +48,83 @@
   .controller('InstallmentListCtrl', ['$scope', '$route', '$uibModal', 'LandBuyService', 'InstallmentService',
     function($scope, $route, $uibModal, LandBuyService, InstallmentService) {
 
+      $scope.gridOptions = {
+        enableSorting: true,
+        showColumnFooter: true,
+        enableGridMenu: true,
+        enableColumnResizing: true,
+        fastWatch: true,
+
+        // useExternalPagination: true,
+        paginationPageSizes: [10, 25, 50, 100, 500],
+        paginationPageSize: 10,
+
+        columnDefs: [
+          {
+            field: 'sequence',
+            displayName: 'No.',
+            headerCellClass: 'center',
+            cellClass: 'center',
+            enableSorting: false,
+            width: '5%',
+            cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>'
+          },{
+          field: 'payFor',
+          displayName: 'payFor',
+          cellFilter: 'date: "MMMM yyyy"',
+          headerCellClass: 'center',
+          cellClass: 'right',
+        }, {
+          field: 'amount',
+          displayName: 'amount',
+          cellFilter: 'number',
+          headerCellClass: 'center',
+          cellClass: 'right'
+        }, {
+          field: 'createdTime',
+          displayName: 'payment date',
+          cellFilter: 'date:"MMMM d, yyyy \' \u0e40\u0e27\u0e25\u0e32 \' h:mm a"',
+          headerCellClass: 'center',
+          cellClass: 'right'
+        }, {
+          name: 'Revise',
+          headerCellClass: 'center',
+          cellClass: 'center',
+          width: '10%',
+          cellTemplate: '<span class="glyphicon glyphicon-edit" style="color:#337ab7;vertical-align: middle"></span>'
+
+        }, {
+          name: 'Delete',
+          headerCellClass: 'center',
+          cellClass: 'center',
+          width: '10%',
+          cellTemplate: '<span class="glyphicon glyphicon-remove" style="color:#d9534f;vertical-align: middle"></span>'
+        }],
+
+        onRegisterApi: function(gridApi) {
+
+          $scope.gridApi = gridApi;
+
+          // gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+          //   var buyDetail = row.entity;
+          //   $location.path('/lands/' + buyDetail.landId + '/buydetails/' + buyDetail.id);
+          // });
+          //
+          // gridApi.pagination.on.paginationChanged($scope, function(newPage, pageSize) {
+          //   self.criteria.page = newPage - 1; // zero-based page index
+          //   self.criteria.length = pageSize;
+          //   self.queryTable();
+          // });
+          //
+          // gridApi.core.on.filterChanged($scope, function() {
+          //   self.criteria.buyType = this.grid.columns[0].filters[0].term;
+          //   self.criteria.firstname = this.grid.columns[1].filters[0].term;
+          //   self.queryTable();
+          // });
+
+        }
+      };
+
       this.saveInstallmentModal = function(selected) {
         $uibModal.open({
           animation: true,
@@ -86,9 +163,16 @@
         };
 
         InstallmentService.query(installmentCriteria).then(function(data) {
+
+          $scope.gridOptions.data = data;
+
           $scope.installments = data;
           return LandBuyService.query(landBuyCriteria);
         }).then(function(data) {
+
+
+          // $scope.gridOptions.totalItems = BuyDetailList.landBuyDetail.totalRecords;
+
           $scope.landBuy = data;
           $scope.totalAmount = InstallmentService.getTotalPayment($scope.installments);
           $scope.remaining = data.buyPrice - data.downPayment - $scope.totalAmount;

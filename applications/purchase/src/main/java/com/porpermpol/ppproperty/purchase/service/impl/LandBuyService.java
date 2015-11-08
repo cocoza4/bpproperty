@@ -5,6 +5,7 @@ import com.porpermpol.ppproperty.purchase.bo.LandBuyDetailBO;
 import com.porpermpol.ppproperty.purchase.dao.IInstallmentDAO;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailBODAO;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailDAO;
+import com.porpermpol.ppproperty.purchase.model.BuyType;
 import com.porpermpol.ppproperty.purchase.model.Installment;
 import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
 import com.porpermpol.ppproperty.purchase.service.ILandBuyService;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -25,6 +28,8 @@ public class LandBuyService implements ILandBuyService {
     private ILandBuyDetailDAO landBuyDetailDAO;
     @Autowired
     private IInstallmentDAO installmentDAO;
+
+    private Calendar calendar = Calendar.getInstance();
 
     @Transactional(readOnly = true)
     @Override
@@ -69,8 +74,20 @@ public class LandBuyService implements ILandBuyService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<LandBuyDetailBO> findLandBuyDetailBOByLandId(long id, Pageable pageable) {
-        return landBuyDetailBODAO.findByLandId(id, pageable);
+    public Page<LandBuyDetailBO> findLandBuyDetailBOByCriteria(BuyType buyType, String firstName, Long landId,
+                                                               Integer month, Integer year, Pageable pageable) {
+
+        Date filteredMonth = null;
+        Date filteredYear = null;
+        if (month != null && year != null) {
+            calendar.set(Calendar.MONTH, month);
+            calendar.set(Calendar.YEAR, year);
+            filteredMonth = calendar.getTime();
+        } else if (year != null) {
+            calendar.set(Calendar.YEAR, year);
+            filteredYear = calendar.getTime();
+        }
+        return landBuyDetailBODAO.findByCriteria(buyType, firstName, landId, filteredMonth, filteredYear, pageable);
     }
 
     @Transactional(readOnly = true)
