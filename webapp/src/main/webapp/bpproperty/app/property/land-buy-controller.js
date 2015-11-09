@@ -448,11 +448,12 @@
           footerCellClass: 'right',
           footerCellFilter: 'number'
         }, {
-          field: "annualInterest", // TODO: pay / month
+          field: "getInstallmentPerMonth()",
           displayName: "\u0e1c\u0e48\u0e2d\u0e19 \u002f \u0e40\u0e14\u0e37\u0e2d\u0e19",
           headerCellClass: 'center',
           cellClass: 'right',
           width: '10%',
+          cellFilter: 'number',
           enableFiltering: false
         }, {
           field: "totalInstallment",
@@ -578,6 +579,15 @@
           if (self.minYear > year) {
             self.minYear = year;
           }
+
+          row.getInstallmentPerMonth = function() {
+            if (this.buyType === 'CASH' || !this.downPayment || !this.annualInterest || !this.yearsOfInstallment) {
+              return;
+            }
+            var calculated = (this.annualInterest / 100); // percentage of annualInterest
+            return (this.buyPrice - this.downPayment) * calculated / 12 * this.yearsOfInstallment;
+          };
+
           row.getDebt = function() {
             if (this.buyType === 'CASH') {
               return 0;

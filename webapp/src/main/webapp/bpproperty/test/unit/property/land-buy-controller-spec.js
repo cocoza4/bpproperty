@@ -378,6 +378,39 @@ describe('land-buy', function() {
       expect(LandBuyDetailListCtrl.minYear).toEqual(2015);
     });
 
+    it('validate getInstallmentPerMonth() in preProcessing() - CASH', function() {
+      var cashBuyDetail = mockBuyDetailObjTable.content[1];
+      LandBuyDetailListCtrl.preProcessing([cashBuyDetail]);
+      expect(cashBuyDetail.getInstallmentPerMonth()).toBeUndefined();
+    });
+
+    it('validate getInstallmentPerMonth() in preProcessing() - null downPayment', function() {
+      var installmentBuyDetail = mockBuyDetailObjTable.content[0];
+      installmentBuyDetail.downPayment = null;
+      LandBuyDetailListCtrl.preProcessing([installmentBuyDetail]);
+      expect(installmentBuyDetail.getInstallmentPerMonth()).toBeUndefined();
+    });
+
+    it('validate getInstallmentPerMonth() in preProcessing() - null annualInterest', function() {
+      var installmentBuyDetail = mockBuyDetailObjTable.content[0];
+      installmentBuyDetail.annualInterest = null;
+      LandBuyDetailListCtrl.preProcessing([installmentBuyDetail]);
+      expect(installmentBuyDetail.getInstallmentPerMonth()).toBeUndefined();
+    });
+
+    it('validate getInstallmentPerMonth() in preProcessing() - null yearsOfInstallment', function() {
+      var installmentBuyDetail = mockBuyDetailObjTable.content[0];
+      installmentBuyDetail.yearsOfInstallment = null;
+      LandBuyDetailListCtrl.preProcessing([installmentBuyDetail]);
+      expect(installmentBuyDetail.getInstallmentPerMonth()).toBeUndefined();
+    });
+
+    it('validate getInstallmentPerMonth() in preProcessing() - happyPath', function() {
+      var installmentBuyDetail = mockBuyDetailObjTable.content[0];
+      LandBuyDetailListCtrl.preProcessing([installmentBuyDetail]);
+      expect(installmentBuyDetail.getInstallmentPerMonth()).toBeCloseTo(56.22);
+    });
+
     it('validate preProcessing() - CASH', function() {
       var data = mockBuyDetailObjTable.content;
       LandBuyDetailListCtrl.preProcessing(data);
