@@ -20,7 +20,8 @@
 
   angular
 
-    .module('land', ['ngRoute', 'ui.bootstrap', 'my-notification', 'land-service', 'land-buy-service'])
+    .module('land', ['ngRoute', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection',
+    'ui.grid.pagination', 'my-notification', 'land-service', 'land-buy-service'])
 
   .config(['$routeProvider', function($routeProvider) {
 
