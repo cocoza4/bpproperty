@@ -6,36 +6,28 @@
   margin-bottom: 2em;
   padding: 0 0 0.5em;
 }
-
 .menu:before {
   content: "[";
 }
-
 .menu:after {
   content: "]";
 }
-
 .menu > li {
   display: inline;
 }
-
 .menu > li:before {
   content: "|";
   padding-right: 0.3em;
 }
-
 .menu > li:nth-child(1):before {
   content: "";
   padding: 0;
 }
-
-
 .headerNavbar {
   /*padding: 0 !important;*/
   border: 0 !important;
   margin: 0;
 }
-
 .left-navbar {
   /*background-color: green;*/
   /*width: 30%*/
@@ -43,89 +35,90 @@
 
 /* ng-cloak - prevent the Angular html template from being briefly displayed by the browser in its raw (uncompiled)
 form while your application is loading.*/
+
 [ng\:cloak], [ng-cloak], .ng-cloak {
   display: none;
 }
-
 .breadcrumb {
   border-radius: 0 !important;
   margin-bottom: 0 !important;
 }
-
 .list-group-item {
   border-radius: 0 !important;
 }
-
 .selectedRow {
   background-color: #bce8f1 !important;
 }
-
+.watermark {
+  position: absolute;
+  top: 80px;
+  opacity: 0.25;
+  font-size: 3em;
+  width: 100%;
+  text-align: center;
+  z-index: 1000;
+}
 .grid {
   width: 100%;
 }
-
+.pointer:hover {
+  cursor: pointer;
+}
 .ui-grid-row:nth-child(odd):hover .ui-grid-cell {
-  background:#c9dde1;
+  background: #c9dde1;
 }
 .ui-grid-row:nth-child(even):hover .ui-grid-cell {
-  background:#c9dde1;
+  background: #c9dde1;
 }
-
 .center {
   text-align: center;
 }
-
 .right {
   text-align: right;
 }
-
 .table th {
   text-align: center;
   vertical-align: middle !important;
-  background: #F0F0F0 ;
+  background: #F0F0F0;
 }
-
 .table tbody tr {
   cursor: pointer;
   cursor: hand;
 }
 
 /* This is added because mobile doesn't show border */
+
 .table tfoot td {
   border-right: 1px solid #ddd !important;
 }
-
 .text {
-    max-width: 320px;
+  max-width: 320px;
 }
-
 .area {
-    max-width: 100px !important;
+  max-width: 100px !important;
 }
-
 .warning {
   color: orange;
 }
-
 .form-group.required .control-label:after {
-  content:"\00a0*";
-  color:#FF4000;
+  content: "\00a0*";
+  color: #FF4000;
 }
-
 #loaderDiv {
-   position: fixed;
-   top: 0;
-   right: 0;
-   bottom: 0;
-   left: 0;
-   z-index: 1100;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1100;
 }
-
 .ajax-loader {
-   position: absolute;
-   left: 50%;
-   top: 50%;
-   margin-left: -50px; /* -1 * image width / 2 */
-   margin-top: -50px; /* -1 * image height / 2  */
-   display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -50px;
+  /* -1 * image width / 2 */
+  margin-top: -50px;
+  /* -1 * image height / 2  */
+  display: block;
 }

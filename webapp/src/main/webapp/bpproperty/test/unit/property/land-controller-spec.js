@@ -115,99 +115,28 @@ describe('land', function() {
     });
 
     it('init', function() {
-      expect($scope.recordsPerPageList).toEqual([10, 25, 50, 100]);
-      expect($scope.currentPage).toEqual(1);
-      expect($scope.recordsPerPage).toEqual(10);
+      expect($scope.gridOptions.data).toEqual(mockLandObjTable.content);
+      expect($scope.gridOptions.totalItems).toEqual(100);
+      expect($scope.gridOptions.paginationPageSizes).toEqual([10, 25, 50, 100, 500]);
+      expect($scope.gridOptions.paginationPageSize).toEqual(10);
+      expect(landListCtrl.criteria).toEqual({
+        page: null,
+        length: null
+      });
     });
 
-    it('validate $scope.onRecordsPerPageChanged', function() {
-      spyOn($scope, 'updateLandTable');
-      $scope.currentPage++;
-      expect($scope.currentPage).toEqual(2);
-      $scope.onRecordsPerPageChanged();
-      expect($scope.currentPage).toEqual(1);
-      expect($scope.updateLandTable).toHaveBeenCalled();
-    });
-
-    it('validate $scope.updateLandTable - happy path', function() {
+    it('validate queryTable()', function() {
       var deferred = $q.defer();
       spyOn(LandService, 'query').and.returnValue(deferred.promise);
-      spyOn(landListCtrl, 'updateScope');
 
-      $scope.updateLandTable();
+      landListCtrl.queryTable();
 
       deferred.resolve(mockLandObjTable);
-      $rootScope.$digest();
+      $scope.$digest();
 
-      expect(LandService.query).toHaveBeenCalledWith({
-        page: $scope.currentPage - 1, // zero-based page index
-        length: $scope.recordsPerPage
-      });
-      expect(landListCtrl.updateScope).toHaveBeenCalledWith(mockLandObjTable);
-    });
-
-    it('validate $scope.updateLandTable - non happy path', function() {
-      var deferred = $q.defer();
-      spyOn(LandService, 'query').and.returnValue(deferred.promise);
-      spyOn(landListCtrl, 'updateScope');
-
-      $scope.updateLandTable();
-
-      deferred.reject();
-      $rootScope.$digest();
-
-      expect(LandService.query).toHaveBeenCalledWith({
-        page: $scope.currentPage - 1, // zero-based page index
-        length: $scope.recordsPerPage
-      });
-      expect(landListCtrl.updateScope).not.toHaveBeenCalled();
-    });
-
-    it('validate updateScope - totalRecords greater than totalDisplayRecords', function() {
-      landListCtrl.updateScope(mockLandObjTable);
-      expect($scope.lands).toEqual(mockLandObjTable.content);
-      expect($scope.totalRecords).toEqual(mockLandObjTable.totalRecords);
-      expect($scope.startIndex).toEqual(1);
-      expect($scope.endIndex).toEqual(10);
-    });
-
-    it('validate updateScope - totalRecords equal to totalDisplayRecords', function() {
-      mockLandObjTable.totalRecords = 10;
-      mockLandObjTable.totalDisplayRecords = 10;
-      landListCtrl.updateScope(mockLandObjTable);
-      expect($scope.lands).toEqual(mockLandObjTable.content);
-      expect($scope.totalRecords).toEqual(mockLandObjTable.totalRecords);
-      expect($scope.startIndex).toEqual(1);
-      expect($scope.endIndex).toEqual(10);
-    });
-
-    it('validate updateScope - totalRecords less to totalDisplayRecords', function() {
-      mockLandObjTable.totalRecords = 10;
-      mockLandObjTable.totalDisplayRecords = 50;
-      landListCtrl.updateScope(mockLandObjTable);
-      expect($scope.lands).toEqual(mockLandObjTable.content);
-      expect($scope.totalRecords).toEqual(mockLandObjTable.totalRecords);
-      expect($scope.startIndex).toEqual(1);
-      expect($scope.endIndex).toEqual(50);
-    });
-
-    it('validate updateScope - 2nd page', function() {
-      $scope.currentPage = 2;
-      landListCtrl.updateScope(mockLandObjTable);
-      expect($scope.lands).toEqual(mockLandObjTable.content);
-      expect($scope.totalRecords).toEqual(mockLandObjTable.totalRecords);
-      expect($scope.startIndex).toEqual(11);
-      expect($scope.endIndex).toEqual(20);
-    });
-
-    it('validate updateScope - no customers', function() {
-      mockLandObjTable.content = [];
-      mockLandObjTable.totalRecords = 0;
-      landListCtrl.updateScope(mockLandObjTable);
-      expect($scope.lands).toEqual(mockLandObjTable.content);
-      expect($scope.totalRecords).toEqual(mockLandObjTable.totalRecords);
-      expect($scope.startIndex).toEqual(0);
-      expect($scope.endIndex).toEqual(0);
+      expect($scope.gridOptions.totalItems).toEqual(100);
+      expect($scope.gridOptions.data).toEqual(mockLandObjTable.content);
+      expect(LandService.query).toHaveBeenCalledWith(landListCtrl.criteria);
     });
 
   });

@@ -83,25 +83,104 @@
   .controller('LandListCtrl', ['$scope', '$location', 'LandService', 'Lands',
     function($scope, $location, LandService, Lands) {
 
-      $scope.redirect = function(url) {
-        $location.path(url);
+      $scope.gridOptions = {
+        enableSorting: true,
+        enableGridMenu: true,
+        enableColumnResizing: true,
+        fastWatch: true,
+        enableRowHeaderSelection: false,
+
+        useExternalPagination: true,
+        paginationPageSizes: [10, 25, 50, 100, 500],
+        paginationPageSize: 10,
+
+        columnDefs: [{
+          field: 'name',
+          displayName: '\u0e0a\u0e37\u0e48\u0e2d',
+          headerCellClass: 'center',
+          cellClass: 'right',
+        }, {
+          field: 'address',
+          displayName: '\u0e17\u0e35\u0e48\u0e2d\u0e22\u0e39\u0e48',
+          headerCellClass: 'center',
+          cellClass: 'right'
+        }, {
+          field: 'area.rai',
+          displayName: '\u0e44\u0e23\u0e48',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          cellFilter: 'unit',
+          width: '7%',
+        }, {
+          field: 'area.yarn',
+          displayName: '\u0e07\u0e32\u0e19',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          cellFilter: 'unit',
+          width: '7%',
+        }, {
+          field: 'area.tarangwa',
+          displayName: '\u0e15\u0e32\u0e23\u0e32\u0e07\u0e27\u0e32',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          cellFilter: 'unit',
+          width: '7%',
+        }, {
+          field: 'createdTime',
+          displayName: '\u0e27\u0e31\u0e19\u0e17\u0e35\u0e48\u0e1a\u0e31\u0e19\u0e17\u0e36\u0e01',
+          cellFilter: 'date:"MMMM d, yyyy"',
+          headerCellClass: 'center',
+          cellClass: 'right'
+        }, {
+          name: '\u0e22\u0e2d\u0e14\u0e02\u0e32\u0e22',
+          enableSorting: false,
+          headerCellClass: 'center',
+          cellClass: 'center',
+          width: '10%',
+          cellTemplate: '<span class="glyphicon glyphicon-list-alt pointer" ' +
+            'ng-click="$event.stopPropagation(); grid.appScope.redirectToLandBuyDetailPage(row.entity)" ' +
+            'style="color:#337ab7;vertical-align: middle"></span>'
+        }, {
+          name: '\u0e08\u0e31\u0e14\u0e2a\u0e23\u0e23',
+          enableSorting: false,
+          headerCellClass: 'center',
+          cellClass: 'center',
+          width: '10%',
+          cellTemplate: '<span class="glyphicon glyphicon-shopping-cart pointer" ' +
+            'ng-click="$event.stopPropagation(); grid.appScope.redirectToCreateLandBuyDetailPage(row.entity)" ' +
+            'style="vertical-align: middle"></span>'
+        }],
+
+        onRegisterApi: function(gridApi) {
+          $scope.gridApi = gridApi;
+
+          gridApi.pagination.on.paginationChanged($scope, function(newPage, pageSize) {
+            self.criteria.page = newPage - 1; // zero-based page index
+            self.criteria.length = pageSize;
+            self.queryTable();
+          });
+
+          gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+            var land = row.entity;
+            $location.path('/lands/' + land.id);
+          });
+
+        }
       };
 
-      $scope.onRecordsPerPageChanged = function() {
-        $scope.currentPage = 1;
-        $scope.updateLandTable();
+      $scope.redirectToLandBuyDetailPage = function(entity) {
+        $location.path('/lands/' + entity.id + '/buydetails');
       };
 
-      $scope.updateLandTable = function() {
+      $scope.redirectToCreateLandBuyDetailPage = function(entity) {
+        $location.path('/lands/' + entity.id + '/buydetails/create');
+      };
 
-        var criteria = {
-          page: $scope.currentPage - 1, // zero-based page index
-          length: $scope.recordsPerPage
-        };
-
-        LandService.query(criteria).then(
+      this.queryTable = function() {
+        LandService.query(self.criteria).then(
           function(data) {
-            self.updateScope(data);
+            $scope.gridOptions.totalItems = data.totalRecords;
+            $scope.gridOptions.data = data.content;
           },
           function(error) {
             alert('Unable to query from table Land');
@@ -109,24 +188,14 @@
         );
       };
 
-      this.updateScope = function(data) {
-        $scope.lands = data.content;
-        $scope.totalRecords = data.totalRecords;
-        if ($scope.totalRecords === 0) {
-          $scope.startIndex = 0;
-          $scope.endIndex = 0;
-        } else {
-          $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
-          $scope.endIndex = $scope.startIndex + data.totalDisplayRecords - 1;
-        }
+      this.criteria = {
+        page: null,
+        length: null
       };
 
       var self = this;
-      $scope.recordsPerPageList = [10, 25, 50, 100];
-      $scope.currentPage = 1;
-      $scope.recordsPerPage = 10;
-
-      this.updateScope(Lands);
+      $scope.gridOptions.data = Lands.content;
+      $scope.gridOptions.totalItems = Lands.totalRecords;
     }
   ])
 
