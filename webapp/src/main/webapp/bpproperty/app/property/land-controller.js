@@ -137,7 +137,7 @@
           enableSorting: false,
           headerCellClass: 'center',
           cellClass: 'center',
-          width: '10%',
+          width: '9%',
           cellTemplate: '<span class="glyphicon glyphicon-list-alt pointer" ' +
             'ng-click="$event.stopPropagation(); grid.appScope.redirectToLandBuyDetailPage(row.entity)" ' +
             'style="color:#337ab7;vertical-align: middle"></span>'
@@ -146,7 +146,7 @@
           enableSorting: false,
           headerCellClass: 'center',
           cellClass: 'center',
-          width: '10%',
+          width: '9%',
           cellTemplate: '<span class="glyphicon glyphicon-shopping-cart pointer" ' +
             'ng-click="$event.stopPropagation(); grid.appScope.redirectToCreateLandBuyDetailPage(row.entity)" ' +
             'style="vertical-align: middle"></span>'

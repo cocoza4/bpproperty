@@ -9,7 +9,7 @@ public interface ICustomerService {
     void saveCustomer(Customer customer);
     void deleteById(long id);
     Customer findById(long id);
-    Page<Customer> findAll(Pageable pageable);
+    Page<Customer> findByCriteria(String firstname, String lastname, String address, String tel, Pageable pageable);
     long count();
 
 }

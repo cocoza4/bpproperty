@@ -9,7 +9,6 @@ import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
 import com.porpermpol.ppproperty.purchase.service.ILandBuyService;
 import com.porpermpol.ppproperty.webapp.exception.ResourceNotFoundException;
 import com.porpermpol.ppproperty.webapp.utils.DataTableObject;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;

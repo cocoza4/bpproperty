@@ -31,6 +31,14 @@
 
     <div style="clear:both"></div>
 
+    <div>
+      <div class="grid " ui-grid-pagination ui-grid-selection ui-grid-resize-columns ui-grid="gridOptions">
+        <div class="watermark" ng-show="!gridOptions.data.length">No data available</div>
+      </div>
+    </div>
+
+    <br/>
+
     <div class="table-responsive">
 
       <table cellspacing="0" class="table table-striped table-bordered table-hover table-condensed" width="100%">

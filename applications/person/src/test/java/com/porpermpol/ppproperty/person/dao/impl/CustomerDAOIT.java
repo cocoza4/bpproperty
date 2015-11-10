@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -81,6 +83,40 @@ public class CustomerDAOIT {
         assertEquals(customer.getCreatedTime(), model.getCreatedTime());
         assertEquals(customer.getUpdatedBy(), model.getUpdatedBy());
         assertEquals(customer.getUpdatedTime(), model.getUpdatedTime());
+    }
 
+    @Test
+    public void testFindByCriteria_firstname() throws Exception {
+        Pageable pageable = new PageRequest(0, 10);
+        customerDAO.save(customer);
+        assertEquals(1, customerDAO.findByCriteria("first", null, null, null, pageable).getTotalElements());
+    }
+
+    @Test
+    public void testFindByCriteria_lastname() throws Exception {
+        Pageable pageable = new PageRequest(0, 10);
+        customerDAO.save(customer);
+        assertEquals(1, customerDAO.findByCriteria(null, "last", null, null, pageable).getTotalElements());
+    }
+
+    @Test
+    public void testFindByCriteria_address() throws Exception {
+        Pageable pageable = new PageRequest(0, 10);
+        customerDAO.save(customer);
+        assertEquals(1, customerDAO.findByCriteria(null, null, "addr", null, pageable).getTotalElements());
+    }
+
+    @Test
+    public void testFindByCriteria_tel() throws Exception {
+        Pageable pageable = new PageRequest(0, 10);
+        customerDAO.save(customer);
+        assertEquals(1, customerDAO.findByCriteria(null, null, null, "1", pageable).getTotalElements());
+    }
+
+    @Test
+    public void testFindByCriteria() throws Exception {
+        Pageable pageable = new PageRequest(0, 10);
+        customerDAO.save(customer);
+        assertEquals(1, customerDAO.findByCriteria("first", "last", "addr", "1", pageable).getTotalElements());
     }
 }

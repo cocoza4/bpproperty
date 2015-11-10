@@ -12,7 +12,7 @@ public abstract class JdbcDao {
     @Autowired
     protected JdbcOperations jdbcOperations;
 
-    protected String sortingClauseIfRequired(Sort sort) {
+    public static String sortingClauseIfRequired(Sort sort) {
         if(sort == null) {
             return "";
         } else {
@@ -32,7 +32,7 @@ public abstract class JdbcDao {
         }
     }
 
-    protected String limitClause(Pageable page) {
+    public static String limitClause(Pageable page) {
         int offset = page.getPageNumber() * page.getPageSize();
         return " LIMIT " + page.getPageSize() + " OFFSET " + offset;
     }

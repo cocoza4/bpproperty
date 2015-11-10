@@ -84,8 +84,8 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
         Object[] params = this.buildSQLConditions(whereClause, buyType, firstName, landId, filteredMonth, filteredYear);
         sql.append(whereClause)
                 .append(SQL_GROUP_BY_CLAUSE)
-                .append(sortingClauseIfRequired(pageable.getSort()))
-                .append(limitClause(pageable));
+                .append(JdbcDao.sortingClauseIfRequired(pageable.getSort()))
+                .append(JdbcDao.limitClause(pageable));
         List<LandBuyDetailBO> bos = jdbcOperations.query(sql.toString(), ROW_MAPPER, params);
         long criteriaCount = this.countByCriteria(whereClause.toString(), firstName, params);
 

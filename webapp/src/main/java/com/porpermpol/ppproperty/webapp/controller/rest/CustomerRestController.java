@@ -43,11 +43,15 @@ public class CustomerRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public DataTableObject<Customer> getAll(@RequestParam(value = "page", defaultValue = "0") int page,
-                                  @RequestParam(value = "length", defaultValue = "10") int length) {
+    public DataTableObject<Customer> getAll(@RequestParam(value = "firstname", required = false) String firstname,
+                                            @RequestParam(value = "lastname", required = false) String lastname,
+                                            @RequestParam(value = "address", required = false) String address,
+                                            @RequestParam(value = "tel", required = false) String tel,
+                                            @RequestParam(value = "page", defaultValue = "0") int page,
+                                            @RequestParam(value = "length", defaultValue = "10") int length) {
 
         Pageable pageRequest = new PageRequest(page, length, Sort.Direction.ASC, "id");
-        Page<Customer> customerPage = customerService.findAll(pageRequest);
+        Page<Customer> customerPage = customerService.findByCriteria(firstname, lastname, address, tel, pageRequest);
 
         DataTableObject<Customer> dataTableObject = new DataTableObject<>(customerPage.getContent(),
                                                                         customerPage.getContent().size(),
