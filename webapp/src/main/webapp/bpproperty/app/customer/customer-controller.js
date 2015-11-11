@@ -291,45 +291,6 @@
         $location.path('/customers/' + entity.id + '/lands');
       };
 
-      $scope.redirect = function(customer) {
-        var url = '/customers/' + customer.id;
-        $location.path(url);
-      };
-
-      $scope.onRecordsPerPageChanged = function() {
-        $scope.currentPage = 1;
-        $scope.updateCustomerTable();
-      };
-
-      $scope.updateCustomerTable = function() {
-
-        var criteria = {
-          page: $scope.currentPage - 1, // zero-based page index
-          length: $scope.recordsPerPage
-        };
-
-        CustomerService.query(criteria).then(
-          function(data) {
-            self.updateScope(data);
-          },
-          function(error) {
-            alert('Unable to query from table Customer');
-          }
-        );
-      };
-
-      this.updateScope = function(data) {
-        $scope.customers = data.content;
-        $scope.totalRecords = data.totalRecords;
-        if ($scope.totalRecords === 0) {
-          $scope.startIndex = 0;
-          $scope.endIndex = 0;
-        } else {
-          $scope.startIndex = (($scope.currentPage - 1) * $scope.recordsPerPage) + 1;
-          $scope.endIndex = $scope.startIndex + data.totalDisplayRecords - 1;
-        }
-      };
-
       this.criteria = {
         firstname: null,
         lastname: null,
@@ -343,12 +304,6 @@
       $scope.gridOptions.data = Customers.content;
       $scope.gridOptions.totalItems = Customers.totalRecords;
 
-
-      $scope.recordsPerPageList = [10, 25, 50, 100];
-      $scope.currentPage = 1;
-      $scope.recordsPerPage = 10;
-
-      this.updateScope(Customers);
     }
   ]);
 })();

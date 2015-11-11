@@ -193,99 +193,30 @@ describe('customer', function() {
     });
 
     it('init', function() {
-      expect($scope.recordsPerPageList).toEqual([10, 25, 50, 100]);
-      expect($scope.currentPage).toEqual(1);
-      expect($scope.recordsPerPage).toEqual(10);
+      expect($scope.gridOptions.data).toEqual(mockCustomerObjTable.content);
+      expect($scope.gridOptions.totalItems).toEqual(mockCustomerObjTable.totalRecords);
+      expect(customerListCtrl.criteria).toEqual({
+        firstname: null,
+        lastname: null,
+        address: null,
+        tel: null,
+        page: null,
+        length: null
+      });
     });
 
-    it('validate $scope.onRecordsPerPageChanged', function() {
-      spyOn($scope, 'updateCustomerTable');
-      $scope.currentPage++;
-      expect($scope.currentPage).toEqual(2);
-      $scope.onRecordsPerPageChanged();
-      expect($scope.currentPage).toEqual(1);
-      expect($scope.updateCustomerTable).toHaveBeenCalled();
-    });
-
-    it('validate $scope.updateCustomerTable - happy path', function() {
+    it('validate queryTable() - happy path', function() {
       var deferred = $q.defer();
       spyOn(CustomerService, 'query').and.returnValue(deferred.promise);
-      spyOn(customerListCtrl, 'updateScope');
 
-      $scope.updateCustomerTable();
+      customerListCtrl.queryTable();
 
       deferred.resolve(mockCustomerObjTable);
-      $rootScope.$digest();
+      $scope.$digest();
 
-      expect(CustomerService.query).toHaveBeenCalledWith({
-        page: $scope.currentPage - 1, // zero-based page index
-        length: $scope.recordsPerPage
-      });
-      expect(customerListCtrl.updateScope).toHaveBeenCalledWith(mockCustomerObjTable);
-    });
-
-    it('validate $scope.updateCustomerTable - non happy path', function() {
-      var deferred = $q.defer();
-      spyOn(CustomerService, 'query').and.returnValue(deferred.promise);
-      spyOn(customerListCtrl, 'updateScope');
-
-      $scope.updateCustomerTable();
-
-      deferred.reject();
-      $rootScope.$digest();
-
-      expect(CustomerService.query).toHaveBeenCalledWith({
-        page: $scope.currentPage - 1, // zero-based page index
-        length: $scope.recordsPerPage
-      });
-      expect(customerListCtrl.updateScope).not.toHaveBeenCalled();
-    });
-
-    it('validate updateScope - totalRecords greater than totalDisplayRecords', function() {
-      customerListCtrl.updateScope(mockCustomerObjTable);
-      expect($scope.customers).toEqual(mockCustomerObjTable.content);
-      expect($scope.totalRecords).toEqual(mockCustomerObjTable.totalRecords);
-      expect($scope.startIndex).toEqual(1);
-      expect($scope.endIndex).toEqual(10);
-    });
-
-    it('validate updateScope - totalRecords equal to totalDisplayRecords', function() {
-      mockCustomerObjTable.totalRecords = 10;
-      mockCustomerObjTable.totalDisplayRecords = 10;
-      customerListCtrl.updateScope(mockCustomerObjTable);
-      expect($scope.customers).toEqual(mockCustomerObjTable.content);
-      expect($scope.totalRecords).toEqual(mockCustomerObjTable.totalRecords);
-      expect($scope.startIndex).toEqual(1);
-      expect($scope.endIndex).toEqual(10);
-    });
-
-    it('validate updateScope - totalRecords less to totalDisplayRecords', function() {
-      mockCustomerObjTable.totalRecords = 10;
-      mockCustomerObjTable.totalDisplayRecords = 50;
-      customerListCtrl.updateScope(mockCustomerObjTable);
-      expect($scope.customers).toEqual(mockCustomerObjTable.content);
-      expect($scope.totalRecords).toEqual(mockCustomerObjTable.totalRecords);
-      expect($scope.startIndex).toEqual(1);
-      expect($scope.endIndex).toEqual(50);
-    });
-
-    it('validate updateScope - 2nd page', function() {
-      $scope.currentPage = 2;
-      customerListCtrl.updateScope(mockCustomerObjTable);
-      expect($scope.customers).toEqual(mockCustomerObjTable.content);
-      expect($scope.totalRecords).toEqual(mockCustomerObjTable.totalRecords);
-      expect($scope.startIndex).toEqual(11);
-      expect($scope.endIndex).toEqual(20);
-    });
-
-    it('validate updateScope - no customers', function() {
-      mockCustomerObjTable.content = [];
-      mockCustomerObjTable.totalRecords = 0;
-      customerListCtrl.updateScope(mockCustomerObjTable);
-      expect($scope.customers).toEqual(mockCustomerObjTable.content);
-      expect($scope.totalRecords).toEqual(mockCustomerObjTable.totalRecords);
-      expect($scope.startIndex).toEqual(0);
-      expect($scope.endIndex).toEqual(0);
+      expect(CustomerService.query).toHaveBeenCalledWith(customerListCtrl.criteria);
+      expect($scope.gridOptions.totalItems).toEqual(100);
+      expect($scope.gridOptions.data).toEqual(mockCustomerObjTable.content);
     });
 
   });

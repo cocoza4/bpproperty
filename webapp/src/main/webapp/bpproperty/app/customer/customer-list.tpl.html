@@ -5,31 +5,16 @@
   </div>
   <div class="panel-body">
 
-    <div style="padding-bottom: 10px;">
-      <table width="100%">
-        <tr>
-          <td>
-            <form class="form-inline">
-              <div class="form-group">
-                Show
-                <select style="width:70px;" class="form-control input-sm" id="showCombo" ng-change="onRecordsPerPageChanged()" ng-model="recordsPerPage" ng-options="recordsPerPage for recordsPerPage in recordsPerPageList"></select>
-                Entries
-              </div>
-            </form>
-          </td>
-          <td align="right">
-            <div class="pull-right">
-              <a class="btn btn-default btn-sm" ng-href="#/customers/create" type="submit">
-                <span class="glyphicon glyphicon-plus"></span>
-                สร้าง
-              </a>
-            </div>
-          </td>
-        </tr>
-      </table>
+    <div>
+      <div class="pull-right">
+        <a class="btn btn-default btn-sm" ng-href="#/customers/create" type="submit">
+          <span class="glyphicon glyphicon-plus"></span>
+          สร้าง
+        </a>
+      </div>
     </div>
 
-    <div style="clear:both"></div>
+    <div style="clear:both;margin-bottom: 10px;"></div>
 
     <div>
       <div class="grid " ui-grid-pagination ui-grid-selection ui-grid-resize-columns ui-grid="gridOptions">
@@ -37,7 +22,7 @@
       </div>
     </div>
 
-    <br/>
+    <!-- <br/>
 
     <div class="table-responsive">
 
@@ -88,7 +73,7 @@
           <my-pagination ng-change="updateCustomerTable()" ng-model="currentPage" records-per-page="recordsPerPage" total-records="totalRecords"></my-pagination>
         </div>
       </div>
-    </div>
+    </div> -->
 
   </div>
 </div>
