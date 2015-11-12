@@ -183,17 +183,215 @@
     }
   ])
 
-  .controller('CustomerLandsCtrl', ['$scope', '$location', 'CustomerLands', function($scope, $location, CustomerLands) {
+  .controller('CustomerLandsCtrl', ['$scope', '$location', 'uiGridConstants', 'CustomerService', 'CustomerLands',
+    function($scope, $location, uiGridConstants, CustomerService, CustomerLands) {
 
-    $scope.redirect = function(landBuyDetail) {
-      var url = 'lands/' + landBuyDetail.landId + '/buydetails/' + landBuyDetail.id;
-      $location.path(url);
-    };
+      $scope.gridOptions = {
+        enableSorting: true,
+        showColumnFooter: true,
+        enableGridMenu: true,
+        enableColumnResizing: true,
+        fastWatch: true,
 
-    $scope.customer = CustomerLands.customer;
-    $scope.landBuyDetails = CustomerLands.landBuyDetails;
+        enableRowSelection: true,
+        enableRowHeaderSelection: false,
+        multiSelect: false,
 
-  }])
+        useExternalFiltering: true,
+        enableFiltering: true,
+
+        useExternalPagination: true,
+        paginationPageSizes: [10, 25, 50, 100, 500],
+        paginationPageSize: 10,
+
+        columnDefs: [{
+          field: 'buyType',
+          displayName: '\u0e1b\u0e23\u0e30\u0e40\u0e20\u0e17',
+          cellFilter: 'buyType',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          width: '8%',
+          filter: {
+            type: uiGridConstants.filter.SELECT,
+            selectOptions: [{
+              value: 'I', // I for Installment
+              label: '\u0e1c\u0e48\u0e2d\u0e19'
+            }, {
+              value: 'C', // C for Cash
+              label: '\u0e2a\u0e14'
+            }]
+          },
+          footerCellClass: 'right',
+          footerCellTemplate: '<div class="ui-grid-cell-contents">Total</div>'
+        }, {
+          field: 'area.rai',
+          displayName: '\u0e44\u0e23\u0e48',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          cellFilter: 'unit',
+          enableFiltering: false,
+          width: '7%',
+          aggregationType: uiGridConstants.aggregationTypes.sum,
+          aggregationHideLabel: true,
+          footerCellClass: 'right',
+          footerCellFilter: 'number'
+        }, {
+          field: 'area.yarn',
+          displayName: '\u0e07\u0e32\u0e19',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          cellFilter: 'unit',
+          enableFiltering: false,
+          width: '7%',
+          aggregationType: uiGridConstants.aggregationTypes.sum,
+          aggregationHideLabel: true,
+          footerCellClass: 'right',
+          footerCellFilter: 'number'
+        }, {
+          field: 'area.tarangwa',
+          displayName: '\u0e15\u0e32\u0e23\u0e32\u0e07\u0e27\u0e32',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          cellFilter: 'unit',
+          enableFiltering: false,
+          width: '7%',
+          aggregationType: uiGridConstants.aggregationTypes.sum,
+          aggregationHideLabel: true,
+          footerCellClass: 'right',
+          footerCellFilter: 'number'
+        }, {
+          field: 'buyPrice',
+          displayName: '\u0e23\u0e32\u0e04\u0e32\u0e0b\u0e37\u0e49\u0e2d',
+          cellFilter: 'number',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          enableFiltering: false,
+          width: '10%',
+          aggregationType: uiGridConstants.aggregationTypes.sum,
+          aggregationHideLabel: true,
+          footerCellClass: 'right',
+          footerCellFilter: 'number'
+        }, {
+          field: "downPayment",
+          displayName: "\u0e14\u0e32\u0e27\u0e19\u0e4c",
+          cellFilter: 'number',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          width: '10%',
+          enableFiltering: false,
+          aggregationType: uiGridConstants.aggregationTypes.sum,
+          aggregationHideLabel: true,
+          footerCellClass: 'right',
+          footerCellFilter: 'number'
+        }, {
+          field: "getInstallmentPerMonth()",
+          displayName: "\u0e1c\u0e48\u0e2d\u0e19 \u002f \u0e40\u0e14\u0e37\u0e2d\u0e19",
+          headerCellClass: 'center',
+          cellClass: 'right',
+          width: '10%',
+          cellFilter: 'number',
+          enableFiltering: false
+        }, {
+          field: "totalInstallment",
+          displayName: "\u0e22\u0e2d\u0e14\u0e1c\u0e48\u0e2d\u0e19",
+          headerCellClass: 'center',
+          cellFilter: 'number',
+          cellClass: 'right',
+          width: '10%',
+          enableFiltering: false,
+          aggregationType: uiGridConstants.aggregationTypes.sum,
+          aggregationHideLabel: true,
+          footerCellClass: 'right',
+          footerCellFilter: 'number'
+        }, {
+          field: 'getDebt()',
+          displayName: "\u0e22\u0e2d\u0e14\u0e04\u0e07\u0e04\u0e49\u0e32\u0e07",
+          headerCellClass: 'center',
+          cellFilter: 'number',
+          cellClass: 'right',
+          width: '10%',
+          enableFiltering: false,
+          aggregationType: uiGridConstants.aggregationTypes.sum,
+          aggregationHideLabel: true,
+          footerCellClass: 'right',
+          footerCellFilter: 'number'
+        }, {
+          field: 'createdTime',
+          enableFiltering: false,
+          displayName: '\u0e27\u0e31\u0e19\u0e17\u0e35\u0e48\u0e1a\u0e31\u0e19\u0e17\u0e36\u0e01',
+          cellFilter: 'date:"MMMM d, yyyy"',
+          headerCellClass: 'center',
+          cellClass: 'right'
+        }],
+
+        onRegisterApi: function(gridApi) {
+          $scope.gridApi = gridApi;
+
+          gridApi.core.on.filterChanged($scope, function() {
+            self.criteria.buyType = this.grid.columns[0].filters[0].term;
+            self.queryTable();
+          });
+
+          gridApi.pagination.on.paginationChanged($scope, function(newPage, pageSize) {
+            self.criteria.page = newPage - 1; // zero-based page index
+            self.criteria.length = pageSize;
+            self.queryTable();
+          });
+
+          gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+            var landBuyDetail = row.entity;
+            $location.path('lands/' + landBuyDetail.landId + '/buydetails/' + landBuyDetail.id);
+          });
+
+        }
+      };
+
+      this.preProcessing = function(data) {
+        angular.forEach(data, function(row) {
+          row.getInstallmentPerMonth = function() {
+            if (this.buyType === 'CASH' || !this.downPayment || !this.annualInterest || !this.yearsOfInstallment) {
+              return;
+            }
+            var calculated = (this.annualInterest / 100); // percentage of annualInterest
+            return (this.buyPrice - this.downPayment) * calculated / 12 * this.yearsOfInstallment;
+          };
+
+          row.getDebt = function() {
+            if (this.buyType === 'CASH') {
+              return 0;
+            }
+            return this.buyPrice - this.downPayment - this.totalInstallment;
+          };
+        });
+      };
+
+      this.queryTable = function() {
+        CustomerService.queryByCustomerId(self.criteria).then(
+          function(data) {
+            $scope.gridOptions.totalItems = data.totalRecords;
+            self.preProcessing(data.content);
+            $scope.gridOptions.data = data.content;
+          },
+          function(error) {
+            alert('Unable to query from table LandBuy');
+          }
+        );
+      };
+
+      this.criteria = {
+        id: CustomerLands.customer.id,
+        buyType: null,
+        page: null,
+        length: null
+      };
+
+      var self = this;
+      this.preProcessing(CustomerLands.landBuyDetails.content);
+      $scope.gridOptions.data = CustomerLands.landBuyDetails.content;
+      $scope.gridOptions.totalItems = CustomerLands.landBuyDetails.totalRecords;
+
+    }
+  ])
 
   .controller('CustomerListCtrl', ['$scope', '$location', 'CustomerService', 'Customers',
     function($scope, $location, CustomerService, Customers) {

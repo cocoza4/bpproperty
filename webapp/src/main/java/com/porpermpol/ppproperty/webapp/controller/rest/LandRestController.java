@@ -87,7 +87,7 @@ public class LandRestController {
         BuyType buyType = buyTypeCode == null ? null : BuyType.get(buyTypeCode);
 
         Page<LandBuyDetailBO> landBuyPage = landBuyService.findLandBuyDetailBOByCriteria(buyType,
-                firstname, id, month, year, pageRequest);
+                firstname, id, null, month, year, pageRequest);
 
         DataTableObject<LandBuyDetailBO> dataTableObject = new DataTableObject<>(landBuyPage.getContent(),
                 landBuyPage.getContent().size(),

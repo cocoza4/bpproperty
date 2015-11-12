@@ -74,7 +74,7 @@ public class LandBuyService implements ILandBuyService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<LandBuyDetailBO> findLandBuyDetailBOByCriteria(BuyType buyType, String firstName, Long landId,
+    public Page<LandBuyDetailBO> findLandBuyDetailBOByCriteria(BuyType buyType, String firstName, Long landId, Long customerId,
                                                                Integer month, Integer year, Pageable pageable) {
 
         Date filteredMonth = null;
@@ -87,7 +87,7 @@ public class LandBuyService implements ILandBuyService {
             calendar.set(Calendar.YEAR, year);
             filteredYear = calendar.getTime();
         }
-        return landBuyDetailBODAO.findByCriteria(buyType, firstName, landId, filteredMonth, filteredYear, pageable);
+        return landBuyDetailBODAO.findByCriteria(buyType, firstName, landId, customerId, filteredMonth, filteredYear, pageable);
     }
 
     @Transactional(readOnly = true)

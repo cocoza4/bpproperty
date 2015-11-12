@@ -19,7 +19,7 @@ public interface ILandBuyService {
     LandBuyDetail findLandBuyDetailById(long id);
     List<LandBuyDetail> findLandBuyDetailsByCustomerId(long customerId);
 
-    Page<LandBuyDetailBO> findLandBuyDetailBOByCriteria(BuyType buyType, String firstName, Long landId,
+    Page<LandBuyDetailBO> findLandBuyDetailBOByCriteria(BuyType buyType, String firstName, Long landId, Long customerId,
                                                         Integer month, Integer year, Pageable pageable);
 
     Page<LandBuyDetail> findAllLandBuyDetails(Pageable pageable);

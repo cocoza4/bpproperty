@@ -1,10 +1,51 @@
 /*jshint esnext: true */
 describe('customer', function() {
 
-  var mockCustomer = {
+  mockCustomer = {
     id: 1,
     firstName: 'firstName',
-    lastName: 'lastName',
+    lastName: 'lastName'
+  };
+
+  mockLandBuyDetailObjTable = {
+    "totalRecords": 100,
+    "totalDisplayRecords": 10,
+    "content": [{
+      "id": 1,
+      "landId": 1,
+      "buyType": "INSTALLMENT",
+      "buyerFirstName": "firstname1",
+      "buyerLastName": "lastname1",
+      "downPayment": 100.55,
+      "buyPrice": 1000.1,
+      "annualInterest": 15.0,
+      "totalInstallment": 500,
+      "yearsOfInstallment": 5,
+      "description": null,
+      "area": {
+        "rai": 10,
+        "yarn": 5,
+        "tarangwa": 10
+      },
+      "createdTime": 1446183913864
+    }, {
+      "id": 2,
+      "landId": 1,
+      "buyType": "CASH",
+      "buyerFirstName": "firstname2",
+      "buyerLastName": "lastname2",
+      "downPayment": null,
+      "buyPrice": 10.8,
+      "annualInterest": null,
+      "yearsOfInstallment": null,
+      "description": null,
+      "area": {
+        "rai": 5,
+        "yarn": 5,
+        "tarangwa": 10
+      },
+      "createdTime": 1446183913864
+    }]
   };
 
   beforeEach(module('customer'));
@@ -88,6 +129,47 @@ describe('customer', function() {
       expect(CustomerService.create).not.toHaveBeenCalledWith($scope.customer);
       expect(NotificationService.notify).not.toHaveBeenCalledWith();
       expect(createCustomerCtrl.redirectToCustomerPage).not.toHaveBeenCalled();
+    });
+
+  });
+
+  describe('CustomerLandsCtrl', function() {
+    beforeEach(inject(function($injector) {
+      customerLands = {
+        customer: mockCustomer,
+        landBuyDetails: mockLandBuyDetailObjTable
+      };
+      CustomerLandsCtrl = $controller('CustomerLandsCtrl', {
+        $scope: $scope,
+        $location: $location,
+        CustomerService: CustomerService,
+        CustomerLands: customerLands
+      });
+    }));
+
+    it('init', function() {
+      expect($scope.gridOptions.data).toEqual(mockLandBuyDetailObjTable.content);
+      expect($scope.gridOptions.totalItems).toEqual(mockLandBuyDetailObjTable.totalRecords);
+      expect(CustomerLandsCtrl.criteria).toEqual({
+        id: 1,
+        buyType: null,
+        page: null,
+        length: null
+      });
+    });
+
+    it('validate queryTable() - happy path', function() {
+      var deferred = $q.defer();
+      spyOn(CustomerService, 'queryByCustomerId').and.returnValue(deferred.promise);
+
+      CustomerLandsCtrl.queryTable();
+
+      deferred.resolve(mockLandBuyDetailObjTable);
+      $scope.$digest();
+
+      expect(CustomerService.queryByCustomerId).toHaveBeenCalledWith(CustomerLandsCtrl.criteria);
+      expect($scope.gridOptions.totalItems).toEqual(100);
+      expect($scope.gridOptions.data).toEqual(mockLandBuyDetailObjTable.content);
     });
 
   });

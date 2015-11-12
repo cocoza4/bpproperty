@@ -128,7 +128,7 @@ public class LandBuyDetailBODAOIT {
     @Test
     public void testFindByCriteria_FirstName() throws Exception {
         Pageable pageable = new PageRequest(0, 10);
-        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, "first", null, null, null, pageable);
+        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, "first", null, null, null, null, pageable);
         assertEquals(2, bos.getTotalElements());
     }
 
@@ -137,14 +137,14 @@ public class LandBuyDetailBODAOIT {
         customer.setFirstName("ทดสอบ");
         customerDAO.save(customer);
         Pageable pageable = new PageRequest(0, 10);
-        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, "ทด", null, null, null, pageable);
+        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, "ทด", null, null, null, null, pageable);
         assertEquals(2, bos.getTotalElements());
     }
 
     @Test
     public void testFindByCriteria_BuyType_installment() throws Exception {
         Pageable pageable = new PageRequest(0, 10);
-        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(BuyType.INSTALLMENT, null, null, null, null, pageable);
+        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(BuyType.INSTALLMENT, null, null, null, null, null, pageable);
         assertEquals(1, bos.getTotalElements());
         LandBuyDetailBO bo = bos.getContent().get(0);
         assertEquals(new Float(20000f), bo.getTotalInstallment());
@@ -154,7 +154,7 @@ public class LandBuyDetailBODAOIT {
     @Test
     public void testFindByCriteria_BuyType_cash() throws Exception {
         Pageable pageable = new PageRequest(0, 10);
-        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(BuyType.CASH, null, null, null, null, pageable);
+        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(BuyType.CASH, null, null, null, null, null, pageable);
         assertEquals(1, bos.getTotalElements());
         LandBuyDetailBO bo = bos.getContent().get(0);
         assertEquals(new Float(0), bo.getTotalInstallment());
@@ -164,14 +164,21 @@ public class LandBuyDetailBODAOIT {
     @Test
     public void testFindByCriteria_LandId() throws Exception {
         Pageable pageable = new PageRequest(0, 10);
-        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, land.getId(), null, null, pageable);
+        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, land.getId(), null, null, null, pageable);
+        assertEquals(2, bos.getTotalElements());
+    }
+
+    @Test
+    public void testFindByCriteria_CustomerId() throws Exception {
+        Pageable pageable = new PageRequest(0, 10);
+        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, null, customer.getId(), null, null, pageable);
         assertEquals(2, bos.getTotalElements());
     }
 
     @Test
     public void testFindByCriteria_validate_createdTime_within_specifiedMonth_someDayWithinMonth() throws Exception {
         Pageable pageable = new PageRequest(0, 10);
-        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, null, df.parse("2015/02/11"), null, pageable);
+        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, null, null, df.parse("2015/02/11"), null, pageable);
         assertEquals(1, bos.getTotalElements());
         LandBuyDetailBO bo = bos.getContent().get(0);
         assertEquals(new Float(20000f), bo.getTotalInstallment());
@@ -181,7 +188,7 @@ public class LandBuyDetailBODAOIT {
     @Test
     public void testFindByCriteria_validate_createdTime_within_specifiedMonth_firstDayOfMonth() throws Exception {
         Pageable pageable = new PageRequest(0, 10);
-        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, null, df.parse("2015/02/01"), null, pageable);
+        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, null, null, df.parse("2015/02/01"), null, pageable);
         assertEquals(1, bos.getTotalElements());
         LandBuyDetailBO bo = bos.getContent().get(0);
         assertEquals(new Float(20000f), bo.getTotalInstallment());
@@ -191,28 +198,28 @@ public class LandBuyDetailBODAOIT {
     @Test
     public void testFindByCriteria_validate_createdTime_within_specifiedMonth_nonHappyPath() throws Exception {
         Pageable pageable = new PageRequest(0, 10);
-        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, null, df.parse("2015/03/01"), null, pageable);
+        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, null, null, df.parse("2015/03/01"), null, pageable);
         assertEquals(0, bos.getTotalElements());
     }
 
     @Test
     public void testFindByCriteria_validate_createdTime_within_specifiedYear_firstDayOfYear() throws Exception {
         Pageable pageable = new PageRequest(0, 10);
-        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, null, null, df.parse("2015/01/01"), pageable);
+        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, null, null, null, df.parse("2015/01/01"), pageable);
         assertEquals(1, bos.getTotalElements());
     }
 
     @Test
     public void testFindByCriteria_validate_createdTime_within_specifiedYear_lastDayOfYear() throws Exception {
         Pageable pageable = new PageRequest(0, 10);
-        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, null, null, df.parse("2015/12/31"), pageable);
+        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, null, null, null, df.parse("2015/12/31"), pageable);
         assertEquals(1, bos.getTotalElements());
     }
 
     @Test
     public void testFindByCriteria_validate_createdTime_within_specifiedYear_nonHappyPath() throws Exception {
         Pageable pageable = new PageRequest(0, 10);
-        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, null, null, df.parse("2012/12/31"), pageable);
+        Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, null, null, null, df.parse("2012/12/31"), pageable);
         assertEquals(0, bos.getTotalElements());
     }
 
@@ -220,7 +227,7 @@ public class LandBuyDetailBODAOIT {
     public void testFindByCriteria_all() throws Exception {
         Pageable pageable = new PageRequest(0, 10);
         Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(BuyType.INSTALLMENT, "first", land.getId(),
-                df.parse("2015/02/11"), null, pageable); // filtering by year is not supposed to use with by month
+                customer.getId(), df.parse("2015/02/11"), null, pageable); // filtering by year is not supposed to use with by month
         assertEquals(1, bos.getTotalElements());
         this.assertLandBuyDetail(installmentLandBuyDetail, bos.getContent().get(0));
     }

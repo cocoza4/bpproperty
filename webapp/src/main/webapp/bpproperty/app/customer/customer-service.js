@@ -62,6 +62,11 @@
       '/api/customers/:id/lands', {
         id: '@id'
       }, {
+        'query': {
+          buyType: '@buyType',
+          page: '@page',
+          length: '@length'
+        },
         'exists': {
           method: 'HEAD'
         },

@@ -35,8 +35,8 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
 
     private static final String SQL_COUNT_BY_LAND_ID = "SELECT count(*) FROM land_buy_detail lbd";
 
-    private Object[] buildSQLConditions(StringBuilder sql, BuyType buyType, String firstName,
-                                        Long landId, Date filteredMonth, Date filteredYear) {
+    private Object[] buildSQLConditions(StringBuilder sql, BuyType buyType, String firstName, Long landId,
+                                        Long customerId, Date filteredMonth, Date filteredYear) {
 
         List<Object> params = new ArrayList<>();
         List<String> conditions = new ArrayList<>();
@@ -52,6 +52,10 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
         if (landId != null) {
             conditions.add("land_id = ?");
             params.add(landId);
+        }
+        if (customerId != null) {
+            conditions.add("customer_id = ?");
+            params.add(customerId);
         }
         if (filteredMonth != null) {
             Date firstDayOfMonth = DateUtils.truncate(filteredMonth, Calendar.MONTH);
@@ -76,12 +80,12 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
     }
 
     @Override
-    public Page<LandBuyDetailBO> findByCriteria(BuyType buyType, String firstName, Long landId, Date filteredMonth,
-                                                Date filteredYear, Pageable pageable) {
+    public Page<LandBuyDetailBO> findByCriteria(BuyType buyType, String firstName, Long landId, Long customerId,
+                                                Date filteredMonth, Date filteredYear, Pageable pageable) {
 
         StringBuilder sql = new StringBuilder(SQL_SELECT_BY_LAND_ID);
         StringBuilder whereClause = new StringBuilder();
-        Object[] params = this.buildSQLConditions(whereClause, buyType, firstName, landId, filteredMonth, filteredYear);
+        Object[] params = this.buildSQLConditions(whereClause, buyType, firstName, landId, customerId, filteredMonth, filteredYear);
         sql.append(whereClause)
                 .append(SQL_GROUP_BY_CLAUSE)
                 .append(JdbcDao.sortingClauseIfRequired(pageable.getSort()))

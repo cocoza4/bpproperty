@@ -2,7 +2,8 @@ package com.porpermpol.ppproperty.webapp.controller.rest;
 
 import com.porpermpol.ppproperty.person.model.Customer;
 import com.porpermpol.ppproperty.person.service.ICustomerService;
-import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
+import com.porpermpol.ppproperty.purchase.bo.LandBuyDetailBO;
+import com.porpermpol.ppproperty.purchase.model.BuyType;
 import com.porpermpol.ppproperty.purchase.service.ILandBuyService;
 import com.porpermpol.ppproperty.webapp.exception.ResourceNotFoundException;
 import com.porpermpol.ppproperty.webapp.utils.DataTableObject;
@@ -19,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/customers")
@@ -78,8 +77,22 @@ public class CustomerRestController {
     }
 
     @RequestMapping(value = "/{id}/lands", method = RequestMethod.GET)
-    public List<LandBuyDetail> getLandBuyDetailsByCustomerId(@PathVariable("id") long id) {
-        return landBuyService.findLandBuyDetailsByCustomerId(id);
+    public DataTableObject<LandBuyDetailBO> getLandBuyDetailsByCustomerId(@PathVariable("id") long id,
+                                                             @RequestParam(value = "buyType", required = false) String buyTypeCode,
+                                                             @RequestParam(value = "page", defaultValue = "0") int page,
+                                                             @RequestParam(value = "length", defaultValue = "10") int length) {
+
+        Pageable pageRequest = new PageRequest(page, length, Sort.Direction.ASC, "id");
+        BuyType buyType = buyTypeCode == null ? null : BuyType.get(buyTypeCode);
+
+        Page<LandBuyDetailBO> landBuyPage = landBuyService.findLandBuyDetailBOByCriteria(buyType, null, null, id,
+                null, null, pageRequest);
+
+        DataTableObject<LandBuyDetailBO> dataTableObject = new DataTableObject<>(landBuyPage.getContent(),
+                landBuyPage.getContent().size(),
+                landBuyPage.getTotalElements());
+
+        return dataTableObject;
     }
 
     @RequestMapping(value = "/{id}/lands", method = RequestMethod.HEAD)
