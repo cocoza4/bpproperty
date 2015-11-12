@@ -150,6 +150,7 @@ describe('customer', function() {
     it('init', function() {
       expect($scope.gridOptions.data).toEqual(mockLandBuyDetailObjTable.content);
       expect($scope.gridOptions.totalItems).toEqual(mockLandBuyDetailObjTable.totalRecords);
+      expect($scope.customer).toEqual(mockCustomer);
       expect(CustomerLandsCtrl.criteria).toEqual({
         id: 1,
         buyType: null,

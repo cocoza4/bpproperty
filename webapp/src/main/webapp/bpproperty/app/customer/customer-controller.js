@@ -389,6 +389,7 @@
       this.preProcessing(CustomerLands.landBuyDetails.content);
       $scope.gridOptions.data = CustomerLands.landBuyDetails.content;
       $scope.gridOptions.totalItems = CustomerLands.landBuyDetails.totalRecords;
+      $scope.customer = CustomerLands.customer;
 
     }
   ])
