@@ -169,6 +169,10 @@
         }
       };
 
+      $scope.redirectToCreateLandPage = function(entity) {
+        $location.path('/lands/create');
+      };
+
       $scope.redirectToLandBuyDetailPage = function(entity) {
         $location.path('/lands/' + entity.id + '/buydetails');
       };

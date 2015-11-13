@@ -444,7 +444,7 @@
           headerCellClass: 'center',
           cellClass: 'center',
           width: '9%',
-          cellTemplate: '<span class="glyphicon glyphicon-shopping-cart pointer" ' +
+          cellTemplate: '<span class="glyphicon glyphicon-list-alt pointer" style="color:#337ab7" ' +
             'ng-click="$event.stopPropagation(); grid.appScope.redirectToCustomerSalesPage(row.entity)" ' +
             'style="vertical-align: middle"></span>'
         }],
