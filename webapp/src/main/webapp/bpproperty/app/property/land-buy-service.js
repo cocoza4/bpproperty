@@ -6,7 +6,11 @@
 
     .module('land-buy-service', ['ngResource'])
 
-  .service('LandBuyService', ['LandBuy', function(LandBuy) {
+  .service('LandBuyService', ['LandBuy', 'LandBuyBO', function(LandBuy, LandBuyBO) {
+
+    this.queryForBO = function(criteria) {
+      return LandBuyBO.query(criteria).$promise;
+    };
 
     this.query = function(criteria) {
       return LandBuy.query(criteria).$promise;
@@ -36,6 +40,19 @@
       }).$promise;
     };
 
+  }])
+
+  .factory('LandBuyBO', ['$resource', function($resource) {
+    return $resource(
+      '/api/lands/:landId/buydetailbos/:buyDetailId', {
+        landId: '@landId',
+        buyDetailId: '@buyDetailId'
+      }, {
+        'query': {
+          method: 'GET',
+          isArray: false
+        }
+      });
   }])
 
   .factory('LandBuy', ['$resource', function($resource) {

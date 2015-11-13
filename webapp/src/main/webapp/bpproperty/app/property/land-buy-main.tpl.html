@@ -65,8 +65,8 @@
   </div>
   <div class="panel-body">
     <div class="container-fluid">
-      <div style="padding: 3px;"></div>
-      <div class="row">
+
+      <div class="row" style="padding-top: 3px">
         <div class="col-xs-3 col-sm-2">
           <label for="name">ชื่อโครงการ</label>
         </div>
@@ -76,43 +76,60 @@
           </span>
         </div>
       </div>
-      <div style="padding: 3px;"></div>
-      <div class="row">
-        <div class="col-xs-3 col-sm-2">
-          <label for="totalArea">เนื้อที่ทั้งหมด</label>
-        </div>
+
+      <div class="row" style="padding-top: 3px">
+        <label class="control-label col-xs-3 col-sm-2">ผู้ซื้อ</label>
         <div class="col-xs-9 col-sm-10">
-          <span name="totalArea">
-            <strong class="text-info">{{ land.area.rai }}</strong>
-            <font color="grey">ไร่</font>,
-            <strong class="text-info">{{ land.area.yarn }}</strong>
-            <font color="grey">งาน</font>,
-            <strong class="text-info">{{ land.area.tarangwa }}</strong>
-            <font color="grey">ตารางวา</font>
-          </span>
-        </div>
-      </div>
-      <div style="padding: 3px;"></div>
-      <div class="row">
-        <label class="control-label col-xs-3 col-sm-2" for="buyer">ผู้ซื้อ</label>
-        <div class="col-xs-9 col-sm-10">
-          <p>
-            <a ng-href="{{'#/customers/' + customer.id}}">{{ customer.firstName + ' ' + customer.lastName }}</a>
+
+            <a ng-href="{{ '#/customers/' + customer.id }}">{{ customer.firstName + ' ' + customer.lastName }}</a>
             <a href ng-click="selectBuyerCtrl.selectBuyerModal()" ng-hide="customer.id">
               <span class="glyphicon glyphicon-plus-sign"></span>
             </a>
-            <a href ng-click="selectBuyerCtrl.selectBuyerModal()" ng-hide="!customer.id || buyDetail.customerId">
+            <a href ng-click="selectBuyerCtrl.selectBuyerModal()" ng-hide="!customer.id || buyDetail.buyerId">
               <span class="glyphicon glyphicon-pencil"></span>
             </a>
-          </p>
+
         </div>
       </div>
+
+      <div class="row" style="padding-top: 3px" ng-show="buyDetail">
+        <div class="col-xs-3 col-sm-2">
+          <label for="name">ราคาซื้อ</label>
+        </div>
+        <div class="col-xs-9 col-sm-10">
+          <span>{{ buyDetail.buyPrice | number }} บาท</span>
+        </div>
+      </div>
+
+      <div class="row" style="padding-top: 3px" ng-show="installmentPerMonth">
+        <div class="col-xs-3 col-sm-2">
+          <label for="name">ผ่อน / เดือน</label>
+        </div>
+        <div class="col-xs-9 col-sm-10">
+          <span>{{ installmentPerMonth | number }} บาท</span>
+        </div>
+      </div>
+
+      <div class="row" style="padding-top: 3px" ng-show="buyDetail">
+        <div class="col-xs-3 col-sm-2">
+          <label for="name">สถานะ</label>
+        </div>
+        <div class="col-xs-9 col-sm-10">
+          <span ng-show="unpaidDebt == 0">
+            จ่ายแล้ว <span class="glyphicon glyphicon-ok-circle" style="color: green"></span>
+          </span>
+          <span ng-show="unpaidDebt > 0">
+            ค้างชำระ ({{ unpaidDebt | number }} บาท) <span class="glyphicon glyphicon-ban-circle" style="color: red"></span>
+          </span>
+        </div>
+      </div>
+
     </div>
     <hr style="margin-top: 5px"/>
 
     <my-tabset>
       <my-tab template-url="property/land-buy-details.tpl.html" title="Buy Details"></my-tab>
-      <my-tab ng-if="buyDetail.customerId && buyDetail.buyType == 'INSTALLMENT'" template-url="property/land-installment.tpl.html" title="Payment Records"></my-tab>
+      <my-tab ng-if="buyDetail.buyerId && buyDetail.buyType == 'INSTALLMENT'" template-url="property/land-installment.tpl.html" title="Payment Records"></my-tab>
     </my-tabset>
 
   </div>

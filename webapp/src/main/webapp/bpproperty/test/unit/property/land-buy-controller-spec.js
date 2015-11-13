@@ -592,6 +592,7 @@ describe('land-buy', function() {
       spyOn($location, 'path').and.returnValue('#/lands/1/buydetails/create');
 
       LandBuyDetailsCtrl = $controller('LandBuyDetailsCtrl', {
+        $rootScope: $rootScope,
         $scope: $scope,
         $uibModal: $uibModal,
         $location: $location,
@@ -729,13 +730,15 @@ describe('land-buy', function() {
 
         it('should successfully update a buyDetail', function() {
           var deferred = $q.defer();
+          spyOn($rootScope, '$broadcast').and.callThrough();
           spyOn(LandBuyService, 'update').and.returnValue(deferred.promise);
           spyOn(NotificationService, 'notify');
 
           $scope.saveLandBuyDetail(true);
           deferred.resolve($scope.buyDetail);
-          $scope.$digest();
+          $rootScope.$digest();
 
+          expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
           expect(LandBuyService.update).toHaveBeenCalledWith($scope.buyDetail);
           expect(NotificationService.notify).toHaveBeenCalledWith({
             type: 'success',
@@ -745,13 +748,15 @@ describe('land-buy', function() {
 
         it('should fail to update a buyDetail', function() {
           var deferred = $q.defer();
+          spyOn($rootScope, '$broadcast').and.callThrough();
           spyOn(LandBuyService, 'update').and.returnValue(deferred.promise);
           spyOn(NotificationService, 'notify');
 
           $scope.saveLandBuyDetail(true);
           deferred.reject();
-          $scope.$digest();
+          $rootScope.$digest();
 
+          expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadLandBuyDetailBO');
           expect(LandBuyService.update).toHaveBeenCalledWith($scope.buyDetail);
           expect(NotificationService.notify).toHaveBeenCalledWith({
             type: 'error',
@@ -761,6 +766,102 @@ describe('land-buy', function() {
 
       });
 
+    });
+
+  });
+
+  describe('LandBuyGeneralDetailsCtrl', function() {
+
+    beforeEach(inject(function($injector) {
+
+      mockBuyDetailBO = {
+        "id": 6,
+        "landId": 1,
+        "buyType": "INSTALLMENT",
+        "buyerId": 6,
+        "buyerName": "firstname lastname",
+        "downPayment": 30000.0,
+        "buyPrice": 125000.0,
+        "annualInterest": 3,
+        "yearsOfInstallment": 12.5,
+        "totalInstallment": 0.0,
+        "description": null,
+        "area": {
+          "rai": 0,
+          "yarn": 0,
+          "tarangwa": 25
+        },
+        "createdTime": 1446185713723
+      };
+
+      BuyDetails = {
+        land: mockLand,
+        buyDetailBO: mockBuyDetailBO
+      };
+
+      LandBuyGeneralDetailsCtrl = $controller('LandBuyGeneralDetailsCtrl', {
+        $scope: $scope,
+        LandBuyService: LandBuyService,
+        BuyDetails: BuyDetails
+      });
+    }));
+
+    it('init', function() {
+      expect($scope.buyDetail).toEqual(mockBuyDetailBO);
+      expect($scope.land).toEqual(mockLand);
+      expect($scope.installmentPerMonth).toEqual(2968.75);
+      expect($scope.unpaidDebt).toEqual(95000);
+      expect($scope.customer).toEqual({
+        id: 6,
+        firstName: 'firstname',
+        lastName: 'lastname'
+      });
+    });
+
+    it('validate calculateUnpaidDebt() - INSTALLMENT', function() {
+      var actual = LandBuyGeneralDetailsCtrl.calculateUnpaidDebt(mockBuyDetailBO);
+      expect(actual).toEqual(95000);
+    });
+
+    it('validate calculateUnpaidDebt() - CASH', function() {
+      mockBuyDetailBO.buyType = 'CASH';
+      var actual = LandBuyGeneralDetailsCtrl.calculateUnpaidDebt(mockBuyDetailBO);
+      expect(actual).toEqual(0);
+    });
+
+    it('validate calculateUnpaidDebt() - no downPayment', function() {
+      mockBuyDetailBO.downPayment = null;
+      var actual = LandBuyGeneralDetailsCtrl.calculateUnpaidDebt(mockBuyDetailBO);
+      expect(actual).toEqual(125000);
+    });
+
+    it('validate calculateInstallmentPerMonth() - happy path', function() {
+      var actual = LandBuyGeneralDetailsCtrl.calculateInstallmentPerMonth(mockBuyDetailBO);
+      expect(actual).toEqual(2968.75);
+    });
+
+    it('validate calculateInstallmentPerMonth() - CASH', function() {
+      mockBuyDetailBO.buyType = 'CASH';
+      var actual = LandBuyGeneralDetailsCtrl.calculateInstallmentPerMonth(mockBuyDetailBO);
+      expect(actual).toEqual(null);
+    });
+
+    it('validate calculateInstallmentPerMonth() - null downPayment', function() {
+      mockBuyDetailBO.downPayment = null;
+      var actual = LandBuyGeneralDetailsCtrl.calculateInstallmentPerMonth(mockBuyDetailBO);
+      expect(actual).toEqual(null);
+    });
+
+    it('validate calculateInstallmentPerMonth() - null annualInterest', function() {
+      mockBuyDetailBO.annualInterest = null;
+      var actual = LandBuyGeneralDetailsCtrl.calculateInstallmentPerMonth(mockBuyDetailBO);
+      expect(actual).toEqual(null);
+    });
+
+    it('validate calculateInstallmentPerMonth() - null yearsOfInstallment', function() {
+      mockBuyDetailBO.yearsOfInstallment = null;
+      var actual = LandBuyGeneralDetailsCtrl.calculateInstallmentPerMonth(mockBuyDetailBO);
+      expect(actual).toEqual(null);
     });
 
   });

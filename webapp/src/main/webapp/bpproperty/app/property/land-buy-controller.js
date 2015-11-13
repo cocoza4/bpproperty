@@ -35,42 +35,25 @@
   };
 
   var LandBuyDetailResolve = {
-    BuyDetails: ['$q', '$route', 'LandService', 'LandBuyService', 'CustomerService',
-      function($q, $route, LandService, LandBuyService, CustomerService) {
+    BuyDetails: ['$q', '$route', 'LandService', 'LandBuyService',
+      function($q, $route, LandService, LandBuyService) {
 
         var landBuyCriteria = {
           landId: $route.current.params['landId'],
           buyDetailId: $route.current.params['buyDetailId']
         };
 
-        var buyDetail = LandBuyService.query(landBuyCriteria);
+        var bo = LandBuyService.queryForBO(landBuyCriteria);
         var land = LandService.query({
           landId: $route.current.params['landId']
         });
 
-        var loadBuyDetail = function() {
-            return $q.all([buyDetail, land])
-              .then(function(response) {
+        var promises = {
+          land: land,
+          buyDetailBO: bo
+        };
 
-                return {
-                  buyDetail: response[0],
-                  land: response[1]
-                };
-
-              });
-          },
-          loadCustomer = function(buyDetails) {
-            return CustomerService.query({
-              id: buyDetails.buyDetail.customerId
-            }).then(function(response) {
-              return {
-                buyDetail: buyDetails.buyDetail,
-                land: buyDetails.land,
-                customer: response
-              };
-            });
-          };
-        return loadBuyDetail().then(loadCustomer);
+        return $q.all(promises);
       }
     ]
   };
@@ -141,8 +124,8 @@
     }
   ])
 
-  .controller('LandBuyDetailsCtrl', ['$scope', '$uibModal', '$location', '$route', 'LandBuyService', 'NotificationService',
-    function($scope, $uibModal, $location, $route, LandBuyService, NotificationService) {
+  .controller('LandBuyDetailsCtrl', ['$rootScope', '$scope', '$uibModal', '$location', '$route', 'LandBuyService', 'NotificationService',
+    function($rootScope, $scope, $uibModal, $location, $route, LandBuyService, NotificationService) {
 
       this.deleteModal = function() {
         $uibModal.open({
@@ -214,6 +197,9 @@
                 msg: 'BuyDetail updated'
               });
 
+              // emit to load LandBuyDetailBO
+              $rootScope.$broadcast('loadLandBuyDetailBO');
+
             }, function(error) {
               NotificationService.notify({
                 type: 'error',
@@ -246,11 +232,54 @@
     }
   ])
 
-  .controller('LandBuyGeneralDetailsCtrl', ['$scope', 'BuyDetails',
-    function($scope, BuyDetails) {
-      $scope.buyDetail = BuyDetails.buyDetail;
+  .controller('LandBuyGeneralDetailsCtrl', ['$scope', 'LandBuyService', 'BuyDetails',
+    function($scope, LandBuyService, BuyDetails) {
+
+      $scope.$on('loadLandBuyDetailBO', function() {
+        var landBuyCriteria = {
+          landId: $scope.land.id,
+          buyDetailId: $scope.buyDetail.id
+        };
+        LandBuyService.queryForBO(landBuyCriteria).then(function(data) {
+          updateScope(data);
+        }, function(error) {
+          alert('Unable to query LandBuyDetailBO');
+        });
+      });
+
+      this.calculateUnpaidDebt = function(buyDetail) {
+        if (buyDetail.buyType === 'CASH') {
+          return 0;
+        } else {
+          return buyDetail.buyPrice - buyDetail.downPayment - buyDetail.totalInstallment;
+        }
+      };
+
+      this.calculateInstallmentPerMonth = function(buyDetail) {
+        if (buyDetail.buyType === 'CASH' || !buyDetail.downPayment ||
+          !buyDetail.annualInterest || !buyDetail.yearsOfInstallment) {
+          return null;
+        }
+        var calculated = (buyDetail.annualInterest / 100); // percentage of annualInterest
+        return (buyDetail.buyPrice - buyDetail.downPayment) * calculated / 12 * buyDetail.yearsOfInstallment;
+      };
+
+      function updateScope(buyDetailBO) {
+        $scope.installmentPerMonth = self.calculateInstallmentPerMonth(buyDetailBO);
+        $scope.unpaidDebt = self.calculateUnpaidDebt(buyDetailBO);
+        $scope.buyDetail = buyDetailBO;
+        var name = $scope.buyDetail.buyerName.split(' ');
+        $scope.customer = {
+          id: $scope.buyDetail.buyerId,
+          firstName: name[0],
+          lastName: name[1]
+        };
+      }
+
+      var self = this;
+      updateScope(BuyDetails.buyDetailBO);
+
       $scope.land = BuyDetails.land;
-      $scope.customer = BuyDetails.customer;
     }
   ])
 
