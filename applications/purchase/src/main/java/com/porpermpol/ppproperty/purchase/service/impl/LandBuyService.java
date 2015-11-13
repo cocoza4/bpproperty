@@ -68,6 +68,12 @@ public class LandBuyService implements ILandBuyService {
 
     @Transactional(readOnly = true)
     @Override
+    public LandBuyDetailBO findLandByDetailBOById(long id) {
+        return landBuyDetailBODAO.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public List<LandBuyDetail> findLandBuyDetailsByCustomerId(long customerId) {
         return landBuyDetailDAO.findByCustomerId(customerId);
     }
@@ -88,12 +94,6 @@ public class LandBuyService implements ILandBuyService {
             filteredYear = calendar.getTime();
         }
         return landBuyDetailBODAO.findByCriteria(buyType, firstName, landId, customerId, filteredMonth, filteredYear, pageable);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public Page<LandBuyDetail> findAllLandBuyDetails(Pageable pageable) {
-        return landBuyDetailDAO.findAll(pageable);
     }
 
     @Override
@@ -119,9 +119,4 @@ public class LandBuyService implements ILandBuyService {
         return installmentDAO.findByLandBuyDetailId(id);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Page<Installment> findAllInstallments(Pageable pageable) {
-        return installmentDAO.findAll(pageable);
-    }
 }

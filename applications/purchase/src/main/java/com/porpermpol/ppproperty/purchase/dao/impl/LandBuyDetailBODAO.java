@@ -7,6 +7,7 @@ import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailBODAO;
 import com.porpermpol.ppproperty.purchase.model.BuyType;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -23,15 +24,17 @@ import java.util.List;
 @Repository
 public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
 
-    private static final String SQL_GROUP_BY_CLAUSE = " GROUP BY lbd.id, buy_type, lbd.land_id, buy_price, " +
+    private static final String SQL_GROUP_BY_CLAUSE = " GROUP BY lbd.id, buy_type, buyer_id, lbd.land_id, buy_price, " +
             "down_payment, annual_interest, years_of_installment, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +
             "buyer_name";
 
-    private static final String SQL_SELECT_BY_LAND_ID = "SELECT lbd.id, buy_type, land_id, buy_price, " +
+    private static final String SQL_SELECT_ALL = "SELECT lbd.id, buy_type, c.id AS buyer_id, land_id, buy_price, " +
             "down_payment, annual_interest, years_of_installment, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +
             "concat(c.firstname, ' ', c.lastname) AS buyer_name, coalesce(sum(amount), 0) AS total_installment " +
             "FROM land_buy_detail lbd INNER JOIN customer c ON lbd.customer_id = c.id " +
             "LEFT JOIN installment ON buy_detail_id = lbd.id";
+
+    private static final String SQL_SELECT_BY_ID = SQL_SELECT_ALL + " WHERE lbd.id = ? " + SQL_GROUP_BY_CLAUSE;
 
     private static final String SQL_COUNT_BY_LAND_ID = "SELECT count(*) FROM land_buy_detail lbd";
 
@@ -80,10 +83,19 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
     }
 
     @Override
+    public LandBuyDetailBO findById(long id) {
+        try {
+            return jdbcOperations.queryForObject(SQL_SELECT_BY_ID, ROW_MAPPER, id);
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
+    }
+
+    @Override
     public Page<LandBuyDetailBO> findByCriteria(BuyType buyType, String firstName, Long landId, Long customerId,
                                                 Date filteredMonth, Date filteredYear, Pageable pageable) {
 
-        StringBuilder sql = new StringBuilder(SQL_SELECT_BY_LAND_ID);
+        StringBuilder sql = new StringBuilder(SQL_SELECT_ALL);
         StringBuilder whereClause = new StringBuilder();
         Object[] params = this.buildSQLConditions(whereClause, buyType, firstName, landId, customerId, filteredMonth, filteredYear);
         sql.append(whereClause)
@@ -115,6 +127,7 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
             LandBuyDetailBO model = new LandBuyDetailBO();
             model.setId(rs.getLong("id"));
             model.setLandId(rs.getLong("land_id"));
+            model.setBuyerId(rs.getLong("buyer_id"));
             model.setBuyerName(rs.getString("buyer_name"));
             model.setBuyType(BuyType.get(rs.getString("buy_type")));
             model.setBuyPrice(rs.getFloat("buy_price"));

@@ -126,6 +126,17 @@ public class LandBuyDetailBODAOIT {
     }
 
     @Test
+    public void testFindById() throws Exception {
+        LandBuyDetailBO bo = buyDetailBODAO.findById(installmentLandBuyDetail.getId());
+        this.assertLandBuyDetail(installmentLandBuyDetail, bo);
+    }
+
+    @Test
+    public void testFindById_notFound() throws Exception {
+        assertNull(buyDetailBODAO.findById(9999L));
+    }
+
+    @Test
     public void testFindByCriteria_FirstName() throws Exception {
         Pageable pageable = new PageRequest(0, 10);
         Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, "first", null, null, null, null, pageable);
@@ -236,6 +247,7 @@ public class LandBuyDetailBODAOIT {
         Area area = expected.getArea();
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getLandId(), actual.getLandId());
+        assertEquals(expected.getCustomerId(), actual.getBuyerId());
         assertEquals(expected.getAnnualInterest(), actual.getAnnualInterest());
         assertEquals(area.getRai(), actual.getArea().getRai());
         assertEquals(area.getYarn(), actual.getArea().getYarn());

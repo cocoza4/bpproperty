@@ -104,11 +104,19 @@ public class LandRestController {
         return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
+    @RequestMapping(value = "/{landId}/buydetailbos/{buyDetailId}", method = RequestMethod.GET)
+    public LandBuyDetailBO getBuyDetailBOById(@PathVariable("landId") long landId,
+                                          @PathVariable("buyDetailId") long buyDetailId) {
+        LandBuyDetailBO bo = landBuyService.findLandByDetailBOById(buyDetailId);
+        if (bo == null){
+            throw new ResourceNotFoundException();
+        }
+        return bo;
+    }
+
     @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}", method = RequestMethod.GET)
     public LandBuyDetail getBuyDetailById(@PathVariable("landId") long landId,
-                                          @PathVariable("buyDetailId") long buyDetailId,
-                                          @RequestParam(value = "page", defaultValue = "0") int page,
-                                          @RequestParam(value = "length", defaultValue = "10") int length) {
+                                          @PathVariable("buyDetailId") long buyDetailId) {
 
         LandBuyDetail buyDetail = landBuyService.findLandBuyDetailById(buyDetailId);
         if (buyDetail == null) {

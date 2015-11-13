@@ -10,6 +10,7 @@ public class LandBuyDetailBO {
     private Long id;
     private Long landId;
     private BuyType buyType;
+    private Long buyerId;
     private String buyerName;
     private Float downPayment;
     private Float buyPrice;
@@ -42,6 +43,14 @@ public class LandBuyDetailBO {
 
     public void setBuyType(BuyType buyType) {
         this.buyType = buyType;
+    }
+
+    public Long getBuyerId() {
+        return buyerId;
+    }
+
+    public void setBuyerId(Long buyerId) {
+        this.buyerId = buyerId;
     }
 
     public String getBuyerName() {

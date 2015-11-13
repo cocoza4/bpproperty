@@ -17,18 +17,14 @@ public interface ILandBuyService {
     void saveLandBuyDetail(LandBuyDetail landBuyDetail);
     void deleteLandBuyDetailById(long id);
     LandBuyDetail findLandBuyDetailById(long id);
+    LandBuyDetailBO findLandByDetailBOById(long id);
     List<LandBuyDetail> findLandBuyDetailsByCustomerId(long customerId);
 
     Page<LandBuyDetailBO> findLandBuyDetailBOByCriteria(BuyType buyType, String firstName, Long landId, Long customerId,
                                                         Integer month, Integer year, Pageable pageable);
 
-    Page<LandBuyDetail> findAllLandBuyDetails(Pageable pageable);
-
-
     void saveInstallment(Installment installment);
     void deleteInstallmentById(long id);
     Installment findInstallmentById(long id);
     List<Installment> findInstallmentsByLandBuyDetailId(long id);
-    Page<Installment> findAllInstallments(Pageable pageable);
-
 }

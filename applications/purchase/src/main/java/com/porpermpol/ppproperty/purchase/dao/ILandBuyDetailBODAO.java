@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Date;
 
 public interface ILandBuyDetailBODAO {
+    LandBuyDetailBO findById(long id);
     Page<LandBuyDetailBO> findByCriteria(BuyType buyType, String firstName, Long landId, Long customerId,
                                          Date filteredMonth, Date filteredYear, Pageable pageable);
 }
