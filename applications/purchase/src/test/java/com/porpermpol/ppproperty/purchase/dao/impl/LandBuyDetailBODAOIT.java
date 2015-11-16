@@ -257,7 +257,8 @@ public class LandBuyDetailBODAOIT {
         assertEquals(expected.getBuyType(), actual.getBuyType());
         assertEquals(expected.getDownPayment(), actual.getDownPayment());
         assertEquals(expected.getYearsOfInstallment(), actual.getYearsOfInstallment());
-        assertEquals(customer.getFirstName() + " " + customer.getLastName(), actual.getBuyerName());
+        assertEquals(customer.getFirstName(), actual.getBuyerFirstName());
+        assertEquals(customer.getLastName(), actual.getBuyerLastName());
         assertEquals(expected.getCreatedTime(), actual.getCreatedTime());
     }
 }

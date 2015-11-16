@@ -26,11 +26,11 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
 
     private static final String SQL_GROUP_BY_CLAUSE = " GROUP BY lbd.id, buy_type, buyer_id, lbd.land_id, buy_price, " +
             "down_payment, annual_interest, years_of_installment, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +
-            "buyer_name";
+            "c.firstname, c.lastname";
 
     private static final String SQL_SELECT_ALL = "SELECT lbd.id, buy_type, c.id AS buyer_id, land_id, buy_price, " +
             "down_payment, annual_interest, years_of_installment, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +
-            "concat(c.firstname, ' ', c.lastname) AS buyer_name, coalesce(sum(amount), 0) AS total_installment " +
+            "c.firstname, c.lastname, coalesce(sum(amount), 0) AS total_installment " +
             "FROM land_buy_detail lbd INNER JOIN customer c ON lbd.customer_id = c.id " +
             "LEFT JOIN installment ON buy_detail_id = lbd.id";
 
@@ -128,7 +128,8 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
             model.setId(rs.getLong("id"));
             model.setLandId(rs.getLong("land_id"));
             model.setBuyerId(rs.getLong("buyer_id"));
-            model.setBuyerName(rs.getString("buyer_name"));
+            model.setBuyerFirstName(rs.getString("firstname"));
+            model.setBuyerLastName(rs.getString("lastname"));
             model.setBuyType(BuyType.get(rs.getString("buy_type")));
             model.setBuyPrice(rs.getFloat("buy_price"));
             model.setDownPayment((Float)rs.getObject("down_payment"));

@@ -11,7 +11,8 @@ public class LandBuyDetailBO {
     private Long landId;
     private BuyType buyType;
     private Long buyerId;
-    private String buyerName;
+    private String buyerFirstName;
+    private String buyerLastName;
     private Float downPayment;
     private Float buyPrice;
     private Float annualInterest;
@@ -53,12 +54,20 @@ public class LandBuyDetailBO {
         this.buyerId = buyerId;
     }
 
-    public String getBuyerName() {
-        return buyerName;
+    public String getBuyerFirstName() {
+        return buyerFirstName;
     }
 
-    public void setBuyerName(String buyerName) {
-        this.buyerName = buyerName;
+    public void setBuyerFirstName(String buyerFirstName) {
+        this.buyerFirstName = buyerFirstName;
+    }
+
+    public String getBuyerLastName() {
+        return buyerLastName;
+    }
+
+    public void setBuyerLastName(String buyerLastName) {
+        this.buyerLastName = buyerLastName;
     }
 
     public Float getDownPayment() {

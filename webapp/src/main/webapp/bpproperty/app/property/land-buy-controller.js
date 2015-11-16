@@ -268,11 +268,10 @@
         $scope.installmentPerMonth = self.calculateInstallmentPerMonth(buyDetailBO);
         $scope.unpaidDebt = self.calculateUnpaidDebt(buyDetailBO);
         $scope.buyDetail = buyDetailBO;
-        var name = $scope.buyDetail.buyerName.split(' ');
         $scope.customer = {
           id: $scope.buyDetail.buyerId,
-          firstName: name[0],
-          lastName: name[1]
+          firstName: $scope.buyDetail.buyerFirstName,
+          lastName: $scope.buyDetail.buyerLastName
         };
       }
 
@@ -401,7 +400,7 @@
           footerCellClass: 'right',
           footerCellTemplate: '<div class="ui-grid-cell-contents">Total</div>'
         }, {
-          field: 'buyerName',
+          field: 'getBuyerName()',
           displayName: '\u0e0a\u0e37\u0e48\u0e2d\u0e1c\u0e39\u0e49\u0e0b\u0e37\u0e49\u0e2d',
           headerCellClass: 'center',
           cellClass: 'right'
@@ -597,6 +596,10 @@
           if (self.minYear > year) {
             self.minYear = year;
           }
+
+          row.getBuyerName = function() {
+            return this.buyerFirstName + ' ' + this.buyerLastName;
+          };
 
           row.getInstallmentPerMonth = function() {
             if (this.buyType === 'CASH' || !this.downPayment || !this.annualInterest || !this.yearsOfInstallment) {

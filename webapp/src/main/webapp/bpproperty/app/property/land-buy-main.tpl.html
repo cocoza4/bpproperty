@@ -9,7 +9,7 @@
   <div class="modal-body">
 
     <div>
-      <div class="grid " ui-grid-pagination ui-grid-selection ui-grid-resize-columns ui-grid="gridOptions">
+      <div class="grid " ui-grid-pagination ui-grid-resize-columns ui-grid-selection ui-grid="gridOptions">
         <div class="watermark" ng-show="!gridOptions.data.length">No data available</div>
       </div>
     </div>
@@ -45,45 +45,50 @@
         <label class="control-label col-xs-3 col-sm-2">ผู้ซื้อ</label>
         <div class="col-xs-9 col-sm-10">
 
-            <a ng-href="{{ '#/customers/' + customer.id }}">{{ customer.firstName + ' ' + customer.lastName }}</a>
-            <a href ng-click="selectBuyerCtrl.selectBuyerModal()" ng-hide="customer.id">
-              <span class="glyphicon glyphicon-plus-sign"></span>
-            </a>
-            <a href ng-click="selectBuyerCtrl.selectBuyerModal()" ng-hide="!customer.id || buyDetail.buyerId">
-              <span class="glyphicon glyphicon-pencil"></span>
-            </a>
+          <a ng-href="{{ '#/customers/' + customer.id }}">{{ customer.firstName + ' ' + customer.lastName }}</a>
+          <a href ng-click="selectBuyerCtrl.selectBuyerModal()" ng-hide="customer.id">
+            <span class="glyphicon glyphicon-plus-sign"></span>
+          </a>
+          <a href ng-click="selectBuyerCtrl.selectBuyerModal()" ng-hide="!customer.id || buyDetail.buyerId">
+            <span class="glyphicon glyphicon-pencil"></span>
+          </a>
 
         </div>
       </div>
 
-      <div class="row" style="padding-top: 3px" ng-show="buyDetail">
+      <div class="row" ng-show="buyDetail" style="padding-top: 3px">
         <div class="col-xs-3 col-sm-2">
           <label for="name">ราคาซื้อ</label>
         </div>
         <div class="col-xs-9 col-sm-10">
-          <span>{{ buyDetail.buyPrice | number }} บาท</span>
+          <span>{{ buyDetail.buyPrice | number }}
+            บาท</span>
         </div>
       </div>
 
-      <div class="row" style="padding-top: 3px" ng-show="installmentPerMonth && unpaidDebt > 0">
+      <div class="row" ng-show="installmentPerMonth && unpaidDebt > 0" style="padding-top: 3px">
         <div class="col-xs-3 col-sm-2">
           <label for="name">ผ่อน / เดือน</label>
         </div>
         <div class="col-xs-9 col-sm-10">
-          <span>{{ installmentPerMonth | number }} บาท</span>
+          <span>{{ installmentPerMonth | number }}
+            บาท</span>
         </div>
       </div>
 
-      <div class="row" style="padding-top: 3px" ng-show="buyDetail">
+      <div class="row" ng-show="buyDetail" style="padding-top: 3px">
         <div class="col-xs-3 col-sm-2">
           <label for="name">สถานะ</label>
         </div>
         <div class="col-xs-9 col-sm-10">
           <span ng-show="unpaidDebt <= 0">
-            จ่ายแล้ว <span class="glyphicon glyphicon-ok-circle" style="color: green"></span>
+            จ่ายแล้ว
+            <span class="glyphicon glyphicon-ok-circle" style="color: green"></span>
           </span>
           <span ng-show="unpaidDebt > 0">
-            ค้างชำระ ({{ unpaidDebt | number }} บาท) <span class="glyphicon glyphicon-ban-circle" style="color: red"></span>
+            ค้างชำระ ({{ unpaidDebt | number }}
+            บาท)
+            <span class="glyphicon glyphicon-ban-circle" style="color: red"></span>
           </span>
         </div>
       </div>
