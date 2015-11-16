@@ -406,6 +406,7 @@
 
         enableFiltering: true,
 
+        multiSelect: false,
         useExternalPagination: true,
         paginationPageSizes: [10, 25, 50, 100, 500],
         paginationPageSize: 10,
@@ -444,26 +445,26 @@
           headerCellClass: 'center',
           cellClass: 'center',
           width: '9%',
-          cellTemplate: '<span class="glyphicon glyphicon-list-alt pointer" style="color:#337ab7" ' +
+          cellTemplate: '<span class="glyphicon glyphicon-list-alt pointer" ' +
             'ng-click="$event.stopPropagation(); grid.appScope.redirectToCustomerSalesPage(row.entity)" ' +
-            'style="vertical-align: middle"></span>'
+            'style="vertical-align: middle; color:#337ab7"></span>'
         }],
 
         onRegisterApi: function(gridApi) {
           $scope.gridApi = gridApi;
 
           gridApi.core.on.filterChanged($scope, function() {
-            self.criteria.firstname = this.grid.columns[0].filters[0].term;
-            self.criteria.lastname = this.grid.columns[1].filters[0].term;
-            self.criteria.address = this.grid.columns[2].filters[0].term;
-            self.criteria.tel = this.grid.columns[3].filters[0].term;
-            self.queryTable();
+            $scope.criteria.firstname = this.grid.columns[0].filters[0].term;
+            $scope.criteria.lastname = this.grid.columns[1].filters[0].term;
+            $scope.criteria.address = this.grid.columns[2].filters[0].term;
+            $scope.criteria.tel = this.grid.columns[3].filters[0].term;
+            $scope.queryTable();
           });
 
           gridApi.pagination.on.paginationChanged($scope, function(newPage, pageSize) {
-            self.criteria.page = newPage - 1; // zero-based page index
-            self.criteria.length = pageSize;
-            self.queryTable();
+            $scope.criteria.page = newPage - 1; // zero-based page index
+            $scope.criteria.length = pageSize;
+            $scope.queryTable();
           });
 
           gridApi.selection.on.rowSelectionChanged($scope, function(row) {
@@ -474,8 +475,8 @@
         }
       };
 
-      this.queryTable = function() {
-        CustomerService.query(self.criteria).then(
+      $scope.queryTable = function() {
+        CustomerService.query($scope.criteria).then(
           function(data) {
             $scope.gridOptions.totalItems = data.totalRecords;
             $scope.gridOptions.data = data.content;
@@ -490,7 +491,7 @@
         $location.path('/customers/' + entity.id + '/lands');
       };
 
-      this.criteria = {
+      $scope.criteria = {
         firstname: null,
         lastname: null,
         address: null,
@@ -499,7 +500,6 @@
         length: null
       };
 
-      var self = this;
       $scope.gridOptions.data = Customers.content;
       $scope.gridOptions.totalItems = Customers.totalRecords;
 

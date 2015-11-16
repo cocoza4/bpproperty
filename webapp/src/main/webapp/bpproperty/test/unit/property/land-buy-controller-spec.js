@@ -148,58 +148,9 @@ describe('land-buy', function() {
     }));
 
     it('init', function() {
-      expect($scope.currentPage).toEqual(1);
+      expect($scope.gridOptions.columnDefs[4].visible).toBeFalsy();
+      expect($scope.gridOptions.columnDefs[5].visible).toBeFalsy();
       expect($scope.selected).toBeNull();
-    });
-
-    it('validate loadCustomers', function() {
-      var deferred = $q.defer();
-      spyOn(CustomerService, 'query').and.returnValue(deferred.promise);
-      SelectBuyerModalCtrl.loadCustomers();
-      expect(CustomerService.query).toHaveBeenCalledWith({
-        page: 0,
-        length: 10
-      });
-    });
-
-    it('validate $scope.onNextPageChanged - $scope.customers.length < 10', function() {
-      spyOn(SelectBuyerModalCtrl, 'loadCustomers');
-      $scope.onNextPageChanged();
-      expect($scope.currentPage).toEqual(1);
-      expect($scope.selected).toBeNull();
-      expect(SelectBuyerModalCtrl.loadCustomers).not.toHaveBeenCalled();
-    });
-
-    it('validate $scope.onNextPageChanged - $scope.customers.length >= 10', function() {
-      $scope.customers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]; // mock customers to be greater then 10
-      spyOn(SelectBuyerModalCtrl, 'loadCustomers');
-      $scope.onNextPageChanged();
-      expect($scope.currentPage).toEqual(2);
-      expect($scope.selected).toBeNull();
-      expect(SelectBuyerModalCtrl.loadCustomers).toHaveBeenCalled();
-    });
-
-    it('validate $scope.onPreviousPageChanged - $scope.currentPage === 1', function() {
-      spyOn(SelectBuyerModalCtrl, 'loadCustomers');
-      $scope.onPreviousPageChanged();
-      expect($scope.currentPage).toEqual(1);
-      expect($scope.selected).toBeNull();
-      expect(SelectBuyerModalCtrl.loadCustomers).not.toHaveBeenCalled();
-    });
-
-    it('validate $scope.onPreviousPageChanged - $scope.currentPage > 1', function() {
-      $scope.currentPage = 2;
-      spyOn(SelectBuyerModalCtrl, 'loadCustomers');
-      $scope.onPreviousPageChanged();
-      expect($scope.currentPage).toEqual(1);
-      expect($scope.selected).toBeNull();
-      expect(SelectBuyerModalCtrl.loadCustomers).toHaveBeenCalled();
-    });
-
-    it('validate $scope.setSelected', function() {
-      expect($scope.selected).toBeNull();
-      $scope.setSelected({});
-      expect($scope.selected).toEqual({});
     });
 
     it('validate $scope.selectBuyer', function() {
@@ -208,59 +159,15 @@ describe('land-buy', function() {
       expect($modalInstance.close).toHaveBeenCalledWith('dummy');
     });
 
+    it('validate $scope.selectBuyer - no buyer selected', function() {
+      $scope.selected = null;
+      $scope.selectBuyer();
+      expect($modalInstance.close).not.toHaveBeenCalled();
+    });
+
     it('validate $scope.closeModal', function() {
       $scope.closeModal();
       expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
-    });
-
-    describe('updateScope', function() {
-
-      it('totalRecords greater than totalDisplayRecords', function() {
-        SelectBuyerModalCtrl.updateScope(mockCustomerObjTable);
-        expect($scope.customers).toEqual(mockCustomerObjTable.content);
-        expect($scope.totalRecords).toEqual(mockCustomerObjTable.totalRecords);
-        expect($scope.startIndex).toEqual(1);
-        expect($scope.endIndex).toEqual(10);
-      });
-
-      it('totalRecords equal to totalDisplayRecords', function() {
-        mockCustomerObjTable.totalRecords = 10;
-        mockCustomerObjTable.totalDisplayRecords = 10;
-        SelectBuyerModalCtrl.updateScope(mockCustomerObjTable);
-        expect($scope.customers).toEqual(mockCustomerObjTable.content);
-        expect($scope.totalRecords).toEqual(mockCustomerObjTable.totalRecords);
-        expect($scope.startIndex).toEqual(1);
-        expect($scope.endIndex).toEqual(10);
-      });
-
-      it('totalRecords less to totalDisplayRecords', function() {
-        mockCustomerObjTable.totalRecords = 10;
-        mockCustomerObjTable.totalDisplayRecords = 50;
-        SelectBuyerModalCtrl.updateScope(mockCustomerObjTable);
-        expect($scope.customers).toEqual(mockCustomerObjTable.content);
-        expect($scope.totalRecords).toEqual(mockCustomerObjTable.totalRecords);
-        expect($scope.startIndex).toEqual(1);
-        expect($scope.endIndex).toEqual(50);
-      });
-
-      it('2nd page', function() {
-        $scope.currentPage = 2;
-        SelectBuyerModalCtrl.updateScope(mockCustomerObjTable);
-        expect($scope.customers).toEqual(mockCustomerObjTable.content);
-        expect($scope.totalRecords).toEqual(mockCustomerObjTable.totalRecords);
-        expect($scope.startIndex).toEqual(11);
-        expect($scope.endIndex).toEqual(20);
-      });
-
-      it('no customers', function() {
-        mockCustomerObjTable.content = [];
-        mockCustomerObjTable.totalRecords = 0;
-        SelectBuyerModalCtrl.updateScope(mockCustomerObjTable);
-        expect($scope.customers).toEqual(mockCustomerObjTable.content);
-        expect($scope.totalRecords).toEqual(mockCustomerObjTable.totalRecords);
-        expect($scope.startIndex).toEqual(0);
-        expect($scope.endIndex).toEqual(0);
-      });
     });
 
   });
@@ -302,6 +209,7 @@ describe('land-buy', function() {
 
       expect($uibModal.open).toHaveBeenCalledWith({
         animation: true,
+        size: 'lg',
         templateUrl: 'myModalContent.html',
         controller: 'SelectBuyerModalCtrl',
         resolve: {
@@ -408,7 +316,7 @@ describe('land-buy', function() {
     it('validate getInstallmentPerMonth() in preProcessing() - happyPath', function() {
       var installmentBuyDetail = mockBuyDetailObjTable.content[0];
       LandBuyDetailListCtrl.preProcessing([installmentBuyDetail]);
-      expect(installmentBuyDetail.getInstallmentPerMonth()).toBeCloseTo(56.22);
+      expect(installmentBuyDetail.getInstallmentPerMonth()).toBeCloseTo(17.24);
     });
 
     it('validate preProcessing() - CASH', function() {
@@ -809,7 +717,7 @@ describe('land-buy', function() {
     it('init', function() {
       expect($scope.buyDetail).toEqual(mockBuyDetailBO);
       expect($scope.land).toEqual(mockLand);
-      expect($scope.installmentPerMonth).toEqual(2968.75);
+      expect($scope.installmentPerMonth).toBeCloseTo(652.33);
       expect($scope.unpaidDebt).toEqual(95000);
       expect($scope.customer).toEqual({
         id: 6,
@@ -837,7 +745,7 @@ describe('land-buy', function() {
 
     it('validate calculateInstallmentPerMonth() - happy path', function() {
       var actual = LandBuyGeneralDetailsCtrl.calculateInstallmentPerMonth(mockBuyDetailBO);
-      expect(actual).toEqual(2968.75);
+      expect(actual).toBeCloseTo(652.33);
     });
 
     it('validate calculateInstallmentPerMonth() - CASH', function() {

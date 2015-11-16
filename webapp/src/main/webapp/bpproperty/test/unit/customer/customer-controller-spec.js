@@ -278,7 +278,7 @@ describe('customer', function() {
     it('init', function() {
       expect($scope.gridOptions.data).toEqual(mockCustomerObjTable.content);
       expect($scope.gridOptions.totalItems).toEqual(mockCustomerObjTable.totalRecords);
-      expect(customerListCtrl.criteria).toEqual({
+      expect($scope.criteria).toEqual({
         firstname: null,
         lastname: null,
         address: null,
@@ -288,16 +288,16 @@ describe('customer', function() {
       });
     });
 
-    it('validate queryTable() - happy path', function() {
+    it('validate $scope.queryTable() - happy path', function() {
       var deferred = $q.defer();
       spyOn(CustomerService, 'query').and.returnValue(deferred.promise);
 
-      customerListCtrl.queryTable();
+      $scope.queryTable();
 
       deferred.resolve(mockCustomerObjTable);
       $scope.$digest();
 
-      expect(CustomerService.query).toHaveBeenCalledWith(customerListCtrl.criteria);
+      expect(CustomerService.query).toHaveBeenCalledWith($scope.criteria);
       expect($scope.gridOptions.totalItems).toEqual(100);
       expect($scope.gridOptions.data).toEqual(mockCustomerObjTable.content);
     });

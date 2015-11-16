@@ -60,8 +60,8 @@
 
   angular
 
-    .module('land-buy', ['ngRoute', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection',
-    'ui.grid.pagination', 'my-notification', 'land-buy-service', 'land-service', 'customer-service'
+    .module('land-buy', ['ngRoute', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection', 'ui.grid.pagination',
+    'my-notification', 'land-buy-service', 'land-service', 'customer', 'customer-service'
   ])
 
   .config(['$routeProvider', function($routeProvider) {
@@ -260,8 +260,8 @@
           !buyDetail.annualInterest || !buyDetail.yearsOfInstallment) {
           return null;
         }
-        var calculated = (buyDetail.annualInterest / 100); // percentage of annualInterest
-        return (buyDetail.buyPrice - buyDetail.downPayment) * calculated / 12 * buyDetail.yearsOfInstallment;
+        var calculated = (buyDetail.annualInterest / 100) + 1; // percentage of annualInterest
+        return (buyDetail.buyPrice - buyDetail.downPayment) * calculated / (12 * buyDetail.yearsOfInstallment);
       };
 
       function updateScope(buyDetailBO) {
@@ -283,64 +283,52 @@
     }
   ])
 
-  .controller('SelectBuyerModalCtrl', ['$scope', '$modalInstance', 'CustomerService', 'dataTableObject',
-    function($scope, $modalInstance, CustomerService, dataTableObject) {
+  .controller('SelectBuyerModalCtrl', ['$scope', '$controller', '$modalInstance',
+    'CustomerService', 'dataTableObject',
+    function($scope, $controller, $modalInstance, CustomerService, dataTableObject) {
 
-      this.loadCustomers = function() {
-        var criteria = {
-          page: $scope.currentPage - 1, // zero-based page index
-          length: recordsPerPage
-        };
-        CustomerService.query(criteria).then(function(data) {
-          self.updateScope(data);
+      // inherits from CustomerListCtrl
+      $controller('CustomerListCtrl', {
+        $scope: $scope,
+        Customers: dataTableObject
+      });
+
+      $scope.gridOptions.onRegisterApi = function(gridApi) {
+        $scope.gridApi = gridApi;
+
+        gridApi.core.on.filterChanged($scope, function() {
+          $scope.criteria.firstname = this.grid.columns[0].filters[0].term;
+          $scope.criteria.lastname = this.grid.columns[1].filters[0].term;
+          $scope.criteria.address = this.grid.columns[2].filters[0].term;
+          $scope.criteria.tel = this.grid.columns[3].filters[0].term;
+          $scope.queryTable();
+        });
+
+        gridApi.pagination.on.paginationChanged($scope, function(newPage, pageSize) {
+          $scope.criteria.page = newPage - 1; // zero-based page index
+          $scope.criteria.length = pageSize;
+          $scope.queryTable();
+        });
+
+        gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+          $scope.selected = row.entity;
         });
       };
 
-      this.updateScope = function(data) {
-        $scope.customers = data.content;
-        $scope.totalRecords = data.totalRecords;
-        if ($scope.totalRecords === 0) {
-          $scope.startIndex = 0;
-          $scope.endIndex = 0;
-        } else {
-          $scope.startIndex = (($scope.currentPage - 1) * recordsPerPage) + 1;
-          $scope.endIndex = $scope.startIndex + data.totalDisplayRecords - 1;
-        }
-      };
-
-      $scope.onNextPageChanged = function() {
-        if ($scope.customers.length < 10) return;
-        $scope.currentPage = $scope.currentPage + 1;
-        self.loadCustomers();
-        $scope.selected = null;
-      };
-
-      $scope.onPreviousPageChanged = function() {
-        if ($scope.currentPage === 1) return;
-        $scope.currentPage = $scope.currentPage - 1;
-        self.loadCustomers();
-        $scope.selected = null;
-      };
-
-      $scope.setSelected = function(customer) {
-        $scope.selected = customer;
-      };
-
       $scope.selectBuyer = function() {
-        $modalInstance.close($scope.selected);
+        if ($scope.selected) {
+          $modalInstance.close($scope.selected);
+        }
       };
 
       $scope.closeModal = function() {
         $modalInstance.dismiss('cancel');
       };
 
-      var self = this;
-      var recordsPerPage = 10;
-
-      $scope.currentPage = 1;
       $scope.selected = null;
 
-      this.updateScope(dataTableObject);
+      $scope.gridOptions.columnDefs[4].visible = false; // disable createdTime field
+      $scope.gridOptions.columnDefs[5].visible = false; // disable page redirect field
     }
   ])
 
@@ -350,6 +338,7 @@
       this.selectBuyerModal = function() {
         $scope.modalInstance = $uibModal.open({
           animation: true,
+          size: 'lg',
           templateUrl: 'myModalContent.html',
           controller: 'SelectBuyerModalCtrl',
           resolve: {
@@ -613,8 +602,8 @@
             if (this.buyType === 'CASH' || !this.downPayment || !this.annualInterest || !this.yearsOfInstallment) {
               return;
             }
-            var calculated = (this.annualInterest / 100); // percentage of annualInterest
-            return (this.buyPrice - this.downPayment) * calculated / 12 * this.yearsOfInstallment;
+            var calculated = (this.annualInterest / 100) + 1; // percentage of annualInterest
+            return (this.buyPrice - this.downPayment) * calculated / (12 * this.yearsOfInstallment);
           };
 
           row.getDebt = function() {

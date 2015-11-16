@@ -8,47 +8,11 @@
   </div>
   <div class="modal-body">
 
-    <div class="inline pull-right">
-      Showing
-      <strong>{{ startIndex }}</strong>
-      to
-      <strong>{{ endIndex }}</strong>
-      of
-      <strong class="text-primary">{{ totalRecords }}</strong>
-      entries
+    <div>
+      <div class="grid " ui-grid-pagination ui-grid-selection ui-grid-resize-columns ui-grid="gridOptions">
+        <div class="watermark" ng-show="!gridOptions.data.length">No data available</div>
+      </div>
     </div>
-
-    <div style="clear:both; padding-top: 10px"></div>
-
-    <div class="table-responsive">
-      <table cellspacing="0" class="table table-striped table-bordered table-hover table-condensed" style="margin-bottom: 0px;" width="100%">
-        <thead>
-          <tr valign="middle">
-            <th></th>
-            <th>No.</th>
-            <th>Name</th>
-            <th>Address</th>
-            <th>Tel.</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-class="{'selectedRow': customer.id === selected.id}" ng-click="setSelected(customer)" ng-repeat="customer in customers">
-            <td align="center"><input ng-model="selected" ng-value="customer" type="radio"></td>
-            <td align="center">{{ startIndex + $index }}</td>
-            <td>{{ customer.firstName + ' ' + customer.lastName }}</td>
-            <td>{{ customer.address }}</td>
-            <td>{{ customer.tel }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <nav>
-      <ul class="pager">
-        <li ng-class="{'disabled': currentPage == 1}">
-          <a href="" ng-click="onPreviousPageChanged()"><< Previous</a> </li> <li ng-class="{'disabled': customers.length < 10}"> <!-- no more customer --> <a href="" ng-click="onNextPageChanged()" disabled>Next >></a>
-        </li>
-      </ul>
-    </nav>
 
   </div>
   <div class="modal-footer">
