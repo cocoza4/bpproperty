@@ -39,10 +39,10 @@ describe('land-buy', function() {
         "buyType": "INSTALLMENT",
         "buyerFirstName": "firstname1",
         "buyerLastName": "lastname1",
-        "downPayment": 100.55,
-        "buyPrice": 1000.1,
-        "annualInterest": 15.0,
-        "totalInstallment": 500,
+        "downPayment": 50000,
+        "buyPrice": 250000,
+        "annualInterest": 8,
+        "totalInstallment": 0,
         "yearsOfInstallment": 5,
         "description": null,
         "area": {
@@ -284,52 +284,6 @@ describe('land-buy', function() {
       var data = mockBuyDetailObjTable.content;
       LandBuyDetailListCtrl.preProcessing(data);
       expect(LandBuyDetailListCtrl.minYear).toEqual(2015);
-    });
-
-    it('validate getInstallmentPerMonth() in preProcessing() - CASH', function() {
-      var cashBuyDetail = mockBuyDetailObjTable.content[1];
-      LandBuyDetailListCtrl.preProcessing([cashBuyDetail]);
-      expect(cashBuyDetail.getInstallmentPerMonth()).toBeUndefined();
-    });
-
-    it('validate getInstallmentPerMonth() in preProcessing() - null downPayment', function() {
-      var installmentBuyDetail = mockBuyDetailObjTable.content[0];
-      installmentBuyDetail.downPayment = null;
-      LandBuyDetailListCtrl.preProcessing([installmentBuyDetail]);
-      expect(installmentBuyDetail.getInstallmentPerMonth()).toBeUndefined();
-    });
-
-    it('validate getInstallmentPerMonth() in preProcessing() - null annualInterest', function() {
-      var installmentBuyDetail = mockBuyDetailObjTable.content[0];
-      installmentBuyDetail.annualInterest = null;
-      LandBuyDetailListCtrl.preProcessing([installmentBuyDetail]);
-      expect(installmentBuyDetail.getInstallmentPerMonth()).toBeUndefined();
-    });
-
-    it('validate getInstallmentPerMonth() in preProcessing() - null yearsOfInstallment', function() {
-      var installmentBuyDetail = mockBuyDetailObjTable.content[0];
-      installmentBuyDetail.yearsOfInstallment = null;
-      LandBuyDetailListCtrl.preProcessing([installmentBuyDetail]);
-      expect(installmentBuyDetail.getInstallmentPerMonth()).toBeUndefined();
-    });
-
-    it('validate getInstallmentPerMonth() in preProcessing() - happyPath', function() {
-      var installmentBuyDetail = mockBuyDetailObjTable.content[0];
-      LandBuyDetailListCtrl.preProcessing([installmentBuyDetail]);
-      expect(installmentBuyDetail.getInstallmentPerMonth()).toBeCloseTo(17.24);
-    });
-
-    it('validate preProcessing() - CASH', function() {
-      var data = mockBuyDetailObjTable.content;
-      LandBuyDetailListCtrl.preProcessing(data);
-      expect(data[1].getDebt()).toEqual(0);
-    });
-
-    it('validate preProcessing() - INSTALLMENT', function() {
-      var data = mockBuyDetailObjTable.content;
-      LandBuyDetailListCtrl.preProcessing(data);
-
-      expect(data[0].getDebt()).toBeCloseTo(399.55);
     });
 
     it('validate $scope.updateYear() - default year', function() {
@@ -718,59 +672,13 @@ describe('land-buy', function() {
     it('init', function() {
       expect($scope.buyDetail).toEqual(mockBuyDetailBO);
       expect($scope.land).toEqual(mockLand);
-      expect($scope.installmentPerMonth).toBeCloseTo(652.33);
+      expect($scope.installmentPerMonth).toBeCloseTo(870.83);
       expect($scope.unpaidDebt).toEqual(95000);
       expect($scope.customer).toEqual({
         id: 6,
         firstName: 'firstname',
         lastName: 'lastname'
       });
-    });
-
-    it('validate calculateUnpaidDebt() - INSTALLMENT', function() {
-      var actual = LandBuyGeneralDetailsCtrl.calculateUnpaidDebt(mockBuyDetailBO);
-      expect(actual).toEqual(95000);
-    });
-
-    it('validate calculateUnpaidDebt() - CASH', function() {
-      mockBuyDetailBO.buyType = 'CASH';
-      var actual = LandBuyGeneralDetailsCtrl.calculateUnpaidDebt(mockBuyDetailBO);
-      expect(actual).toEqual(0);
-    });
-
-    it('validate calculateUnpaidDebt() - no downPayment', function() {
-      mockBuyDetailBO.downPayment = null;
-      var actual = LandBuyGeneralDetailsCtrl.calculateUnpaidDebt(mockBuyDetailBO);
-      expect(actual).toEqual(125000);
-    });
-
-    it('validate calculateInstallmentPerMonth() - happy path', function() {
-      var actual = LandBuyGeneralDetailsCtrl.calculateInstallmentPerMonth(mockBuyDetailBO);
-      expect(actual).toBeCloseTo(652.33);
-    });
-
-    it('validate calculateInstallmentPerMonth() - CASH', function() {
-      mockBuyDetailBO.buyType = 'CASH';
-      var actual = LandBuyGeneralDetailsCtrl.calculateInstallmentPerMonth(mockBuyDetailBO);
-      expect(actual).toEqual(null);
-    });
-
-    it('validate calculateInstallmentPerMonth() - null downPayment', function() {
-      mockBuyDetailBO.downPayment = null;
-      var actual = LandBuyGeneralDetailsCtrl.calculateInstallmentPerMonth(mockBuyDetailBO);
-      expect(actual).toEqual(null);
-    });
-
-    it('validate calculateInstallmentPerMonth() - null annualInterest', function() {
-      mockBuyDetailBO.annualInterest = null;
-      var actual = LandBuyGeneralDetailsCtrl.calculateInstallmentPerMonth(mockBuyDetailBO);
-      expect(actual).toEqual(null);
-    });
-
-    it('validate calculateInstallmentPerMonth() - null yearsOfInstallment', function() {
-      mockBuyDetailBO.yearsOfInstallment = null;
-      var actual = LandBuyGeneralDetailsCtrl.calculateInstallmentPerMonth(mockBuyDetailBO);
-      expect(actual).toEqual(null);
     });
 
   });

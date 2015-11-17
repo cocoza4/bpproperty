@@ -247,26 +247,9 @@
         });
       });
 
-      this.calculateUnpaidDebt = function(buyDetail) {
-        if (buyDetail.buyType === 'CASH') {
-          return 0;
-        } else {
-          return buyDetail.buyPrice - buyDetail.downPayment - buyDetail.totalInstallment;
-        }
-      };
-
-      this.calculateInstallmentPerMonth = function(buyDetail) {
-        if (buyDetail.buyType === 'CASH' || !buyDetail.downPayment ||
-          !buyDetail.annualInterest || !buyDetail.yearsOfInstallment) {
-          return null;
-        }
-        var calculated = (buyDetail.annualInterest / 100) + 1; // percentage of annualInterest
-        return (buyDetail.buyPrice - buyDetail.downPayment) * calculated / (12 * buyDetail.yearsOfInstallment);
-      };
-
       function updateScope(buyDetailBO) {
-        $scope.installmentPerMonth = self.calculateInstallmentPerMonth(buyDetailBO);
-        $scope.unpaidDebt = self.calculateUnpaidDebt(buyDetailBO);
+        $scope.installmentPerMonth = LandBuyService.getInstallmentPerMonth(buyDetailBO);
+        $scope.unpaidDebt = LandBuyService.getUnpaidDebt(buyDetailBO);
         $scope.buyDetail = buyDetailBO;
         $scope.customer = {
           id: $scope.buyDetail.buyerId,
@@ -359,8 +342,8 @@
   ])
 
   .controller('LandBuyDetailListCtrl', ['$scope', '$location', '$routeParams', 'uiGridConstants',
-    'BuyDetailList', 'LandBuyService',
-    function($scope, $location, $routeParams, uiGridConstants, BuyDetailList, LandBuyService) {
+    'BuyDetailList', 'LandBuyService', 'CustomerService',
+    function($scope, $location, $routeParams, uiGridConstants, BuyDetailList, LandBuyService, CustomerService) {
 
       $scope.gridOptions = {
         enableSorting: true,
@@ -400,7 +383,7 @@
           footerCellClass: 'right',
           footerCellTemplate: '<div class="ui-grid-cell-contents">Total</div>'
         }, {
-          field: 'getBuyerName()',
+          field: 'buyerName',
           displayName: '\u0e0a\u0e37\u0e48\u0e2d\u0e1c\u0e39\u0e49\u0e0b\u0e37\u0e49\u0e2d',
           headerCellClass: 'center',
           cellClass: 'right'
@@ -465,7 +448,7 @@
           footerCellClass: 'right',
           footerCellFilter: 'number'
         }, {
-          field: "getInstallmentPerMonth()",
+          field: "installmentPerMonth",
           displayName: "\u0e1c\u0e48\u0e2d\u0e19 \u002f \u0e40\u0e14\u0e37\u0e2d\u0e19",
           headerCellClass: 'center',
           cellClass: 'right',
@@ -485,7 +468,7 @@
           footerCellClass: 'right',
           footerCellFilter: 'number'
         }, {
-          field: 'getDebt()',
+          field: 'unpaidDebt',
           displayName: "\u0e22\u0e2d\u0e14\u0e04\u0e07\u0e04\u0e49\u0e32\u0e07",
           headerCellClass: 'center',
           cellFilter: 'number',
@@ -597,24 +580,9 @@
             self.minYear = year;
           }
 
-          row.getBuyerName = function() {
-            return this.buyerFirstName + ' ' + this.buyerLastName;
-          };
-
-          row.getInstallmentPerMonth = function() {
-            if (this.buyType === 'CASH' || !this.downPayment || !this.annualInterest || !this.yearsOfInstallment) {
-              return;
-            }
-            var calculated = (this.annualInterest / 100) + 1; // percentage of annualInterest
-            return (this.buyPrice - this.downPayment) * calculated / (12 * this.yearsOfInstallment);
-          };
-
-          row.getDebt = function() {
-            if (this.buyType === 'CASH') {
-              return 0;
-            }
-            return this.buyPrice - this.downPayment - this.totalInstallment;
-          };
+          row.buyerName = CustomerService.getCustomerFullName(row);
+          row.installmentPerMonth = LandBuyService.getInstallmentPerMonth(row);
+          row.unpaidDebt = LandBuyService.getUnpaidDebt(row);
         });
       };
 

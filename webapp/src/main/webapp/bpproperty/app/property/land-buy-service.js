@@ -8,6 +8,22 @@
 
   .service('LandBuyService', ['LandBuy', 'LandBuyBO', function(LandBuy, LandBuyBO) {
 
+    this.getUnpaidDebt = function(data) {
+      if (data.buyType === 'CASH') {
+        return 0;
+      }
+      return data.buyPrice - data.downPayment - data.totalInstallment;
+    };
+
+    this.getInstallmentPerMonth = function(data) {
+      if (data.buyType === 'CASH' || !data.downPayment || !data.annualInterest || !data.yearsOfInstallment) {
+        return null;
+      }
+      var initialDebt = (data.buyPrice - data.downPayment);
+      var interest = initialDebt * (data.annualInterest / 100) * data.yearsOfInstallment;
+      return (initialDebt + interest) / (12 * data.yearsOfInstallment);
+    };
+
     this.queryForBO = function(criteria) {
       return LandBuyBO.query(criteria).$promise;
     };

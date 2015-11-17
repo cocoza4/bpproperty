@@ -8,6 +8,10 @@
 
   .service('CustomerService', ['Customer', 'CustomerLands', function(Customer, CustomerLands) {
 
+    this.getCustomerFullName = function(data) {
+      return data.buyerFirstName + ' ' + data.buyerLastName;
+    };
+
     this.query = function(criteria) {
       return Customer.query(criteria).$promise;
     };
