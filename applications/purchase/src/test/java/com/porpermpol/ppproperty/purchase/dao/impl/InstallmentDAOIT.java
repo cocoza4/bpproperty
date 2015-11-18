@@ -15,6 +15,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -132,9 +134,10 @@ public class InstallmentDAOIT {
 
     @Test
     public void testFindByLandBuyDetailId() throws Exception {
-        assertTrue(installmentDAO.findByLandBuyDetailId(installment.getBuyDetailId()).isEmpty());
+        Pageable pageable = new PageRequest(0, 10);
+        assertEquals(0, installmentDAO.findByLandBuyDetailId(installment.getBuyDetailId(), pageable).getTotalElements());
         installmentDAO.save(installment);
-        assertEquals(1, installmentDAO.findByLandBuyDetailId(installment.getBuyDetailId()).size());
+        assertEquals(1, installmentDAO.findByLandBuyDetailId(installment.getBuyDetailId(), pageable).getTotalElements());
     }
 
     @Test

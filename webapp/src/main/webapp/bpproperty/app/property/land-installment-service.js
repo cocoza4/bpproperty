@@ -56,7 +56,7 @@
             page: '@page',
             length: '@length'
           },
-          isArray: true
+          isArray: false
         }
       });
   }]);

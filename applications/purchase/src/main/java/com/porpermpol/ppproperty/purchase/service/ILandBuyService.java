@@ -26,5 +26,5 @@ public interface ILandBuyService {
     void saveInstallment(Installment installment);
     void deleteInstallmentById(long id);
     Installment findInstallmentById(long id);
-    List<Installment> findInstallmentsByLandBuyDetailId(long id);
+    Page<Installment> findInstallmentsByLandBuyDetailId(long id, Pageable pageable);
 }

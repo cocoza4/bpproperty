@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping("api/lands")
@@ -132,10 +131,18 @@ public class LandRestController {
     }
 
     @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/installments", method = RequestMethod.GET)
-    public List<Installment> getInstallmentsByBuyDetailId(@PathVariable("landId") long landId,
-                                                          @PathVariable("buyDetailId") long buyDetailId) {
+    public DataTableObject<Installment> getInstallmentsByBuyDetailId(@PathVariable("landId") long landId,
+                                                          @PathVariable("buyDetailId") long buyDetailId,
+                                                          @RequestParam(value = "page", defaultValue = "0") int page,
+                                                          @RequestParam(value = "length", defaultValue = "10") int length) {
+        Pageable pageable = new PageRequest(page, length);
 
-        return landBuyService.findInstallmentsByLandBuyDetailId(buyDetailId);
+        Page<Installment> installmentPage = landBuyService.findInstallmentsByLandBuyDetailId(buyDetailId, pageable);
+        DataTableObject<Installment> dataTableObject = new DataTableObject<>(installmentPage.getContent(),
+                installmentPage.getContent().size(),
+                installmentPage.getTotalElements());
+
+        return dataTableObject;
     }
 
     @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/installments", method = RequestMethod.POST)

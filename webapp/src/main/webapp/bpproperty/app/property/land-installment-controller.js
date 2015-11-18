@@ -5,7 +5,9 @@
 
   angular
 
-    .module('land-installment', ['ngRoute', 'ui.bootstrap', 'my-notification', 'land-buy', 'land-installment-service'])
+    .module('land-installment', ['ngRoute', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection',
+    'ui.grid.pagination', 'my-notification', 'land-buy', 'land-installment-service'
+  ])
 
   .controller('ConfirmDeleteModalCtrl', ['$rootScope', '$scope', '$route', '$modalInstance', 'InstallmentService',
     'NotificationService', 'installment',
@@ -25,6 +27,7 @@
             });
 
             // emit to load installments
+            $rootScope.$broadcast('loadLandBuyDetailBO');
             $rootScope.$broadcast('loadInstallments');
           },
           function(error) {
@@ -45,8 +48,9 @@
     }
   ])
 
-  .controller('InstallmentListCtrl', ['$scope', '$route', '$uibModal', 'LandBuyService', 'InstallmentService',
-    function($scope, $route, $uibModal, LandBuyService, InstallmentService) {
+  .controller('InstallmentListCtrl', ['$scope', '$route', '$uibModal', 'uiGridConstants',
+    'LandBuyService', 'InstallmentService',
+    function($scope, $route, $uibModal, uiGridConstants, LandBuyService, InstallmentService) {
 
       $scope.gridOptions = {
         enableSorting: true,
@@ -55,77 +59,66 @@
         enableColumnResizing: true,
         fastWatch: true,
 
-        // useExternalPagination: true,
+        useExternalPagination: true,
         paginationPageSizes: [10, 25, 50, 100, 500],
         paginationPageSize: 10,
 
-        columnDefs: [
-          {
-            field: 'sequence',
-            displayName: 'No.',
-            headerCellClass: 'center',
-            cellClass: 'center',
-            enableSorting: false,
-            width: '5%',
-            cellTemplate: '<div class="ui-grid-cell-contents">{{grid.renderContainers.body.visibleRowCache.indexOf(row) + 1}}</div>'
-          },{
+        columnDefs: [{
           field: 'payFor',
-          displayName: 'payFor',
+          displayName: '\u0e1b\u0e23\u0e30\u0e08\u0e33\u0e40\u0e14\u0e37\u0e2d\u0e19',
           cellFilter: 'date: "MMMM yyyy"',
           headerCellClass: 'center',
           cellClass: 'right',
+          footerCellClass: 'right',
+          footerCellTemplate: '<div class="ui-grid-cell-contents">Total</div>'
         }, {
           field: 'amount',
-          displayName: 'amount',
+          displayName: '\u0e08\u0e33\u0e19\u0e27\u0e19',
           cellFilter: 'number',
           headerCellClass: 'center',
-          cellClass: 'right'
+          cellClass: 'right',
+          aggregationType: uiGridConstants.aggregationTypes.sum,
+          aggregationHideLabel: true,
+          footerCellClass: 'right',
+          footerCellFilter: 'number'
         }, {
           field: 'createdTime',
-          displayName: 'payment date',
+          displayName: '\u0e27\u0e31\u0e19\u0e17\u0e35\u0e48\u0e1a\u0e31\u0e19\u0e17\u0e36\u0e01',
           cellFilter: 'date:"MMMM d, yyyy \' \u0e40\u0e27\u0e25\u0e32 \' h:mm a"',
           headerCellClass: 'center',
           cellClass: 'right'
         }, {
-          name: 'Revise',
+          name: '\u0e41\u0e01\u0e49\u0e44\u0e02',
           headerCellClass: 'center',
           cellClass: 'center',
           width: '10%',
-          cellTemplate: '<span class="glyphicon glyphicon-edit" style="color:#337ab7;vertical-align: middle"></span>'
+          cellTemplate: '<span class="glyphicon glyphicon-edit pointer" ' +
+            'ng-click="grid.appScope.saveInstallmentModal(row.entity)" ' +
+            'style="color:#337ab7;vertical-align: middle"></span>'
 
         }, {
-          name: 'Delete',
+          name: '\u0e25\u0e1a',
           headerCellClass: 'center',
           cellClass: 'center',
           width: '10%',
-          cellTemplate: '<span class="glyphicon glyphicon-remove" style="color:#d9534f;vertical-align: middle"></span>'
+          cellTemplate: '<span class="glyphicon glyphicon-remove pointer" ' +
+            'ng-click="grid.appScope.confirmDeleteModal(row.entity)" ' +
+            'style="color:#d9534f;vertical-align: middle"></span>'
         }],
 
         onRegisterApi: function(gridApi) {
-
           $scope.gridApi = gridApi;
 
-          // gridApi.selection.on.rowSelectionChanged($scope, function(row) {
-          //   var buyDetail = row.entity;
-          //   $location.path('/lands/' + buyDetail.landId + '/buydetails/' + buyDetail.id);
-          // });
-          //
-          // gridApi.pagination.on.paginationChanged($scope, function(newPage, pageSize) {
-          //   self.criteria.page = newPage - 1; // zero-based page index
-          //   self.criteria.length = pageSize;
-          //   self.queryTable();
-          // });
-          //
-          // gridApi.core.on.filterChanged($scope, function() {
-          //   self.criteria.buyType = this.grid.columns[0].filters[0].term;
-          //   self.criteria.firstname = this.grid.columns[1].filters[0].term;
-          //   self.queryTable();
-          // });
+          gridApi.pagination.on.paginationChanged($scope, function(newPage, pageSize) {
+            self.installmentCriteria.page = newPage - 1;
+            self.installmentCriteria.length = pageSize;
+            self.loadInstallments();
+          });
 
         }
       };
 
-      this.saveInstallmentModal = function(selected) {
+      $scope.saveInstallmentModal = function(selected) {
         $uibModal.open({
           animation: true,
           templateUrl: 'saveInstallmentModal.html',
@@ -138,7 +131,7 @@
         });
       };
 
-      this.confirmDeleteModal = function(selected) {
+      $scope.confirmDeleteModal = function(selected) {
         $uibModal.open({
           animation: true,
           templateUrl: 'confirmDeleteModal.html',
@@ -152,34 +145,20 @@
       };
 
       this.loadInstallments = function() {
-        var installmentCriteria = {
-          landId: $route.current.params['landId'],
-          buyDetailId: $route.current.params['buyDetailId'],
-        };
-
-        var landBuyCriteria = {
-          landId: $route.current.params['landId'],
-          buyDetailId: $route.current.params['buyDetailId']
-        };
-
-        InstallmentService.query(installmentCriteria).then(function(data) {
-
-          $scope.gridOptions.data = data;
-
-          $scope.installments = data;
-          return LandBuyService.query(landBuyCriteria);
-        }).then(function(data) {
-
-
-          // $scope.gridOptions.totalItems = BuyDetailList.landBuyDetail.totalRecords;
-
-          $scope.landBuy = data;
-          $scope.totalAmount = InstallmentService.getTotalPayment($scope.installments);
-          $scope.remaining = data.buyPrice - data.downPayment - $scope.totalAmount;
+        InstallmentService.query(self.installmentCriteria).then(function(data) {
+          $scope.gridOptions.data = data.content;
+          $scope.gridOptions.totalItems = data.totalRecords;
         });
       };
 
-      $scope.$on('loadInstallments', function() {
+      this.installmentCriteria = {
+        landId: $route.current.params.landId,
+        buyDetailId: $route.current.params.buyDetailId,
+        page: 0,
+        length: 10
+      };
+
+      $scope.$on('loadInstallments', function(event) {
         self.loadInstallments();
       });
 
@@ -221,6 +200,7 @@
               });
 
               // emit to load installments
+              $rootScope.$broadcast('loadLandBuyDetailBO');
               $rootScope.$broadcast('loadInstallments');
 
             }, function(error) {
@@ -239,6 +219,7 @@
               });
 
               // emit to load installments
+              $rootScope.$broadcast('loadLandBuyDetailBO');
               $rootScope.$broadcast('loadInstallments');
 
             }, function(error) {

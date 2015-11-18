@@ -74,6 +74,7 @@ describe('land-installment', function() {
       $scope.delete();
       $rootScope.$digest();
 
+      expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
       expect($rootScope.$broadcast).toHaveBeenCalledWith('loadInstallments');
       expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
       expect(NotificationService.notify).toHaveBeenCalledWith({
@@ -178,6 +179,7 @@ describe('land-installment', function() {
           buyDetailId: 1,
         }, $scope.installment, $scope.selectedMonth.key, $scope.selectedYear);
         expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+        expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
         expect($rootScope.$broadcast).toHaveBeenCalledWith('loadInstallments');
         expect(NotificationService.notify).toHaveBeenCalledWith({
           type: 'success',
@@ -201,6 +203,7 @@ describe('land-installment', function() {
           buyDetailId: 1,
         }, $scope.installment, $scope.selectedMonth.key, $scope.selectedYear);
         expect($modalInstance.dismiss).not.toHaveBeenCalledWith('cancel');
+        expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadLandBuyDetailBO');
         expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadInstallments');
         expect(NotificationService.notify).toHaveBeenCalledWith({
           type: 'error',
@@ -250,6 +253,7 @@ describe('land-installment', function() {
           buyDetailId: 1,
         }, $scope.installment, $scope.selectedMonth.key, $scope.selectedYear);
         expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+        expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
         expect($rootScope.$broadcast).toHaveBeenCalledWith('loadInstallments');
         expect(NotificationService.notify).toHaveBeenCalledWith({
           type: 'success',
@@ -273,6 +277,7 @@ describe('land-installment', function() {
           buyDetailId: 1,
         }, $scope.installment, $scope.selectedMonth.key, $scope.selectedYear);
         expect($modalInstance.dismiss).not.toHaveBeenCalledWith('cancel');
+        expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadLandBuyDetailBO');
         expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadInstallments');
         expect(NotificationService.notify).toHaveBeenCalledWith({
           type: 'error',
@@ -328,11 +333,6 @@ describe('land-installment', function() {
         "description": "description"
       }];
 
-      mockCriteria = {
-        landId: 1,
-        buyDetailId: 1
-      };
-
       $uibModal = $injector.get('$uibModal');
 
       $route = {
@@ -356,8 +356,6 @@ describe('land-installment', function() {
         return deferred.promise;
       });
 
-      spyOn(InstallmentService, 'getTotalPayment').and.callThrough();
-
       InstallmentListCtrl = $controller('InstallmentListCtrl', {
         $scope: $scope,
         $route: $route,
@@ -369,24 +367,25 @@ describe('land-installment', function() {
       $scope.$digest();
     }));
 
-    it('validate loadInstallments', function() {
-
-      InstallmentListCtrl.loadInstallments();
-      $scope.$digest();
-
-      expect(InstallmentService.query).toHaveBeenCalledWith(mockCriteria);
-      expect(LandBuyService.query).toHaveBeenCalledWith(mockCriteria);
-      expect(InstallmentService.getTotalPayment).toHaveBeenCalledWith(mockInstallments);
-
-      expect($scope.landBuy).toEqual(mockLandBuyDetail);
-      expect($scope.totalAmount).toEqual(6001.0);
-      expect($scope.remaining).toEqual(93898.45);
+    it('init', function() {
+      expect(InstallmentListCtrl.installmentCriteria).toEqual({
+        landId: $route.current.params.landId,
+        buyDetailId: $route.current.params.buyDetailId,
+        page: 0,
+        length: 10
+      });
     });
 
-    it('validate saveInstallmentModal', function() {
+    it('validate loadInstallments()', function() {
+      InstallmentListCtrl.loadInstallments();
+      $scope.$digest();
+      expect(InstallmentService.query).toHaveBeenCalledWith(InstallmentListCtrl.installmentCriteria);
+    });
+
+    it('validate $scope.saveInstallmentModal()', function() {
       var dummy = "dummy";
       spyOn($uibModal, 'open');
-      InstallmentListCtrl.saveInstallmentModal(dummy);
+      $scope.saveInstallmentModal(dummy);
       $scope.$digest();
       expect($uibModal.open).toHaveBeenCalledWith({
         animation: true,
@@ -398,10 +397,10 @@ describe('land-installment', function() {
       });
     });
 
-    it('validate confirmDeleteModal', function() {
+    it('validate $scope.confirmDeleteModal()', function() {
       var dummy = "dummy";
       spyOn($uibModal, 'open');
-      InstallmentListCtrl.confirmDeleteModal(dummy);
+      $scope.confirmDeleteModal(dummy);
       $scope.$digest();
       expect($uibModal.open).toHaveBeenCalledWith({
         animation: true,

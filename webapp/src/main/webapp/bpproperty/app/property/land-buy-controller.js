@@ -232,13 +232,14 @@
     }
   ])
 
-  .controller('LandBuyGeneralDetailsCtrl', ['$scope', 'LandBuyService', 'BuyDetails',
-    function($scope, LandBuyService, BuyDetails) {
+  .controller('LandBuyGeneralDetailsCtrl', ['$scope', '$route', 'LandBuyService', 'BuyDetails',
+    function($scope, $route, LandBuyService, BuyDetails) {
 
       $scope.$on('loadLandBuyDetailBO', function() {
+
         var landBuyCriteria = {
-          landId: $scope.land.id,
-          buyDetailId: $scope.buyDetail.id
+          landId: $route.current.params['landId'],
+          buyDetailId: $route.current.params['buyDetailId']
         };
         LandBuyService.queryForBO(landBuyCriteria).then(function(data) {
           updateScope(data);

@@ -115,8 +115,8 @@ public class LandBuyService implements ILandBuyService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Installment> findInstallmentsByLandBuyDetailId(long id) {
-        return installmentDAO.findByLandBuyDetailId(id);
+    public Page<Installment> findInstallmentsByLandBuyDetailId(long id, Pageable pageable) {
+        return installmentDAO.findByLandBuyDetailId(id, pageable);
     }
 
 }

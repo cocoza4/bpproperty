@@ -3,10 +3,14 @@ package com.porpermpol.ppproperty.purchase.dao.impl;
 import com.nurkiewicz.jdbcrepository.JdbcRepository;
 import com.nurkiewicz.jdbcrepository.RowUnmapper;
 import com.nurkiewicz.jdbcrepository.sql.PostgreSqlGenerator;
+import com.porpermpol.ppproperty.core.jdbcrepository.extension.JdbcDao;
 import com.porpermpol.ppproperty.core.utils.ModelUtils;
 import com.porpermpol.ppproperty.purchase.dao.IInstallmentDAO;
 import com.porpermpol.ppproperty.purchase.model.Installment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -27,6 +31,8 @@ public class InstallmentDAO extends JdbcRepository<Installment, Long> implements
     private static final String SQL_SELECT_BY_LAND_BUY_DETAIL_ID = "SELECT * FROM installment " +
                                                                             "WHERE buy_detail_id = ? " +
                                                                             "ORDER BY pay_for ASC";
+    private static final String SQL_COUNT_BY_LAND_BUY_DETAIL_ID = "SELECT count(*) FROM installment " +
+                                                                            "WHERE buy_detail_id = ?";
 
     public InstallmentDAO() {
         super(ROW_MAPPER, ROW_UNMAPPER, "installment", "id");
@@ -74,7 +80,18 @@ public class InstallmentDAO extends JdbcRepository<Installment, Long> implements
     }
 
     @Override
-    public List<Installment> findByLandBuyDetailId(long id) {
-        return jdbcOperations.query(SQL_SELECT_BY_LAND_BUY_DETAIL_ID, ROW_MAPPER, id);
+    public Page<Installment> findByLandBuyDetailId(long id, Pageable pageable) {
+
+        StringBuilder sql = new StringBuilder(SQL_SELECT_BY_LAND_BUY_DETAIL_ID)
+                .append(JdbcDao.limitClause(pageable));
+        List<Installment> installments = jdbcOperations.query(sql.toString(), ROW_MAPPER, id);
+        long criteriaCount = this.countByCriteria(id);
+
+        return new PageImpl<>(installments, pageable, criteriaCount);
     }
+
+    private long countByCriteria(long id) {
+        return jdbcOperations.queryForObject(SQL_COUNT_BY_LAND_BUY_DETAIL_ID, Long.class, id);
+    }
+
 }
