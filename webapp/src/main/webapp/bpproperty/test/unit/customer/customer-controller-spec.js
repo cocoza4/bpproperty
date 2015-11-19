@@ -58,6 +58,7 @@ describe('customer', function() {
     $q = $injector.get('$q');
     NotificationService = $injector.get('NotificationService');
     CustomerService = $injector.get('CustomerService');
+    LandBuyService = $injector.get('LandBuyService');
   }));
 
   describe('CreateCustomerCtrl', function() {
@@ -143,6 +144,7 @@ describe('customer', function() {
         $scope: $scope,
         $location: $location,
         CustomerService: CustomerService,
+        LandBuyService: LandBuyService,
         CustomerLands: customerLands
       });
     }));

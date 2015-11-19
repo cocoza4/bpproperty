@@ -92,7 +92,7 @@ module.exports = function(grunt) {
   // Default task(s).
   grunt.registerTask('test', ['jshint', 'karma:continuous']);
   grunt.registerTask('dev', ['watch:dev']);
-  grunt.registerTask('minified', ['watch:min']);
-  grunt.registerTask('default', ['minified']);
+  grunt.registerTask('prod', ['watch:min']);
+  grunt.registerTask('default', ['prod']);
 
 };

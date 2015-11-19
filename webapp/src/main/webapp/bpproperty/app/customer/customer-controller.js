@@ -37,7 +37,7 @@
   angular
 
     .module('customer', ['ngRoute', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection',
-    'ui.grid.pagination', 'my-notification', 'customer-service'
+    'ui.grid.pagination', 'my-notification', 'land-buy-service', 'customer-service'
   ])
 
   .config(['$routeProvider', function($routeProvider) {
@@ -183,8 +183,9 @@
     }
   ])
 
-  .controller('CustomerLandsCtrl', ['$scope', '$location', 'uiGridConstants', 'CustomerService', 'CustomerLands',
-    function($scope, $location, uiGridConstants, CustomerService, CustomerLands) {
+  .controller('CustomerLandsCtrl', ['$scope', '$location', 'uiGridConstants', 'LandBuyService',
+  'CustomerService', 'CustomerLands',
+    function($scope, $location, uiGridConstants, LandBuyService, CustomerService, CustomerLands) {
 
       $scope.gridOptions = {
         enableSorting: true,
@@ -284,7 +285,7 @@
           footerCellClass: 'right',
           footerCellFilter: 'number'
         }, {
-          field: "getInstallmentPerMonth()",
+          field: "installmentPerMonth",
           displayName: "\u0e1c\u0e48\u0e2d\u0e19 \u002f \u0e40\u0e14\u0e37\u0e2d\u0e19",
           headerCellClass: 'center',
           cellClass: 'right',
@@ -304,7 +305,7 @@
           footerCellClass: 'right',
           footerCellFilter: 'number'
         }, {
-          field: 'getDebt()',
+          field: 'unpaidDebt',
           displayName: "\u0e22\u0e2d\u0e14\u0e04\u0e07\u0e04\u0e49\u0e32\u0e07",
           headerCellClass: 'center',
           cellFilter: 'number',
@@ -348,20 +349,8 @@
 
       this.preProcessing = function(data) {
         angular.forEach(data, function(row) {
-          row.getInstallmentPerMonth = function() {
-            if (this.buyType === 'CASH' || !this.downPayment || !this.annualInterest || !this.yearsOfInstallment) {
-              return;
-            }
-            var calculated = (this.annualInterest / 100); // percentage of annualInterest
-            return (this.buyPrice - this.downPayment) * calculated / 12 * this.yearsOfInstallment;
-          };
-
-          row.getDebt = function() {
-            if (this.buyType === 'CASH') {
-              return 0;
-            }
-            return this.buyPrice - this.downPayment - this.totalInstallment;
-          };
+          row.installmentPerMonth = LandBuyService.getInstallmentPerMonth(row);
+          row.unpaidDebt = LandBuyService.getUnpaidDebt(row);
         });
       };
 
