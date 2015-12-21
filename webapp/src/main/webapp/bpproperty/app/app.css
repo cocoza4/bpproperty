@@ -76,6 +76,9 @@ form while your application is loading.*/
 .right {
   text-align: right;
 }
+.middle-valign {
+  vertical-align: middle;
+}
 .table th {
   text-align: center;
   vertical-align: middle !important;

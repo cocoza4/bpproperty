@@ -243,6 +243,11 @@ public class LandBuyDetailBODAOIT {
         this.assertLandBuyDetail(installmentLandBuyDetail, bos.getContent().get(0));
     }
 
+    @Test
+    public void testGetReceipt() throws Exception {
+        assertNotNull(buyDetailBODAO.getReceipt(cashLandBuyDetail.getId(), cashLandBuyDetail.getCustomerId()));
+    }
+
     private void assertLandBuyDetail(LandBuyDetail expected, LandBuyDetailBO actual) {
         Area area = expected.getArea();
         assertEquals(expected.getId(), actual.getId());

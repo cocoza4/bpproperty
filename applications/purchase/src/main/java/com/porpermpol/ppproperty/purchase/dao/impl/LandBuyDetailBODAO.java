@@ -5,6 +5,10 @@ import com.porpermpol.ppproperty.property.model.Area;
 import com.porpermpol.ppproperty.purchase.bo.LandBuyDetailBO;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailBODAO;
 import com.porpermpol.ppproperty.purchase.model.BuyType;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -12,17 +16,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
+import java.io.ByteArrayOutputStream;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
+
+    private static final String JASPER_FILE = "src/main/resources/jasper/receipt.jasper";
 
     private static final String SQL_GROUP_BY_CLAUSE = " GROUP BY lbd.id, buy_type, buyer_id, lbd.land_id, buy_price, " +
             "down_payment, annual_interest, years_of_installment, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +
@@ -85,10 +96,32 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
     @Override
     public LandBuyDetailBO findById(long id) {
         try {
-            return jdbcOperations.queryForObject(SQL_SELECT_BY_ID, ROW_MAPPER, id);
+            return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, ROW_MAPPER, id);
         } catch (EmptyResultDataAccessException ex) {
             return null;
         }
+    }
+
+    @Override
+    public ByteArrayOutputStream getReceipt(long buyDetailId, long customerId) {
+
+        Connection conn = DataSourceUtils.getConnection(jdbcTemplate.getDataSource());
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        Map params = new HashMap();
+        params.put("payment", 50000f);
+        params.put("buy_detail_id", buyDetailId);
+        params.put("customer_id", customerId);
+
+        try {
+            JasperPrint jasperPrint = JasperFillManager.fillReport(JASPER_FILE, params, conn);
+            JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+
+        } catch (JRException e) {
+            e.printStackTrace();
+        }
+
+        return outputStream;
     }
 
     @Override
@@ -102,7 +135,7 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
                 .append(SQL_GROUP_BY_CLAUSE)
                 .append(JdbcDao.sortingClauseIfRequired(pageable.getSort()))
                 .append(JdbcDao.limitClause(pageable));
-        List<LandBuyDetailBO> bos = jdbcOperations.query(sql.toString(), ROW_MAPPER, params);
+        List<LandBuyDetailBO> bos = jdbcTemplate.query(sql.toString(), ROW_MAPPER, params);
         long criteriaCount = this.countByCriteria(whereClause.toString(), firstName, params);
 
         return new PageImpl<>(bos, pageable, criteriaCount);
@@ -114,12 +147,8 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
             sb.append(" INNER JOIN customer c ON customer_id = c.id");
         }
         sb.append(whereClause);
-        return jdbcOperations.queryForObject(sb.toString(), Long.class, params);
+        return jdbcTemplate.queryForObject(sb.toString(), Long.class, params);
     }
-
-        //TODO: use this for jasper report
-//        JdbcTemplate template;
-//        DataSourceUtils.getConnection(template.getDataSource());
 
     public static final RowMapper<LandBuyDetailBO> ROW_MAPPER = new RowMapper<LandBuyDetailBO>() {
         @Override

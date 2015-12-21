@@ -36,11 +36,13 @@
     'land-service',
     'land-buy',
     'land-buy-service',
-    'land-installment',
-    'land-installment-service',
+    'land-payment',
+    'land-payment-service',
 
     'customer',
-    'customer-service'
+    'customer-service',
+
+    'bpproperty-cache'
 
   ])
 

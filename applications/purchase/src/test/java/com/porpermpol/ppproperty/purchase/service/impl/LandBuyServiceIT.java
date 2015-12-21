@@ -7,8 +7,8 @@ import com.porpermpol.ppproperty.property.model.Area;
 import com.porpermpol.ppproperty.property.model.Land;
 import com.porpermpol.ppproperty.property.service.ILandService;
 import com.porpermpol.ppproperty.purchase.model.BuyType;
-import com.porpermpol.ppproperty.purchase.model.Installment;
 import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
+import com.porpermpol.ppproperty.purchase.model.Payment;
 import com.porpermpol.ppproperty.purchase.service.ILandBuyService;
 import mockit.Mock;
 import mockit.MockUp;
@@ -41,7 +41,7 @@ public class LandBuyServiceIT {
     private Customer customer;
     private Land land;
     private LandBuyDetail landBuyDetail;
-    private Installment installment;
+    private Payment payment;
 
     @Before
     public void setUp() throws Exception {
@@ -81,10 +81,10 @@ public class LandBuyServiceIT {
         landBuyDetail.setAnnualInterest(15.5f);
         landBuyDetail.setYearsOfInstallment(5);
 
-        installment = new Installment();
-        installment.setPayFor(new Date());
-        installment.setAmount(200f);
-        installment.setDescription("description");
+        payment = new Payment();
+        payment.setPayFor(new Date());
+        payment.setAmount(200f);
+        payment.setDescription("description");
     }
 
     @After
@@ -123,41 +123,41 @@ public class LandBuyServiceIT {
     @Test
     public void testSaveInstallment_newInstance() throws Exception {
         landBuyService.saveLandBuyDetail(landBuyDetail);
-        installment.setBuyDetailId(landBuyDetail.getId());
-        landBuyService.saveInstallment(installment);
+        payment.setBuyDetailId(landBuyDetail.getId());
+        landBuyService.savePayment(payment);
 
-        assertNotNull(installment.getId());
-        assertTrue(installment.isPersisted());
+        assertNotNull(payment.getId());
+        assertTrue(payment.isPersisted());
 
-        Installment returnInstallment = landBuyService.findInstallmentById(installment.getId());
-        assertEquals(USER_LOGIN_ID, returnInstallment.getCreatedBy());
-        assertEquals(CURRENT_DATE, returnInstallment.getCreatedTime());
+        Payment returnPayment = landBuyService.findPaymentById(payment.getId());
+        assertEquals(USER_LOGIN_ID, returnPayment.getCreatedBy());
+        assertEquals(CURRENT_DATE, returnPayment.getCreatedTime());
     }
 
     @Test
     public void testDeleteLandBuyDetailById() throws Exception {
         landBuyService.saveLandBuyDetail(landBuyDetail);
-        installment.setBuyDetailId(landBuyDetail.getId());
-        landBuyService.saveInstallment(installment);
+        payment.setBuyDetailId(landBuyDetail.getId());
+        landBuyService.savePayment(payment);
 
         landBuyService.deleteLandBuyDetailById(landBuyDetail.getId());
         assertNull(landBuyService.findLandBuyDetailById(landBuyDetail.getId()));
-        assertNull(landBuyService.findInstallmentById(installment.getId()));
+        assertNull(landBuyService.findPaymentById(payment.getId()));
     }
 
     @Test
     public void testSaveInstallment_update() throws Exception {
         landBuyService.saveLandBuyDetail(landBuyDetail);
-        installment.setBuyDetailId(landBuyDetail.getId());
-        landBuyService.saveInstallment(installment);
+        payment.setBuyDetailId(landBuyDetail.getId());
+        landBuyService.savePayment(payment);
 
         Float expected = 20f;
-        installment.setAmount(expected);
-        landBuyService.saveInstallment(installment);
+        payment.setAmount(expected);
+        landBuyService.savePayment(payment);
 
-        Installment returnInstallment = landBuyService.findInstallmentById(installment.getId());
-        assertEquals(expected, returnInstallment.getAmount());
-        assertEquals(USER_LOGIN_ID, returnInstallment.getUpdatedBy());
-        assertEquals(CURRENT_DATE, returnInstallment.getUpdatedTime());
+        Payment returnPayment = landBuyService.findPaymentById(payment.getId());
+        assertEquals(expected, returnPayment.getAmount());
+        assertEquals(USER_LOGIN_ID, returnPayment.getUpdatedBy());
+        assertEquals(CURRENT_DATE, returnPayment.getUpdatedTime());
     }
 }

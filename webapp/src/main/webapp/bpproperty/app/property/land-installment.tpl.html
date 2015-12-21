@@ -1,6 +1,6 @@
 <div style="padding-top: 10px"></div>
 
-<div ng-controller="InstallmentListCtrl as installmentListCtrl">
+<div ng-controller="PaymentListCtrl as paymentListCtrl">
   <!-- Confirm Delete Modal-->
   <script id="confirmDeleteModal.html" type="text/ng-template">
     <div class="modal-header">
@@ -9,9 +9,9 @@
     </div>
     <div class="modal-body">
       <p>You are about to delete one payment record,
-        <strong class="text-info">฿{{ installment.amount }}</strong>
+        <strong class="text-info">฿{{ payment.amount }}</strong>
         for
-        <strong class="text-info">{{ installment.payFor | date: "MMMM, yyyy" }}</strong>, this procedure is irreversible.</p>
+        <strong class="text-info">{{ payment.payFor | date: "MMMM, yyyy" }}</strong>, this procedure is irreversible.</p>
       <p>Do you want to proceed?</p>
     </div>
     <div class="modal-footer">
@@ -21,21 +21,21 @@
   </script>
 
   <!-- Update Modal -->
-  <script id="saveInstallmentModal.html" type="text/ng-template">
-    <form class="form-horizontal" name="installmentForm" ng-submit="saveInstallment(installmentForm.$valid)" role="form">
+  <script id="savePaymentModal.html" type="text/ng-template">
+    <form class="form-horizontal" name="paymentForm" ng-submit="savePayment(paymentForm.$valid)" role="form">
       <div class="modal-header">
         <button aria-hidden="true" class="close" ng-click='closeModal()' type="button">&times;</button>
         <h4 class="modal-title"><i class="warning glyphicon glyphicon-list-alt"></i> Payment Record</h4>
       </div>
       <div class="modal-body">
-        <div class="form-group">
+        <div class="form-group" ng-show="isInstallment()">
           <label class="control-label col-sm-3" for="month">ประจำเดือน:
           </label>
           <div class="col-sm-9">
             <select class="form-control input-sm" name="month" ng-model="selectedMonth" ng-options="month.value for month in months" style="width: 320px;"></select>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-show="isInstallment()">
           <label class="control-label col-sm-3" for="year">ประจำปี:</label>
           <div class="col-sm-9">
             <select class="form-control input-sm" name="year" ng-model="selectedYear" ng-options="year for year in years" style="width: 320px;"></select>
@@ -44,13 +44,13 @@
         <div class="form-group">
           <label class="control-label col-sm-3" for="amount">จำนวน:</label>
           <div class="col-sm-9">
-            <input class="form-control input-sm text" decimal-number name="amount" ng-model="installment.amount" placeholder="Amount" required type="text">
+            <input class="form-control input-sm text" decimal-number name="amount" ng-model="payment.amount" placeholder="Amount" required type="text">
           </div>
         </div>
         <div class="form-group">
           <label class="control-label col-sm-3" for="description">หมายเหตุ:</label>
           <div class="col-sm-9">
-            <textarea class="form-control input-sm" name="description" ng-model="installment.description" placeholder="Description" rows="5" style="width: 320px;"></textarea>
+            <textarea class="form-control input-sm" name="description" ng-model="payment.description" placeholder="Description" rows="5" style="width: 320px;"></textarea>
           </div>
         </div>
       </div>
@@ -61,8 +61,19 @@
     </form>
   </script>
 
+  <!--<div class="pull-left" style="padding-bottom: 10px;">
+    <div clas="btn-group">
+      <button type="button" class="btn btn-default btn-sm">
+        <span class="glyphicon glyphicon-print"></span>
+      </button>
+      <button type="button" class="btn btn-default btn-sm">
+        <span class="glyphicon glyphicon-download-alt"></span>
+      </button>
+    </div>
+  </div>-->
+
   <div class="pull-right" style="padding-bottom: 10px;">
-    <button class="btn btn-default btn-sm" ng-click="saveInstallmentModal({})" type="button">
+    <button class="btn btn-default btn-sm" ng-click="savePaymentModal({})" type="button">
       <span class="glyphicon glyphicon-plus"></span>
       สร้าง
     </button>
@@ -75,65 +86,4 @@
     </div>
   </div>
 
-  <!-- <div class="table-responsive">
-    <table cellspacing="0" class="table table-striped table-bordered table-hover table-condensed">
-      <thead>
-        <tr valign="middle">
-          <th>No.</th>
-          <th>ประจำเดือน</th>
-          <th>จำนวน</th>
-          <th>วันที่จ่าย</th>
-          <th>แก้ไข</th>
-          <th>ลบ</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="installment in installments" ng-show="installments.length">
-          <td class="ui-grid-header-cell ui-grid-clearfix ng-scope ng-isolate-scope ui-grid-coluiGrid-00DS center" align="center">{{ $index + 1 }}</td>
-          <td align="right">{{ installment.payFor | date: "MMMM yyyy" }}</td>
-          <td align="right">{{ installment.amount | number }}</td>
-          <td align="right">{{ installment.createdTime | date:"MMMM d, yyyy ' เวลา ' h:mm a" }}</td>
-          <td align="middle" ng-click="installmentListCtrl.saveInstallmentModal(installment)">
-            <span class="glyphicon glyphicon-edit" style="color:#337ab7"></span>
-          </td>
-          <td align="middle" ng-click="installmentListCtrl.confirmDeleteModal(installment)">
-            <span class="glyphicon glyphicon-remove" style="color:#d9534f"></span>
-          </td>
-        </tr>
-        <tr ng-show="!installments.length">
-          <td colspan="6">
-            No data found
-          </td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td align="right" colspan="2">
-            <b>ยอดรวม</b>
-          </td>
-          <td align="right">
-            <b>{{totalAmount | number}}</b>
-          </td>
-        </tr>
-        <tr>
-          <td align="right" colspan="2">
-            <b>เงินดาวน์</b>
-          </td>
-          <td align="right">
-            <b>{{landBuy.downPayment | number}}</b>
-          </td>
-        </tr>
-        <tr>
-          <td align="right" colspan="2">
-            <b>ยอดค้าง</b>
-          </td>
-          <td align="right">
-            <b class="text-primary">{{remaining | number}}</b>
-          </td>
-        </tr>
-
-      </tfoot>
-
-    </table>
-  </div> -->
 </div>

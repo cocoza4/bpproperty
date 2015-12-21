@@ -450,8 +450,12 @@ describe('land-buy', function() {
       };
 
       $uibModal = $injector.get('$uibModal');
+      $cacheFactory = $injector.get('$cacheFactory');
 
-      spyOn($location, 'path').and.returnValue('#/lands/1/buydetails/create');
+      $cacheFactory('land-cache'); // init cache object
+
+      pathSpy = spyOn($location, 'path');
+      pathSpy.and.returnValue('#/lands/1/buydetails/create');
 
       LandBuyDetailsCtrl = $controller('LandBuyDetailsCtrl', {
         $rootScope: $rootScope,
@@ -461,9 +465,54 @@ describe('land-buy', function() {
         $route: $route,
         LandBuyService: LandBuyService,
         NotificationService: NotificationService,
+        $cacheFactory: $cacheFactory
       });
       $scope.$digest();
     }));
+
+    describe('should show cache data', function() {
+
+      beforeEach(function() {
+        pathSpy.and.returnValue('#/lands/1/buydetails/1');
+
+        $route = {
+          current: {
+            params: {
+              landId: 1,
+              buyDetailId: 1
+            }
+          }
+        };
+
+        var deferred = $q.defer();
+        spyOn(LandBuyService, 'query').and.returnValue(deferred.promise);
+
+        deferred.resolve(mockBuyDetail);
+        $scope.$digest();
+
+        LandBuyDetailsCtrl = $controller('LandBuyDetailsCtrl', {
+          $rootScope: $rootScope,
+          $scope: $scope,
+          $uibModal: $uibModal,
+          $location: $location,
+          $route: $route,
+          LandBuyService: LandBuyService,
+          NotificationService: NotificationService,
+          $cacheFactory: $cacheFactory
+        });
+        $scope.$digest();
+      });
+
+      it('init', function() {
+        expect(LandBuyService.query).toHaveBeenCalledWith({
+          landId: 1,
+          buyDetailId: 1
+        });
+        var cache = $cacheFactory.get('land-cache');
+        expect(cache.get('buyDetail')).toEqual(mockBuyDetail);
+      });
+
+    });
 
     it('init', function() {
       expect($scope.buyTypeItems).toEqual(['CASH', 'INSTALLMENT']);

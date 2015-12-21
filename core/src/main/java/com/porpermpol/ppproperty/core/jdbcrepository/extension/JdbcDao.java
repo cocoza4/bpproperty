@@ -3,14 +3,14 @@ package com.porpermpol.ppproperty.core.jdbcrepository.extension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Iterator;
 
 public abstract class JdbcDao {
 
     @Autowired
-    protected JdbcOperations jdbcOperations;
+    protected JdbcTemplate jdbcTemplate;
 
     public static String sortingClauseIfRequired(Sort sort) {
         if(sort == null) {

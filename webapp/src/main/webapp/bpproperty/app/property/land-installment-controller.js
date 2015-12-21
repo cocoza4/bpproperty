@@ -5,35 +5,35 @@
 
   angular
 
-    .module('land-installment', ['ngRoute', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection',
-    'ui.grid.pagination', 'my-notification', 'land-buy', 'land-installment-service'
+    .module('land-payment', ['ngRoute', 'ui.bootstrap', 'ui.grid', 'ui.grid.selection',
+    'ui.grid.pagination', 'my-notification', 'land-buy', 'land-payment-service'
   ])
 
-  .controller('ConfirmDeleteModalCtrl', ['$rootScope', '$scope', '$route', '$modalInstance', 'InstallmentService',
-    'NotificationService', 'installment',
-    function($rootScope, $scope, $route, $modalInstance, InstallmentService, NotificationService, installment) {
+  .controller('ConfirmDeleteModalCtrl', ['$rootScope', '$scope', '$route', '$modalInstance', 'PaymentService',
+    'NotificationService', 'payment',
+    function($rootScope, $scope, $route, $modalInstance, PaymentService, NotificationService, payment) {
 
       $scope.delete = function() {
         var criteria = {
           landId: $route.current.params['landId'],
           buyDetailId: $route.current.params['buyDetailId'],
-          installmentId: $scope.installment.id
+          installmentId: $scope.payment.id
         };
 
-        InstallmentService.delete(criteria).then(function(response) {
+        PaymentService.delete(criteria).then(function(response) {
             NotificationService.notify({
               type: 'success',
-              msg: 'Installment deleted'
+              msg: 'Payment deleted'
             });
 
             // emit to load installments
             $rootScope.$broadcast('loadLandBuyDetailBO');
-            $rootScope.$broadcast('loadInstallments');
+            $rootScope.$broadcast('loadPayments');
           },
           function(error) {
             NotificationService.notify({
               type: 'error',
-              msg: 'Unable to delete the selected Installment'
+              msg: 'Unable to delete the selected Payment'
             });
           });
 
@@ -44,13 +44,13 @@
         $modalInstance.dismiss('cancel');
       };
 
-      $scope.installment = installment;
+      $scope.payment = payment;
     }
   ])
 
-  .controller('InstallmentListCtrl', ['$scope', '$route', '$uibModal', 'uiGridConstants',
-    'LandBuyService', 'InstallmentService',
-    function($scope, $route, $uibModal, uiGridConstants, LandBuyService, InstallmentService) {
+  .controller('PaymentListCtrl', ['$scope', '$route', '$uibModal', 'uiGridConstants',
+    'PaymentService', '$cacheFactory', '$templateCache',
+    function($scope, $route, $uibModal, uiGridConstants, PaymentService, $cacheFactory, $templateCache) {
 
       $scope.gridOptions = {
         enableSorting: true,
@@ -64,6 +64,22 @@
         paginationPageSize: 10,
 
         columnDefs: [{
+          name: 'print',
+          headerCellTemplate: '<span class="glyphicon glyphicon-print middle-valign"></span>',
+          headerCellClass: 'center',
+          cellClass: 'center',
+          width: '3%',
+          cellTemplate: '<span class="glyphicon glyphicon-print pointer" ' +
+            'ng-click="grid.appScope.print(row.entity)" ' +
+            'style="color:#d9534f;vertical-align: middle"></span>'
+        }, {
+          field: 'receiptId',
+          displayName: '\u0e43\u0e1a\u0e40\u0e2a\u0e23\u0e47\u0e08 \u0023',
+          headerCellClass: 'center',
+          cellClass: 'right',
+          footerCellClass: 'right',
+          footerCellTemplate: '<div class="ui-grid-cell-contents">Total</div>'
+        }, {
           field: 'payFor',
           displayName: '\u0e1b\u0e23\u0e30\u0e08\u0e33\u0e40\u0e14\u0e37\u0e2d\u0e19',
           cellFilter: 'date: "MMMM yyyy"',
@@ -91,16 +107,16 @@
           name: '\u0e41\u0e01\u0e49\u0e44\u0e02',
           headerCellClass: 'center',
           cellClass: 'center',
-          width: '10%',
+          width: '5%',
           cellTemplate: '<span class="glyphicon glyphicon-edit pointer" ' +
-            'ng-click="grid.appScope.saveInstallmentModal(row.entity)" ' +
+            'ng-click="grid.appScope.savePaymentModal(row.entity)" ' +
             'style="color:#337ab7;vertical-align: middle"></span>'
 
         }, {
           name: '\u0e25\u0e1a',
           headerCellClass: 'center',
           cellClass: 'center',
-          width: '10%',
+          width: '5%',
           cellTemplate: '<span class="glyphicon glyphicon-remove pointer" ' +
             'ng-click="grid.appScope.confirmDeleteModal(row.entity)" ' +
             'style="color:#d9534f;vertical-align: middle"></span>'
@@ -110,21 +126,30 @@
           $scope.gridApi = gridApi;
 
           gridApi.pagination.on.paginationChanged($scope, function(newPage, pageSize) {
-            self.installmentCriteria.page = newPage - 1;
-            self.installmentCriteria.length = pageSize;
-            self.loadInstallments();
+            self.paymentCriteria.page = newPage - 1;
+            self.payment.length = pageSize;
+            self.loadPayments();
           });
 
         }
       };
 
-      $scope.saveInstallmentModal = function(selected) {
+      $scope.print = function(selected) {
+        alert('fuck');
+      };
+
+      var tplUrl = 'savePaymentModal.html';
+      // $templateCache.remove('savePaymentModal.html');
+      // $templateCache.removeAll();
+
+      $scope.savePaymentModal = function(selected) {
+
         $uibModal.open({
           animation: true,
-          templateUrl: 'saveInstallmentModal.html',
-          controller: 'SaveInstallmentModalCtrl',
+          templateUrl: 'savePaymentModal.html',
+          controller: 'SavePaymentModalCtrl',
           resolve: {
-            installment: function() {
+            payment: function() {
               return selected;
             }
           }
@@ -137,95 +162,108 @@
           templateUrl: 'confirmDeleteModal.html',
           controller: 'ConfirmDeleteModalCtrl',
           resolve: {
-            installment: function() {
+            payment: function() {
               return selected;
             }
           }
         });
       };
 
-      this.loadInstallments = function() {
-        InstallmentService.query(self.installmentCriteria).then(function(data) {
+      this.loadPayments = function() {
+        PaymentService.query(self.paymentCriteria).then(function(data) {
           $scope.gridOptions.data = data.content;
           $scope.gridOptions.totalItems = data.totalRecords;
         });
       };
 
-      this.installmentCriteria = {
+      this.paymentCriteria = {
         landId: $route.current.params.landId,
         buyDetailId: $route.current.params.buyDetailId,
         page: 0,
         length: 10
       };
 
-      $scope.$on('loadInstallments', function(event) {
-        self.loadInstallments();
+      $scope.$on('loadPayments', function(event) {
+        self.loadPayments();
       });
 
       var self = this;
-      this.loadInstallments();
+      this.loadPayments();
+
+      $scope.landBuy = $cacheFactory.get('land-cache').get('buyDetail');
+
+      $scope.isInstallment = function() {
+        return $scope.landBuy.buyType == 'INSTALLMENT';
+      };
+
+      alert($scope.landBuy.buyType == 'INSTALLMENT');
+      if ($scope.landBuy.buyType == 'CASH') {
+        $scope.gridOptions.columnDefs[2].visible = false; // disable payFor field
+      }
+
     }
   ])
 
-  .controller('SaveInstallmentModalCtrl', ['$rootScope', '$scope', '$route', '$modalInstance',
-    'InstallmentService', 'NotificationService', 'installment',
-    function($rootScope, $scope, $route, $modalInstance, InstallmentService, NotificationService, installment) {
+  .controller('SavePaymentModalCtrl', ['$rootScope', '$scope', '$route', '$modalInstance',
+    'PaymentService', 'NotificationService', 'payment',
+    function($rootScope, $scope, $route, $modalInstance, PaymentService, NotificationService, payment) {
 
       $scope.closeModal = function() {
         $modalInstance.dismiss('cancel');
+        // $modalInstance.close();
       };
 
-      $scope.saveInstallment = function(isValid) {
+      $scope.savePayment = function(isValid) {
         if (isValid) {
 
-          $scope.installment.buyDetailId = $route.current.params['buyDetailId'];
+          $scope.payment.buyDetailId = $route.current.params['buyDetailId'];
 
-          var installmentCriteria = {
+          var paymentCriteria = {
             landId: $route.current.params['landId'],
             buyDetailId: $route.current.params['buyDetailId'],
           };
           var selectedMonth = $scope.selectedMonth.key;
           var selectedYear = $scope.selectedYear;
 
-          var isNew = !$scope.installment.id;
+          var isNew = !$scope.payment.id;
 
           if (isNew) {
-            InstallmentService.create(installmentCriteria, $scope.installment, selectedMonth, selectedYear).then(function(data) {
+            PaymentService.create(paymentCriteria, $scope.payment, selectedMonth, selectedYear).then(function(data) {
 
               $modalInstance.dismiss('cancel'); // hide dialog
 
               NotificationService.notify({
                 type: 'success',
-                msg: 'Installment created'
+                msg: 'Payment created'
               });
 
-              // emit to load installments
+              // emit to load payments
               $rootScope.$broadcast('loadLandBuyDetailBO');
-              $rootScope.$broadcast('loadInstallments');
+              $rootScope.$broadcast('loadPayments');
 
             }, function(error) {
               NotificationService.notify({
                 type: 'error',
-                msg: 'Unable to create Installment'
+                msg: 'Unable to create Payment'
               });
             });
           } else {
-            InstallmentService.update(installmentCriteria, $scope.installment, selectedMonth, selectedYear).then(function(data) {
+            PaymentService.update(paymentCriteria, $scope.payment, selectedMonth, selectedYear).then(function(data) {
               $modalInstance.dismiss('cancel'); // hide dialog
 
               NotificationService.notify({
                 type: 'success',
-                msg: 'Installment updated'
+                msg: 'Payment updated'
               });
 
-              // emit to load installments
+              // emit to load payments
               $rootScope.$broadcast('loadLandBuyDetailBO');
-              $rootScope.$broadcast('loadInstallments');
+              $rootScope.$broadcast('loadPayments');
 
             }, function(error) {
               NotificationService.notify({
                 type: 'error',
-                msg: 'Unable to update existing Installment'
+                msg: 'Unable to update existing Payment'
               });
             });
           }
@@ -283,8 +321,8 @@
         return years;
       }
 
-      if (installment.id) { // update installment
-        var selectedDate = new Date(installment.payFor);
+      if (payment.id) { // update payment
+        var selectedDate = new Date(payment.payFor);
         var selectedYear = selectedDate.getFullYear();
         var selectedMonth = selectedDate.getMonth();
 
@@ -292,15 +330,25 @@
         $scope.selectedYear = selectedYear;
         $scope.years = generateYears(currentYear, selectedYear);
 
-      } else { // create new installment
+      } else { // create new payment
         $scope.years = [currentYear];
         $scope.selectedMonth = $scope.months[currentMonth];
         $scope.selectedYear = currentYear;
       }
 
-      $scope.installment = angular.copy(installment);
+      $scope.payment = angular.copy(payment);
     }
-  ]);
+  ])
 
+  .run(['$rootScope', '$templateCache', function($rootScope, $templateCache) {
+
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {
+      alert(current);
+      if (typeof(current) !== 'undefined') {
+        alert('ok');
+        $templateCache.remove(current.templateUrl);
+      }
+    });
+  }]);
 
 })();

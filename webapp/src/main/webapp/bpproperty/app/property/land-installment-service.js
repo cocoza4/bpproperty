@@ -4,42 +4,42 @@
 
   angular
 
-    .module('land-installment-service', ['ngResource'])
+    .module('land-payment-service', ['ngResource'])
 
-  .service('InstallmentService', ['Installment', function(Installment) {
+  .service('PaymentService', ['Payment', function(Payment) {
 
     this.query = function(criteria) {
-      return Installment.query(criteria).$promise;
+      return Payment.query(criteria).$promise;
     };
 
-    this.create = function(criteria, installment, month, year) {
+    this.create = function(criteria, payment, month, year) {
       var date = new Date(year, month, 1);
-      installment.payFor = date.getTime();
-      return Installment.save(criteria, installment).$promise;
+      payment.payFor = date.getTime();
+      return Payment.save(criteria, payment).$promise;
     };
 
-    this.update = function(criteria, installment, month, year) {
+    this.update = function(criteria, payment, month, year) {
       var date = new Date(year, month, 1);
-      installment.payFor = date.getTime();
-      return Installment.update(criteria, installment).$promise;
+      payment.payFor = date.getTime();
+      return Payment.update(criteria, payment).$promise;
     };
 
     this.delete = function(criteria, id) {
-      return Installment.delete(criteria, id).$promise;
+      return Payment.delete(criteria, id).$promise;
     };
 
-    this.getTotalPayment = function(installments) {
+    this.getTotalPayment = function(payments) {
       var total = 0;
-      for (var i = 0; i < installments.length; i++) {
-        var installment = installments[i];
-        total += installment.amount;
+      for (var i = 0; i < payments.length; i++) {
+        var payment = payments[i];
+        total += payment.amount;
       }
       return total;
     };
 
   }])
 
-  .factory('Installment', ['$resource', function($resource) {
+  .factory('Payment', ['$resource', function($resource) {
     return $resource(
       '/api/lands/:landId/buydetails/:buyDetailId/installments/:installmentId', {
         landId: '@landId',

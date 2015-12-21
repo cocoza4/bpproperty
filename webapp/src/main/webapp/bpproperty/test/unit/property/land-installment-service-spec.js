@@ -1,6 +1,6 @@
-describe('land-installment-service', function() {
+describe('land-payment-service', function() {
 
-  var mockInstallments = [
+  var mockPayments = [
     {
       buyDetailId: 1,
       payFor: 1212312,
@@ -15,20 +15,20 @@ describe('land-installment-service', function() {
     },
   ];
 
-  beforeEach(module('land-installment-service'));
+  beforeEach(module('land-payment-service'));
 
   describe('validate getTotalPayment', function() {
 
     beforeEach(inject(function($injector) {
-      InstallmentService = $injector.get('InstallmentService');
+      PaymentService = $injector.get('PaymentService');
     }));
 
     it('should return 0 payment', function() {
-      expect(InstallmentService.getTotalPayment([])).toEqual(0);
+      expect(PaymentService.getTotalPayment([])).toEqual(0);
     });
 
     it('should return actual total payment', function() {
-      expect(InstallmentService.getTotalPayment(mockInstallments)).toBeCloseTo(30000.80);
+      expect(PaymentService.getTotalPayment(mockPayments)).toBeCloseTo(30000.80);
     });
 
   });

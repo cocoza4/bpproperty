@@ -2,12 +2,12 @@ package com.porpermpol.ppproperty.purchase.service.impl;
 
 import com.porpermpol.ppproperty.core.utils.ModelUtils;
 import com.porpermpol.ppproperty.purchase.bo.LandBuyDetailBO;
-import com.porpermpol.ppproperty.purchase.dao.IInstallmentDAO;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailBODAO;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailDAO;
+import com.porpermpol.ppproperty.purchase.dao.IPaymentDAO;
 import com.porpermpol.ppproperty.purchase.model.BuyType;
-import com.porpermpol.ppproperty.purchase.model.Installment;
 import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
+import com.porpermpol.ppproperty.purchase.model.Payment;
 import com.porpermpol.ppproperty.purchase.service.ILandBuyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +28,7 @@ public class LandBuyService implements ILandBuyService {
     @Autowired
     private ILandBuyDetailDAO landBuyDetailDAO;
     @Autowired
-    private IInstallmentDAO installmentDAO;
+    private IPaymentDAO paymentDAO;
 
     private Calendar calendar = Calendar.getInstance();
 
@@ -80,6 +81,12 @@ public class LandBuyService implements ILandBuyService {
 
     @Transactional(readOnly = true)
     @Override
+    public ByteArrayOutputStream getReceipt(long buyDetailId, long customerId) {
+        return landBuyDetailBODAO.getReceipt(buyDetailId, customerId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public Page<LandBuyDetailBO> findLandBuyDetailBOByCriteria(BuyType buyType, String firstName, Long landId, Long customerId,
                                                                Integer month, Integer year, Pageable pageable) {
 
@@ -97,26 +104,26 @@ public class LandBuyService implements ILandBuyService {
     }
 
     @Override
-    public void saveInstallment(Installment installment) {
-        ModelUtils.setAuditFields(installment);
-        installmentDAO.save(installment);
+    public void savePayment(Payment payment) {
+        ModelUtils.setAuditFields(payment);
+        paymentDAO.save(payment);
     }
 
     @Override
-    public void deleteInstallmentById(long id) {
-        installmentDAO.delete(id);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public Installment findInstallmentById(long id) {
-        return installmentDAO.findOne(id);
+    public void deletePaymentById(long id) {
+        paymentDAO.delete(id);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Page<Installment> findInstallmentsByLandBuyDetailId(long id, Pageable pageable) {
-        return installmentDAO.findByLandBuyDetailId(id, pageable);
+    public Payment findPaymentById(long id) {
+        return paymentDAO.findOne(id);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<Payment> findPaymentsByLandBuyDetailId(long id, Pageable pageable) {
+        return paymentDAO.findByLandBuyDetailId(id, pageable);
     }
 
 }

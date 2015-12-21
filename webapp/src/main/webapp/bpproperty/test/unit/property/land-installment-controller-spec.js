@@ -1,6 +1,6 @@
-describe('land-installment', function() {
+describe('land-payment', function() {
 
-  beforeEach(module('land-installment'));
+  beforeEach(module('land-payment'));
 
   beforeEach(inject(function($injector, _$controller_) {
     $rootScope = $injector.get('$rootScope');
@@ -9,14 +9,14 @@ describe('land-installment', function() {
     $q = $injector.get('$q');
     LandBuyService = $injector.get('LandBuyService');
     NotificationService = $injector.get('NotificationService');
-    InstallmentService = $injector.get('InstallmentService');
+    PaymentService = $injector.get('PaymentService');
   }));
 
   describe('ConfirmDeleteModalCtrl', function() {
 
     beforeEach(inject(function($injector) {
 
-      mockInstallment = {
+      mockPayment = {
         "id": 1,
         "createdBy": 0,
         "createdTime": 1422631659000,
@@ -45,15 +45,15 @@ describe('land-installment', function() {
         $scope: $scope,
         $route: $route,
         $modalInstance: $modalInstance,
-        InstallmentService: InstallmentService,
+        PaymentService: PaymentService,
         NotificationService: NotificationService,
-        installment: mockInstallment,
+        payment: mockPayment,
       });
       $scope.$digest();
     }));
 
     it('init', function() {
-      expect($scope.installment).toEqual(mockInstallment);
+      expect($scope.payment).toEqual(mockPayment);
     });
 
     it('validate $scope.closeModal', function() {
@@ -65,7 +65,7 @@ describe('land-installment', function() {
       spyOn($rootScope, '$broadcast').and.callThrough();
       spyOn(NotificationService, 'notify');
 
-      spyOn(InstallmentService, 'delete').and.callFake(function() {
+      spyOn(PaymentService, 'delete').and.callFake(function() {
         var deferred = $q.defer();
         deferred.resolve('response');
         return deferred.promise;
@@ -75,11 +75,11 @@ describe('land-installment', function() {
       $rootScope.$digest();
 
       expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
-      expect($rootScope.$broadcast).toHaveBeenCalledWith('loadInstallments');
+      expect($rootScope.$broadcast).toHaveBeenCalledWith('loadPayments');
       expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
       expect(NotificationService.notify).toHaveBeenCalledWith({
         type: 'success',
-        msg: 'Installment deleted'
+        msg: 'Payment deleted'
       });
     });
 
@@ -87,7 +87,7 @@ describe('land-installment', function() {
       spyOn($rootScope, '$broadcast').and.callThrough();
       spyOn(NotificationService, 'notify');
 
-      spyOn(InstallmentService, 'delete').and.callFake(function() {
+      spyOn(PaymentService, 'delete').and.callFake(function() {
         var deferred = $q.defer();
         deferred.reject();
         return deferred.promise;
@@ -99,20 +99,20 @@ describe('land-installment', function() {
       expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
       expect(NotificationService.notify).toHaveBeenCalledWith({
         type: 'error',
-        msg: 'Unable to delete the selected Installment'
+        msg: 'Unable to delete the selected Payment'
       });
     });
 
   });
 
-  describe('SaveInstallmentModalCtrl', function() {
+  describe('SavePaymentModalCtrl', function() {
 
     beforeEach(inject(function($injector) {
 
       var baseTime = new Date(2015, 0, 1);
       jasmine.clock().mockDate(baseTime);
 
-      mockInstallment = {
+      mockPayment = {
         "id": 1,
         "createdBy": 0,
         "createdTime": 1422631659000,
@@ -138,23 +138,23 @@ describe('land-installment', function() {
 
     }));
 
-    describe('Save a new Installment', function() {
+    describe('Save a new Payment', function() {
 
       beforeEach(function() {
-        SaveInstallmentModalCtrl = $controller('SaveInstallmentModalCtrl', {
+        SavePaymentModalCtrl = $controller('SavePaymentModalCtrl', {
           $rootScope: $rootScope,
           $scope: $scope,
           $route: $route,
           $modalInstance: $modalInstance,
-          InstallmentService: InstallmentService,
+          PaymentService: PaymentService,
           NotificationService: NotificationService,
-          installment: {},
+          payment: {},
         });
         $scope.$digest();
       });
 
-      it('init - new installment', function() {
-        expect($scope.installment).toEqual({});
+      it('init - new payment', function() {
+        expect($scope.payment).toEqual({});
         expect($scope.years).toEqual([2015]);
         expect($scope.selectedYear).toEqual(2015);
         expect($scope.selectedMonth).toEqual({
@@ -163,72 +163,72 @@ describe('land-installment', function() {
         });
       });
 
-      it('should successfully create a new Installment', function() {
+      it('should successfully create a new Payment', function() {
         var deferred = $q.defer();
         spyOn(NotificationService, 'notify');
         spyOn($rootScope, '$broadcast').and.callThrough();
-        spyOn(InstallmentService, 'create').and.returnValue(deferred.promise);
+        spyOn(PaymentService, 'create').and.returnValue(deferred.promise);
 
-        $scope.saveInstallment(true);
+        $scope.savePayment(true);
         deferred.resolve();
         $scope.$digest();
 
-        expect($scope.installment.buyDetailId).toEqual(1);
-        expect(InstallmentService.create).toHaveBeenCalledWith({
+        expect($scope.payment.buyDetailId).toEqual(1);
+        expect(PaymentService.create).toHaveBeenCalledWith({
           landId: 1,
           buyDetailId: 1,
-        }, $scope.installment, $scope.selectedMonth.key, $scope.selectedYear);
+        }, $scope.payment, $scope.selectedMonth.key, $scope.selectedYear);
         expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
         expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
-        expect($rootScope.$broadcast).toHaveBeenCalledWith('loadInstallments');
+        expect($rootScope.$broadcast).toHaveBeenCalledWith('loadPayments');
         expect(NotificationService.notify).toHaveBeenCalledWith({
           type: 'success',
-          msg: 'Installment created'
+          msg: 'Payment created'
         });
       });
 
-      it('should fail to create a new Installment', function() {
+      it('should fail to create a new Payment', function() {
         var deferred = $q.defer();
         spyOn(NotificationService, 'notify');
         spyOn($rootScope, '$broadcast').and.callThrough();
-        spyOn(InstallmentService, 'create').and.returnValue(deferred.promise);
+        spyOn(PaymentService, 'create').and.returnValue(deferred.promise);
 
-        $scope.saveInstallment(true);
+        $scope.savePayment(true);
         deferred.reject();
         $scope.$digest();
 
-        expect($scope.installment.buyDetailId).toEqual(1);
-        expect(InstallmentService.create).toHaveBeenCalledWith({
+        expect($scope.payment.buyDetailId).toEqual(1);
+        expect(PaymentService.create).toHaveBeenCalledWith({
           landId: 1,
           buyDetailId: 1,
-        }, $scope.installment, $scope.selectedMonth.key, $scope.selectedYear);
+        }, $scope.payment, $scope.selectedMonth.key, $scope.selectedYear);
         expect($modalInstance.dismiss).not.toHaveBeenCalledWith('cancel');
         expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadLandBuyDetailBO');
-        expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadInstallments');
+        expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadPayments');
         expect(NotificationService.notify).toHaveBeenCalledWith({
           type: 'error',
-          msg: 'Unable to create Installment'
+          msg: 'Unable to create Payment'
         });
       });
 
     });
 
-    describe('Save an existing Installment', function() {
+    describe('Save an existing Payment', function() {
       beforeEach(function() {
-        SaveInstallmentModalCtrl = $controller('SaveInstallmentModalCtrl', {
+        SavePaymentModalCtrl = $controller('SavePaymentModalCtrl', {
           $rootScope: $rootScope,
           $scope: $scope,
           $route: $route,
           $modalInstance: $modalInstance,
-          InstallmentService: InstallmentService,
+          PaymentService: PaymentService,
           NotificationService: NotificationService,
-          installment: mockInstallment,
+          payment: mockPayment,
         });
         $scope.$digest();
       });
 
-      it('init - existing installment', function() {
-        expect($scope.installment).toEqual(mockInstallment);
+      it('init - existing payment', function() {
+        expect($scope.payment).toEqual(mockPayment);
         expect($scope.years).toEqual([2015, 2014]);
         expect($scope.selectedYear).toEqual(2014);
         expect($scope.selectedMonth).toEqual({
@@ -237,51 +237,51 @@ describe('land-installment', function() {
         });
       });
 
-      it('should successfully update an existing Installment', function() {
+      it('should successfully update an existing Payment', function() {
         var deferred = $q.defer();
         spyOn(NotificationService, 'notify');
         spyOn($rootScope, '$broadcast').and.callThrough();
-        spyOn(InstallmentService, 'update').and.returnValue(deferred.promise);
+        spyOn(PaymentService, 'update').and.returnValue(deferred.promise);
 
-        $scope.saveInstallment(true);
+        $scope.savePayment(true);
         deferred.resolve();
         $scope.$digest();
 
-        expect($scope.installment.buyDetailId).toEqual(1);
-        expect(InstallmentService.update).toHaveBeenCalledWith({
+        expect($scope.payment.buyDetailId).toEqual(1);
+        expect(PaymentService.update).toHaveBeenCalledWith({
           landId: 1,
           buyDetailId: 1,
-        }, $scope.installment, $scope.selectedMonth.key, $scope.selectedYear);
+        }, $scope.payment, $scope.selectedMonth.key, $scope.selectedYear);
         expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
         expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
-        expect($rootScope.$broadcast).toHaveBeenCalledWith('loadInstallments');
+        expect($rootScope.$broadcast).toHaveBeenCalledWith('loadPayments');
         expect(NotificationService.notify).toHaveBeenCalledWith({
           type: 'success',
-          msg: 'Installment updated'
+          msg: 'Payment updated'
         });
       });
 
-      it('should fail to create a new Installment', function() {
+      it('should fail to create a new Payment', function() {
         var deferred = $q.defer();
         spyOn(NotificationService, 'notify');
         spyOn($rootScope, '$broadcast').and.callThrough();
-        spyOn(InstallmentService, 'update').and.returnValue(deferred.promise);
+        spyOn(PaymentService, 'update').and.returnValue(deferred.promise);
 
-        $scope.saveInstallment(true);
+        $scope.savePayment(true);
         deferred.reject();
         $scope.$digest();
 
-        expect($scope.installment.buyDetailId).toEqual(1);
-        expect(InstallmentService.update).toHaveBeenCalledWith({
+        expect($scope.payment.buyDetailId).toEqual(1);
+        expect(PaymentService.update).toHaveBeenCalledWith({
           landId: 1,
           buyDetailId: 1,
-        }, $scope.installment, $scope.selectedMonth.key, $scope.selectedYear);
+        }, $scope.payment, $scope.selectedMonth.key, $scope.selectedYear);
         expect($modalInstance.dismiss).not.toHaveBeenCalledWith('cancel');
         expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadLandBuyDetailBO');
-        expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadInstallments');
+        expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadPayments');
         expect(NotificationService.notify).toHaveBeenCalledWith({
           type: 'error',
-          msg: 'Unable to update existing Installment'
+          msg: 'Unable to update existing Payment'
         });
       });
 
@@ -289,7 +289,7 @@ describe('land-installment', function() {
 
   });
 
-  describe('InstallmentListCtrl', function() {
+  describe('PaymentListCtrl', function() {
 
     beforeEach(inject(function($injector) {
       mockLandBuyDetail = {
@@ -311,7 +311,7 @@ describe('land-installment', function() {
         "createdTime": 0
       };
 
-      mockInstallments = [{
+      mockPayments = [{
         "id": 1,
         "createdBy": 0,
         "createdTime": 1422631659000,
@@ -334,6 +334,10 @@ describe('land-installment', function() {
       }];
 
       $uibModal = $injector.get('$uibModal');
+      $cacheFactory = $injector.get('$cacheFactory');
+
+      var cache = $cacheFactory('land-cache'); // init cache object
+      cache.put('buyDetail', mockLandBuyDetail);
 
       $route = {
         current: {
@@ -344,9 +348,9 @@ describe('land-installment', function() {
         }
       };
 
-      spyOn(InstallmentService, 'query').and.callFake(function() {
+      spyOn(PaymentService, 'query').and.callFake(function() {
         var deferred = $q.defer();
-        deferred.resolve(mockInstallments);
+        deferred.resolve(mockPayments);
         return deferred.promise;
       });
 
@@ -356,19 +360,21 @@ describe('land-installment', function() {
         return deferred.promise;
       });
 
-      InstallmentListCtrl = $controller('InstallmentListCtrl', {
+      PaymentListCtrl = $controller('PaymentListCtrl', {
         $scope: $scope,
         $route: $route,
         $uibModal: $uibModal,
         $location: $location,
         LandBuyService: LandBuyService,
-        InstallmentService: InstallmentService,
+        PaymentService: PaymentService,
+        $cacheFactory: $cacheFactory
       });
       $scope.$digest();
     }));
 
     it('init', function() {
-      expect(InstallmentListCtrl.installmentCriteria).toEqual({
+      expect($scope.landBuy).toEqual(mockLandBuyDetail);
+      expect(PaymentListCtrl.paymentCriteria).toEqual({
         landId: $route.current.params.landId,
         buyDetailId: $route.current.params.buyDetailId,
         page: 0,
@@ -376,25 +382,25 @@ describe('land-installment', function() {
       });
     });
 
-    it('validate loadInstallments()', function() {
-      InstallmentListCtrl.loadInstallments();
+    it('validate loadPayments()', function() {
+      PaymentListCtrl.loadPayments();
       $scope.$digest();
-      expect(InstallmentService.query).toHaveBeenCalledWith(InstallmentListCtrl.installmentCriteria);
+      expect(PaymentService.query).toHaveBeenCalledWith(PaymentListCtrl.paymentCriteria);
     });
 
-    it('validate $scope.saveInstallmentModal()', function() {
+    it('validate $scope.savePaymentModal()', function() {
       var dummy = "dummy";
       spyOn($uibModal, 'open');
-      $scope.saveInstallmentModal(dummy);
+      $scope.savePaymentModal(dummy);
       $scope.$digest();
-      expect($uibModal.open).toHaveBeenCalledWith({
-        animation: true,
-        templateUrl: 'saveInstallmentModal.html',
-        controller: 'SaveInstallmentModalCtrl',
-        resolve: {
-          installment: jasmine.any(Function)
-        }
-      });
+      // expect($uibModal.open).toHaveBeenCalledWith({
+      //   animation: true,
+      //   templateUrl: 'savePaymentModal.html',
+      //   controller: 'SavePaymentModalCtrl',
+      //   resolve: {
+      //     payment: jasmine.any(Function)
+      //   }
+      // });
     });
 
     it('validate $scope.confirmDeleteModal()', function() {
@@ -407,7 +413,7 @@ describe('land-installment', function() {
         templateUrl: 'confirmDeleteModal.html',
         controller: 'ConfirmDeleteModalCtrl',
         resolve: {
-          installment: jasmine.any(Function)
+          payment: jasmine.any(Function)
         }
       });
     });

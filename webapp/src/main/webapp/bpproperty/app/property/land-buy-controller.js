@@ -124,8 +124,10 @@
     }
   ])
 
-  .controller('LandBuyDetailsCtrl', ['$rootScope', '$scope', '$uibModal', '$location', '$route', 'LandBuyService', 'NotificationService',
-    function($rootScope, $scope, $uibModal, $location, $route, LandBuyService, NotificationService) {
+  .controller('LandBuyDetailsCtrl', ['$rootScope', '$scope', '$uibModal', '$location',
+    '$route', 'LandBuyService', 'NotificationService', '$cacheFactory',
+    function($rootScope, $scope, $uibModal, $location, $route, LandBuyService,
+      NotificationService, $cacheFactory) {
 
       this.deleteModal = function() {
         $uibModal.open({
@@ -226,6 +228,13 @@
 
         LandBuyService.query(landBuyCriteria).then(function(data) {
           $scope.buyDetail = data;
+
+          var cache = $cacheFactory.get('land-cache');
+          if (!cache) {
+            cache = $cacheFactory('land-cache');
+          }
+          cache.put('buyDetail', $scope.buyDetail);
+
         });
       }
 
