@@ -21,29 +21,56 @@
   </script>
 
   <!-- Update Modal -->
-  <script id="savePaymentModal.html" type="text/ng-template">
-    <form class="form-horizontal" name="paymentForm" ng-submit="savePayment(paymentForm.$valid)" role="form">
+  <script id="saveInstallmentModal.html" type="text/ng-template">
+    <form class="form-horizontal" novalidate name="paymentForm" ng-submit="savePayment(paymentForm.$valid)" role="form">
       <div class="modal-header">
         <button aria-hidden="true" class="close" ng-click='closeModal()' type="button">&times;</button>
         <h4 class="modal-title"><i class="warning glyphicon glyphicon-list-alt"></i> Payment Record</h4>
       </div>
       <div class="modal-body">
-        <div class="form-group" ng-show="isInstallment()">
+        <div class="form-group">
           <label class="control-label col-sm-3" for="month">ประจำเดือน:
           </label>
           <div class="col-sm-9">
             <select class="form-control input-sm" name="month" ng-model="selectedMonth" ng-options="month.value for month in months" style="width: 320px;"></select>
           </div>
         </div>
-        <div class="form-group" ng-show="isInstallment()">
+        <div class="form-group">
           <label class="control-label col-sm-3" for="year">ประจำปี:</label>
           <div class="col-sm-9">
             <select class="form-control input-sm" name="year" ng-model="selectedYear" ng-options="year for year in years" style="width: 320px;"></select>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group required">
           <label class="control-label col-sm-3" for="amount">จำนวน:</label>
+          <div class="col-sm-9" ng-class="{'has-error': paymentForm.amount.$error.required && (paymentForm.$submitted || paymentForm.amount.$touched)}">
+            <input class="form-control input-sm text" decimal-number name="amount" ng-model="payment.amount" placeholder="Amount" required type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-3" for="description">หมายเหตุ:</label>
           <div class="col-sm-9">
+            <textarea class="form-control input-sm" name="description" ng-model="payment.description" placeholder="Description" rows="5" style="width: 320px;"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default btn-sm" ng-click="closeModal()" type="button">Close</button>
+        <button class="btn btn-primary btn-sm" type="submit">Save</button>
+      </div>
+    </form>
+  </script>
+
+  <script id="savePaymentModal.html" type="text/ng-template">
+    <form class="form-horizontal" novalidate name="paymentForm" ng-submit="savePayment(paymentForm.$valid)" role="form">
+      <div class="modal-header">
+        <button aria-hidden="true" class="close" ng-click='closeModal()' type="button">&times;</button>
+        <h4 class="modal-title"><i class="warning glyphicon glyphicon-list-alt"></i> Payment Record</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group required">
+          <label class="control-label col-sm-3" for="amount">จำนวน:</label>
+          <div class="col-sm-9" ng-class="{'has-error': paymentForm.amount.$error.required && (paymentForm.$submitted || paymentForm.amount.$touched)}">
             <input class="form-control input-sm text" decimal-number name="amount" ng-model="payment.amount" placeholder="Amount" required type="text">
           </div>
         </div>

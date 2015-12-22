@@ -49,8 +49,8 @@
   ])
 
   .controller('PaymentListCtrl', ['$scope', '$route', '$uibModal', 'uiGridConstants',
-    'PaymentService', '$cacheFactory', '$templateCache',
-    function($scope, $route, $uibModal, uiGridConstants, PaymentService, $cacheFactory, $templateCache) {
+    'PaymentService', '$cacheFactory',
+    function($scope, $route, $uibModal, uiGridConstants, PaymentService, $cacheFactory) {
 
       $scope.gridOptions = {
         enableSorting: true,
@@ -65,18 +65,19 @@
 
         columnDefs: [{
           name: 'print',
-          headerCellTemplate: '<span class="glyphicon glyphicon-print middle-valign"></span>',
+          headerCellTemplate: '<span class=""></span>',
           headerCellClass: 'center',
           cellClass: 'center',
           width: '3%',
           cellTemplate: '<span class="glyphicon glyphicon-print pointer" ' +
             'ng-click="grid.appScope.print(row.entity)" ' +
-            'style="color:#d9534f;vertical-align: middle"></span>'
+            'style="color:#999933;vertical-align: middle"></span>'
         }, {
-          field: 'receiptId',
+          field: 'id', // receipt id
           displayName: '\u0e43\u0e1a\u0e40\u0e2a\u0e23\u0e47\u0e08 \u0023',
           headerCellClass: 'center',
           cellClass: 'right',
+          width: '10%',
           footerCellClass: 'right',
           footerCellTemplate: '<div class="ui-grid-cell-contents">Total</div>'
         }, {
@@ -138,22 +139,32 @@
         alert('fuck');
       };
 
-      var tplUrl = 'savePaymentModal.html';
-      // $templateCache.remove('savePaymentModal.html');
-      // $templateCache.removeAll();
-
       $scope.savePaymentModal = function(selected) {
 
-        $uibModal.open({
-          animation: true,
-          templateUrl: 'savePaymentModal.html',
-          controller: 'SavePaymentModalCtrl',
-          resolve: {
-            payment: function() {
-              return selected;
+        if ($scope.landBuy.buyType == 'INSTALLMENT') {
+          $uibModal.open({
+            animation: true,
+            templateUrl: 'saveInstallmentModal.html',
+            controller: 'SaveInstallmentModalCtrl',
+            resolve: {
+              payment: function() {
+                return selected;
+              }
             }
-          }
-        });
+          });
+        } else {
+          $uibModal.open({
+            animation: true,
+            templateUrl: 'savePaymentModal.html',
+            controller: 'SavePaymentModalCtrl',
+            resolve: {
+              payment: function() {
+                return selected;
+              }
+            }
+          });
+        }
+
       };
 
       $scope.confirmDeleteModal = function(selected) {
@@ -192,25 +203,30 @@
 
       $scope.landBuy = $cacheFactory.get('land-cache').get('buyDetail');
 
-      $scope.isInstallment = function() {
-        return $scope.landBuy.buyType == 'INSTALLMENT';
-      };
-
-      alert($scope.landBuy.buyType == 'INSTALLMENT');
-      if ($scope.landBuy.buyType == 'CASH') {
+      if ($scope.landBuy.buyType == 'CASH') { // TODO: write test for this
         $scope.gridOptions.columnDefs[2].visible = false; // disable payFor field
       }
 
     }
   ])
 
-  .controller('SavePaymentModalCtrl', ['$rootScope', '$scope', '$route', '$modalInstance',
+  .controller('SavePaymentModalCtrl', ['$rootScope', '$scope', '$modalInstance',
+    'PaymentService', 'NotificationService', 'payment',
+    function($rootScope, $scope, $modalInstance, PaymentService, NotificationService, payment) {
+
+      $scope.closeModal = function() {
+        $modalInstance.dismiss('cancel');
+      };
+
+    }
+  ])
+
+  .controller('SaveInstallmentModalCtrl', ['$rootScope', '$scope', '$route', '$modalInstance',
     'PaymentService', 'NotificationService', 'payment',
     function($rootScope, $scope, $route, $modalInstance, PaymentService, NotificationService, payment) {
 
       $scope.closeModal = function() {
         $modalInstance.dismiss('cancel');
-        // $modalInstance.close();
       };
 
       $scope.savePayment = function(isValid) {
@@ -338,17 +354,6 @@
 
       $scope.payment = angular.copy(payment);
     }
-  ])
-
-  .run(['$rootScope', '$templateCache', function($rootScope, $templateCache) {
-
-    $rootScope.$on('$routeChangeStart', function(event, next, current) {
-      alert(current);
-      if (typeof(current) !== 'undefined') {
-        alert('ok');
-        $templateCache.remove(current.templateUrl);
-      }
-    });
-  }]);
+  ]);
 
 })();

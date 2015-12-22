@@ -105,7 +105,7 @@ describe('land-payment', function() {
 
   });
 
-  describe('SavePaymentModalCtrl', function() {
+  describe('SaveInstallmentModalCtrl', function() {
 
     beforeEach(inject(function($injector) {
 
@@ -141,7 +141,7 @@ describe('land-payment', function() {
     describe('Save a new Payment', function() {
 
       beforeEach(function() {
-        SavePaymentModalCtrl = $controller('SavePaymentModalCtrl', {
+        SaveInstallmentModalCtrl = $controller('SaveInstallmentModalCtrl', {
           $rootScope: $rootScope,
           $scope: $scope,
           $route: $route,
@@ -215,7 +215,7 @@ describe('land-payment', function() {
 
     describe('Save an existing Payment', function() {
       beforeEach(function() {
-        SavePaymentModalCtrl = $controller('SavePaymentModalCtrl', {
+        SaveInstallmentModalCtrl = $controller('SaveInstallmentModalCtrl', {
           $rootScope: $rootScope,
           $scope: $scope,
           $route: $route,
@@ -393,14 +393,14 @@ describe('land-payment', function() {
       spyOn($uibModal, 'open');
       $scope.savePaymentModal(dummy);
       $scope.$digest();
-      // expect($uibModal.open).toHaveBeenCalledWith({
-      //   animation: true,
-      //   templateUrl: 'savePaymentModal.html',
-      //   controller: 'SavePaymentModalCtrl',
-      //   resolve: {
-      //     payment: jasmine.any(Function)
-      //   }
-      // });
+      expect($uibModal.open).toHaveBeenCalledWith({
+        animation: true,
+        templateUrl: 'saveInstallmentModal.html',
+        controller: 'SaveInstallmentModalCtrl',
+        resolve: {
+          payment: jasmine.any(Function)
+        }
+      });
     });
 
     it('validate $scope.confirmDeleteModal()', function() {
