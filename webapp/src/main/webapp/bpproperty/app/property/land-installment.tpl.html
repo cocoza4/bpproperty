@@ -22,7 +22,7 @@
 
   <!-- Update Modal -->
   <script id="saveInstallmentModal.html" type="text/ng-template">
-    <form class="form-horizontal" novalidate name="paymentForm" ng-submit="savePayment(paymentForm.$valid)" role="form">
+    <form class="form-horizontal" novalidate name="installmentForm" ng-submit="savePayment(installmentForm.$valid)" role="form">
       <div class="modal-header">
         <button aria-hidden="true" class="close" ng-click='closeModal()' type="button">&times;</button>
         <h4 class="modal-title"><i class="warning glyphicon glyphicon-list-alt"></i> Payment Record</h4>
@@ -43,7 +43,7 @@
         </div>
         <div class="form-group required">
           <label class="control-label col-sm-3" for="amount">จำนวน:</label>
-          <div class="col-sm-9" ng-class="{'has-error': paymentForm.amount.$error.required && (paymentForm.$submitted || paymentForm.amount.$touched)}">
+          <div class="col-sm-9" ng-class="{'has-error': installmentForm.amount.$error.required && (installmentForm.$submitted || installmentForm.amount.$touched)}">
             <input class="form-control input-sm text" decimal-number name="amount" ng-model="payment.amount" placeholder="Amount" required type="text">
           </div>
         </div>

@@ -40,9 +40,7 @@
     'land-payment-service',
 
     'customer',
-    'customer-service',
-
-    'bpproperty-cache'
+    'customer-service'
 
   ])
 

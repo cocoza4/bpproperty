@@ -8,19 +8,24 @@
 
   .service('PaymentService', ['Payment', function(Payment) {
 
+    function updatePayDate(payment, month, year) {
+      if (month && year) {
+        var date = new Date(year, month, 1);
+        payment.payFor = date.getTime();
+      }
+    }
+
     this.query = function(criteria) {
       return Payment.query(criteria).$promise;
     };
 
     this.create = function(criteria, payment, month, year) {
-      var date = new Date(year, month, 1);
-      payment.payFor = date.getTime();
+      updatePayDate(payment, month, year);
       return Payment.save(criteria, payment).$promise;
     };
 
     this.update = function(criteria, payment, month, year) {
-      var date = new Date(year, month, 1);
-      payment.payFor = date.getTime();
+      updatePayDate(payment, month, year);
       return Payment.update(criteria, payment).$promise;
     };
 

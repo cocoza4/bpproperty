@@ -17,7 +17,7 @@
         var criteria = {
           landId: $route.current.params['landId'],
           buyDetailId: $route.current.params['buyDetailId'],
-          installmentId: $scope.payment.id
+          paymentId: $scope.payment.id
         };
 
         PaymentService.delete(criteria).then(function(response) {
@@ -210,13 +210,69 @@
     }
   ])
 
-  .controller('SavePaymentModalCtrl', ['$rootScope', '$scope', '$modalInstance',
+  .controller('SavePaymentModalCtrl', ['$rootScope', '$scope', '$route', '$modalInstance',
     'PaymentService', 'NotificationService', 'payment',
-    function($rootScope, $scope, $modalInstance, PaymentService, NotificationService, payment) {
+    function($rootScope, $scope, $route, $modalInstance, PaymentService, NotificationService, payment) {
 
       $scope.closeModal = function() {
         $modalInstance.dismiss('cancel');
       };
+
+      $scope.savePayment = function(isValid) {
+
+        if (isValid) {
+          $scope.payment.buyDetailId = $route.current.params['buyDetailId'];
+          var paymentCriteria = {
+            landId: $route.current.params['landId'],
+            buyDetailId: $route.current.params['buyDetailId'],
+          };
+
+          var isNew = !$scope.payment.id;
+          if (isNew) {
+            PaymentService.create(paymentCriteria, $scope.payment).then(function(data) {
+
+              $modalInstance.dismiss('cancel'); // hide dialog
+
+              NotificationService.notify({
+                type: 'success',
+                msg: 'Payment created'
+              });
+
+              // emit to load payments
+              $rootScope.$broadcast('loadLandBuyDetailBO');
+              $rootScope.$broadcast('loadPayments');
+
+            }, function(error) {
+              NotificationService.notify({
+                type: 'error',
+                msg: 'Unable to create Payment'
+              });
+            });
+          } else {
+            PaymentService.update(paymentCriteria, $scope.payment).then(function(data) {
+              $modalInstance.dismiss('cancel'); // hide dialog
+
+              NotificationService.notify({
+                type: 'success',
+                msg: 'Payment updated'
+              });
+
+              // emit to load payments
+              $rootScope.$broadcast('loadLandBuyDetailBO');
+              $rootScope.$broadcast('loadPayments');
+
+            }, function(error) {
+              NotificationService.notify({
+                type: 'error',
+                msg: 'Unable to update existing Payment'
+              });
+            });
+          }
+
+        }
+      };
+
+      $scope.payment = angular.copy(payment);
 
     }
   ])
