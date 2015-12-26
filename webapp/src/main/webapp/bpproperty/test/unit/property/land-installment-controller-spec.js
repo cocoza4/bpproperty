@@ -449,6 +449,8 @@ describe('land-payment', function() {
 
   describe('PaymentListCtrl', function() {
 
+    //TODO: finish this
+
     beforeEach(inject(function($injector) {
       mockLandBuyDetail = {
         "id": 1,
@@ -460,6 +462,22 @@ describe('land-payment', function() {
         "buyPrice": 100000,
         "annualInterest": 15.0,
         "yearsOfInstallment": 5,
+        "description": null,
+        "area": {
+          "rai": 10,
+          "yarn": 5,
+          "tarangwa": 10
+        },
+        "createdTime": 0
+      };
+
+      mockCashLandBuyDetail = {
+        "id": 1,
+        "landId": 1,
+        "buyType": "CASH",
+        "buyerFirstName": "firstname1",
+        "buyerLastName": "lastname1",
+        "buyPrice": 100000,
         "description": null,
         "area": {
           "rai": 10,
@@ -494,7 +512,7 @@ describe('land-payment', function() {
       $uibModal = $injector.get('$uibModal');
       $cacheFactory = $injector.get('$cacheFactory');
 
-      var cache = $cacheFactory('land-cache'); // init cache object
+      cache = $cacheFactory('land-cache'); // init cache object
       cache.put('buyDetail', mockLandBuyDetail);
 
       $route = {
@@ -530,8 +548,31 @@ describe('land-payment', function() {
       $scope.$digest();
     }));
 
+    it('init - CASH buy', function() {
+      cache.put('buyDetail', mockCashLandBuyDetail);
+      PaymentListCtrl = $controller('PaymentListCtrl', {
+        $scope: $scope,
+        $route: $route,
+        $uibModal: $uibModal,
+        $location: $location,
+        LandBuyService: LandBuyService,
+        PaymentService: PaymentService,
+        $cacheFactory: $cacheFactory
+      });
+      $scope.$digest();
+      expect($scope.landBuy).toEqual(mockCashLandBuyDetail);
+      expect($scope.gridOptions.columnDefs[2].visible).toBeFalsy();
+      expect(PaymentListCtrl.paymentCriteria).toEqual({
+        landId: $route.current.params.landId,
+        buyDetailId: $route.current.params.buyDetailId,
+        page: 0,
+        length: 10
+      });
+    });
+
     it('init', function() {
       expect($scope.landBuy).toEqual(mockLandBuyDetail);
+      expect($scope.gridOptions.columnDefs[2].visible).toBeTruthy();
       expect(PaymentListCtrl.paymentCriteria).toEqual({
         landId: $route.current.params.landId,
         buyDetailId: $route.current.params.buyDetailId,
@@ -546,7 +587,7 @@ describe('land-payment', function() {
       expect(PaymentService.query).toHaveBeenCalledWith(PaymentListCtrl.paymentCriteria);
     });
 
-    it('validate $scope.savePaymentModal()', function() {
+    it('validate $scope.savePaymentModal() - INSTALLMENT', function() {
       var dummy = "dummy";
       spyOn($uibModal, 'open');
       $scope.savePaymentModal(dummy);
@@ -555,6 +596,22 @@ describe('land-payment', function() {
         animation: true,
         templateUrl: 'saveInstallmentModal.html',
         controller: 'SaveInstallmentModalCtrl',
+        resolve: {
+          payment: jasmine.any(Function)
+        }
+      });
+    });
+
+    it('validate $scope.savePaymentModal() - CASH', function() {
+      $scope.landBuy = mockCashLandBuyDetail;
+      var dummy = "dummy";
+      spyOn($uibModal, 'open');
+      $scope.savePaymentModal(dummy);
+      $scope.$digest();
+      expect($uibModal.open).toHaveBeenCalledWith({
+        animation: true,
+        templateUrl: 'savePaymentModal.html',
+        controller: 'SavePaymentModalCtrl',
         resolve: {
           payment: jasmine.any(Function)
         }

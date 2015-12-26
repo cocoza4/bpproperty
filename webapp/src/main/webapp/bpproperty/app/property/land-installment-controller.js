@@ -87,7 +87,8 @@
           headerCellClass: 'center',
           cellClass: 'right',
           footerCellClass: 'right',
-          footerCellTemplate: '<div class="ui-grid-cell-contents">Total</div>'
+          footerCellTemplate: '<div class="ui-grid-cell-contents">Total</div>',
+          visible: 'true'
         }, {
           field: 'amount',
           displayName: '\u0e08\u0e33\u0e19\u0e27\u0e19',
@@ -135,7 +136,7 @@
         }
       };
 
-      $scope.print = function(selected) {
+      $scope.print = function(selected) { //TODO: finish this
         alert('fuck');
       };
 
@@ -203,7 +204,7 @@
 
       $scope.landBuy = $cacheFactory.get('land-cache').get('buyDetail');
 
-      if ($scope.landBuy.buyType == 'CASH') { // TODO: write test for this
+      if ($scope.landBuy.buyType == 'CASH') {
         $scope.gridOptions.columnDefs[2].visible = false; // disable payFor field
       }
 
