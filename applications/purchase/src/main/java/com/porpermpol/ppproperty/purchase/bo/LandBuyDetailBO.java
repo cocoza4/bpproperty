@@ -17,7 +17,7 @@ public class LandBuyDetailBO {
     private Float buyPrice;
     private Float annualInterest;
     private Integer yearsOfInstallment;
-    private Float totalInstallment;
+    private Float totalPayment;
     private String description;
     private Area area;
     private Date createdTime;
@@ -102,12 +102,12 @@ public class LandBuyDetailBO {
         this.yearsOfInstallment = yearsOfInstallment;
     }
 
-    public Float getTotalInstallment() {
-        return totalInstallment;
+    public Float getTotalPayment() {
+        return totalPayment;
     }
 
-    public void setTotalInstallment(Float totalInstallment) {
-        this.totalInstallment = totalInstallment;
+    public void setTotalPayment(Float totalPayment) {
+        this.totalPayment = totalPayment;
     }
 
     public String getDescription() {

@@ -19,7 +19,7 @@ describe('customer', function() {
       "downPayment": 100.55,
       "buyPrice": 1000.1,
       "annualInterest": 15.0,
-      "totalInstallment": 500,
+      "totalPayment": 500,
       "yearsOfInstallment": 5,
       "description": null,
       "area": {

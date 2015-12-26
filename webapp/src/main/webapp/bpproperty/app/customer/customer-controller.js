@@ -293,7 +293,7 @@
           cellFilter: 'number',
           enableFiltering: false
         }, {
-          field: "totalInstallment",
+          field: "totalPayment",
           displayName: "\u0e22\u0e2d\u0e14\u0e1c\u0e48\u0e2d\u0e19",
           headerCellClass: 'center',
           cellFilter: 'number',

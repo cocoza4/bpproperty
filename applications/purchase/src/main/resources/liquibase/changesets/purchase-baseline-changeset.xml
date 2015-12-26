@@ -49,31 +49,31 @@
             <column name="updated_time" type="bigint"/>
         </createTable>
 
-        <createTable tableName="installment">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="buy_detail_id" type="bigint">
-                <constraints nullable="false" deleteCascade="true"
-                             foreignKeyName="fk_installment_land_buy_detail_id"
-                             references="land_buy_detail(id)"/>
-            </column>
-            <column name="pay_for" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="amount" type="real">
-                <constraints nullable="false"/>
-            </column>
-            <column name="description" type="text"/>
-            <column name="created_by" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="created_time" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updated_by" type="bigint"/>
-            <column name="updated_time" type="bigint"/>
-        </createTable>
+        <!--<createTable tableName="installment">-->
+            <!--<column name="id" type="bigint" autoIncrement="true">-->
+                <!--<constraints primaryKey="true"/>-->
+            <!--</column>-->
+            <!--<column name="buy_detail_id" type="bigint">-->
+                <!--<constraints nullable="false" deleteCascade="true"-->
+                             <!--foreignKeyName="fk_installment_land_buy_detail_id"-->
+                             <!--references="land_buy_detail(id)"/>-->
+            <!--</column>-->
+            <!--<column name="pay_for" type="bigint">-->
+                <!--<constraints nullable="false"/>-->
+            <!--</column>-->
+            <!--<column name="amount" type="real">-->
+                <!--<constraints nullable="false"/>-->
+            <!--</column>-->
+            <!--<column name="description" type="text"/>-->
+            <!--<column name="created_by" type="bigint">-->
+                <!--<constraints nullable="false"/>-->
+            <!--</column>-->
+            <!--<column name="created_time" type="bigint">-->
+                <!--<constraints nullable="false"/>-->
+            <!--</column>-->
+            <!--<column name="updated_by" type="bigint"/>-->
+            <!--<column name="updated_time" type="bigint"/>-->
+        <!--</createTable>-->
 
         <createTable tableName="payment">
             <column name="id" type="bigint" autoIncrement="true">

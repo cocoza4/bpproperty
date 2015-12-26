@@ -12,7 +12,7 @@ describe('land-buy', function() {
       "downPayment": 50000,
       "buyPrice": 250000,
       "annualInterest": 8,
-      "totalInstallment": 100000,
+      "totalPayment": 100000,
       "yearsOfInstallment": 5,
       "description": null,
       "area": {

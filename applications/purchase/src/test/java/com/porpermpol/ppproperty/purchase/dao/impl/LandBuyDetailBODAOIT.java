@@ -99,6 +99,14 @@ public class LandBuyDetailBODAOIT {
         installmentLandBuyDetail.setCreatedTime(df.parse("2015/02/11"));
         buyDetailDAO.save(installmentLandBuyDetail);
 
+        Payment payment = new Payment();
+        payment.setBuyDetailId(cashLandBuyDetail.getId());
+        payment.setAmount(100000f);
+        payment.setDescription("description");
+        payment.setCreatedBy(0L);
+        payment.setCreatedTime(new Date());
+        paymentDAO.save(payment);
+
         Payment payment1 = new Payment();
         payment1.setBuyDetailId(installmentLandBuyDetail.getId());
         payment1.setAmount(10000f);
@@ -158,7 +166,7 @@ public class LandBuyDetailBODAOIT {
         Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(BuyType.INSTALLMENT, null, null, null, null, null, pageable);
         assertEquals(1, bos.getTotalElements());
         LandBuyDetailBO bo = bos.getContent().get(0);
-        assertEquals(new Float(20000f), bo.getTotalInstallment());
+        assertEquals(new Float(20000f), bo.getTotalPayment());
         this.assertLandBuyDetail(installmentLandBuyDetail, bo);
     }
 
@@ -168,7 +176,7 @@ public class LandBuyDetailBODAOIT {
         Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(BuyType.CASH, null, null, null, null, null, pageable);
         assertEquals(1, bos.getTotalElements());
         LandBuyDetailBO bo = bos.getContent().get(0);
-        assertEquals(new Float(0), bo.getTotalInstallment());
+        assertEquals(new Float(100000f), bo.getTotalPayment());
         this.assertLandBuyDetail(cashLandBuyDetail, bo);
     }
 
@@ -192,7 +200,7 @@ public class LandBuyDetailBODAOIT {
         Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, null, null, df.parse("2015/02/11"), null, pageable);
         assertEquals(1, bos.getTotalElements());
         LandBuyDetailBO bo = bos.getContent().get(0);
-        assertEquals(new Float(20000f), bo.getTotalInstallment());
+        assertEquals(new Float(20000f), bo.getTotalPayment());
         this.assertLandBuyDetail(installmentLandBuyDetail, bo);
     }
 
@@ -202,7 +210,7 @@ public class LandBuyDetailBODAOIT {
         Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(null, null, null, null, df.parse("2015/02/01"), null, pageable);
         assertEquals(1, bos.getTotalElements());
         LandBuyDetailBO bo = bos.getContent().get(0);
-        assertEquals(new Float(20000f), bo.getTotalInstallment());
+        assertEquals(new Float(20000f), bo.getTotalPayment());
         this.assertLandBuyDetail(installmentLandBuyDetail, bo);
     }
 

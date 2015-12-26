@@ -165,7 +165,7 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
             model.setDownPayment((Float)rs.getObject("down_payment"));
             model.setAnnualInterest((Float)rs.getObject("annual_interest"));
             model.setYearsOfInstallment((Integer)rs.getObject("years_of_installment"));
-            model.setTotalInstallment((Float)rs.getObject("total_payment"));
+            model.setTotalPayment((Float)rs.getObject("total_payment"));
             model.setDescription(rs.getString("description"));
             model.setArea(new Area(rs.getInt("rai"), rs.getInt("yarn"), rs.getInt("tarangwa")));
             model.setCreatedTime(new Date(rs.getLong("created_time")));

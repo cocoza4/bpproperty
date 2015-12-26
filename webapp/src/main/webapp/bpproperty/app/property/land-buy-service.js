@@ -12,7 +12,7 @@
       if (data.buyType === 'CASH') {
         return 0;
       }
-      return data.buyPrice - data.downPayment - data.totalInstallment;
+      return data.buyPrice - data.downPayment - data.totalPayment;
     };
 
     this.getInstallmentPerMonth = function(data) {

@@ -42,7 +42,7 @@ describe('land-buy', function() {
         "downPayment": 50000,
         "buyPrice": 250000,
         "annualInterest": 8,
-        "totalInstallment": 0,
+        "totalPayment": 0,
         "yearsOfInstallment": 5,
         "description": null,
         "area": {
@@ -628,7 +628,7 @@ describe('land-buy', function() {
             "downPayment": 100.55,
             "buyPrice": 1000.1,
             "annualInterest": 15.0,
-            "totalInstallment": 500,
+            "totalPayment": 500,
             "yearsOfInstallment": 5,
             "description": null,
             "area": {
@@ -696,7 +696,7 @@ describe('land-buy', function() {
         "buyPrice": 125000.0,
         "annualInterest": 3,
         "yearsOfInstallment": 12.5,
-        "totalInstallment": 0.0,
+        "totalPayment": 0.0,
         "description": null,
         "area": {
           "rai": 0,
