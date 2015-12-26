@@ -42,20 +42,20 @@ public class LandRestController {
     @Autowired
     private ILandBuyService landBuyService;
 
-    @InitBinder("installment")
+    @InitBinder("payment")
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(Date.class, "payFor", new CustomDateEditor(
-                new SimpleDateFormat("dd/MM/yyyy"), false));
+                new SimpleDateFormat("dd/MM/yyyy"), true));
     }
 
     @RequestMapping(value = "/{landId}", method = RequestMethod.GET)
     public Land getLandById(@PathVariable("landId") long id) {
 
-        Land Land = landService.findById(id);
-        if (Land == null) {
+        Land land = landService.findById(id);
+        if (land == null) {
             throw new ResourceNotFoundException();
         }
-        return Land;
+        return land;
     }
 
     @RequestMapping(value = "/{landId}", method = RequestMethod.DELETE)
@@ -141,8 +141,8 @@ public class LandRestController {
         landBuyService.deleteLandBuyDetailById(buyDetailId);
     }
 
-    @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/installments", method = RequestMethod.GET)
-    public DataTableObject<Payment> getInstallmentsByBuyDetailId(@PathVariable("landId") long landId,
+    @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/payments", method = RequestMethod.GET)
+    public DataTableObject<Payment> getPaymentsByBuyDetailId(@PathVariable("landId") long landId,
                                                           @PathVariable("buyDetailId") long buyDetailId,
                                                           @RequestParam(value = "page", defaultValue = "0") int page,
                                                           @RequestParam(value = "length", defaultValue = "10") int length) {
@@ -156,27 +156,27 @@ public class LandRestController {
         return dataTableObject;
     }
 
-    @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/installments", method = RequestMethod.POST)
-    public void saveInstallment(@PathVariable("landId") long landId,
+    @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/payments", method = RequestMethod.POST)
+    public void savePayment(@PathVariable("landId") long landId,
                                 @PathVariable("buyDetailId") long buyDetailId,
                                 @RequestBody Payment payment) {
 
         landBuyService.savePayment(payment);
     }
 
-    @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/installments", method = RequestMethod.PUT)
-    public void updateInstallment(@PathVariable("landId") long landId,
+    @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/payments", method = RequestMethod.PUT)
+    public void updatePayment(@PathVariable("landId") long landId,
                                   @PathVariable("buyDetailId") long buyDetailId,
                                   @RequestBody Payment payment) {
         payment.setPersisted(true);
         landBuyService.savePayment(payment);
     }
 
-    @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/installments/{installmentId}", method = RequestMethod.DELETE)
-    public void deleteInstallment(@PathVariable("landId") long landId,
+    @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/payments/{paymentId}", method = RequestMethod.DELETE)
+    public void deletePayment(@PathVariable("landId") long landId,
                                   @PathVariable("buyDetailId") long buyDetailId,
-                                  @PathVariable("installmentId") long installmentId) {
-        landBuyService.deletePaymentById(installmentId);
+                                  @PathVariable("paymentId") long paymentId) {
+        landBuyService.deletePaymentById(paymentId);
     }
 
     @RequestMapping(method = RequestMethod.POST)

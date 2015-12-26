@@ -41,9 +41,9 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
 
     private static final String SQL_SELECT_ALL = "SELECT lbd.id, buy_type, c.id AS buyer_id, land_id, buy_price, " +
             "down_payment, annual_interest, years_of_installment, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +
-            "c.firstname, c.lastname, coalesce(sum(amount), 0) AS total_installment " +
+            "c.firstname, c.lastname, coalesce(sum(amount), 0) AS total_payment " +
             "FROM land_buy_detail lbd INNER JOIN customer c ON lbd.customer_id = c.id " +
-            "LEFT JOIN installment ON buy_detail_id = lbd.id";
+            "LEFT JOIN payment ON buy_detail_id = lbd.id";
 
     private static final String SQL_SELECT_BY_ID = SQL_SELECT_ALL + " WHERE lbd.id = ? " + SQL_GROUP_BY_CLAUSE;
 
@@ -102,6 +102,7 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
         }
     }
 
+    //TODO: implement report
     @Override
     public ByteArrayOutputStream getReceipt(long buyDetailId, long customerId) {
 
@@ -164,7 +165,7 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
             model.setDownPayment((Float)rs.getObject("down_payment"));
             model.setAnnualInterest((Float)rs.getObject("annual_interest"));
             model.setYearsOfInstallment((Integer)rs.getObject("years_of_installment"));
-            model.setTotalInstallment((Float)rs.getObject("total_installment"));
+            model.setTotalInstallment((Float)rs.getObject("total_payment"));
             model.setDescription(rs.getString("description"));
             model.setArea(new Area(rs.getInt("rai"), rs.getInt("yarn"), rs.getInt("tarangwa")));
             model.setCreatedTime(new Date(rs.getLong("created_time")));

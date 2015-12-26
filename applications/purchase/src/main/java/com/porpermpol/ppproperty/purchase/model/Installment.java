@@ -4,6 +4,7 @@ import com.porpermpol.ppproperty.core.jdbcrepository.extension.PersistableModel;
 
 import java.util.Date;
 
+@Deprecated
 public class Installment extends PersistableModel<Long> {
 
     private Long buyDetailId;

@@ -41,10 +41,10 @@
 
   .factory('Payment', ['$resource', function($resource) {
     return $resource(
-      '/api/lands/:landId/buydetails/:buyDetailId/installments/:installmentId', {
+      '/api/lands/:landId/buydetails/:buyDetailId/payments/:paymentId', {
         landId: '@landId',
         buyDetailId: '@buyDetailId',
-        installmentId: '@installmentId'
+        paymentId: '@paymentId'
       }, {
         'update': {
           method: 'PUT'

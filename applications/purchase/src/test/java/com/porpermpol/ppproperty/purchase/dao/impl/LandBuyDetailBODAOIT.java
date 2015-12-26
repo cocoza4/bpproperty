@@ -6,12 +6,12 @@ import com.porpermpol.ppproperty.property.dao.ILandDAO;
 import com.porpermpol.ppproperty.property.model.Area;
 import com.porpermpol.ppproperty.property.model.Land;
 import com.porpermpol.ppproperty.purchase.bo.LandBuyDetailBO;
-import com.porpermpol.ppproperty.purchase.dao.IInstallmentDAO;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailBODAO;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailDAO;
+import com.porpermpol.ppproperty.purchase.dao.IPaymentDAO;
 import com.porpermpol.ppproperty.purchase.model.BuyType;
-import com.porpermpol.ppproperty.purchase.model.Installment;
 import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
+import com.porpermpol.ppproperty.purchase.model.Payment;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class LandBuyDetailBODAOIT {
     private ILandBuyDetailBODAO buyDetailBODAO;
 
     @Autowired
-    private IInstallmentDAO installmentDAO;
+    private IPaymentDAO paymentDAO;
 
     private DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
 
@@ -99,23 +99,23 @@ public class LandBuyDetailBODAOIT {
         installmentLandBuyDetail.setCreatedTime(df.parse("2015/02/11"));
         buyDetailDAO.save(installmentLandBuyDetail);
 
-        Installment installment1 = new Installment();
-        installment1.setBuyDetailId(installmentLandBuyDetail.getId());
-        installment1.setAmount(10000f);
-        installment1.setPayFor(new Date());
-        installment1.setDescription("description");
-        installment1.setCreatedBy(0L);
-        installment1.setCreatedTime(new Date());
-        installmentDAO.save(installment1);
+        Payment payment1 = new Payment();
+        payment1.setBuyDetailId(installmentLandBuyDetail.getId());
+        payment1.setAmount(10000f);
+        payment1.setPayFor(new Date());
+        payment1.setDescription("description");
+        payment1.setCreatedBy(0L);
+        payment1.setCreatedTime(new Date());
+        paymentDAO.save(payment1);
 
-        Installment installment2 = new Installment();
-        installment2.setBuyDetailId(installmentLandBuyDetail.getId());
-        installment2.setAmount(10000f);
-        installment2.setPayFor(new Date());
-        installment2.setDescription("description");
-        installment2.setCreatedBy(0L);
-        installment2.setCreatedTime(new Date());
-        installmentDAO.save(installment2);
+        Payment payment2 = new Payment();
+        payment2.setBuyDetailId(installmentLandBuyDetail.getId());
+        payment2.setAmount(10000f);
+        payment2.setPayFor(new Date());
+        payment2.setDescription("description");
+        payment2.setCreatedBy(0L);
+        payment2.setCreatedTime(new Date());
+        paymentDAO.save(payment2);
     }
 
     @After
