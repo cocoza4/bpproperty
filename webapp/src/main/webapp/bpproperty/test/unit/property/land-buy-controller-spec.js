@@ -696,7 +696,7 @@ describe('land-buy', function() {
         "buyPrice": 125000.0,
         "annualInterest": 3,
         "yearsOfInstallment": 12.5,
-        "totalPayment": 0.0,
+        "totalPayment": 30000.0,
         "description": null,
         "area": {
           "rai": 0,

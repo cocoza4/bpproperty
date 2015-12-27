@@ -30,6 +30,7 @@ describe('land-buy', function() {
       "buyerLastName": "lastname2",
       "downPayment": null,
       "buyPrice": 10.8,
+      "totalPayment": 10.8,
       "annualInterest": null,
       "yearsOfInstallment": null,
       "description": null,
@@ -46,17 +47,11 @@ describe('land-buy', function() {
 
     it('INSTALLMENT - happy path', function() {
       var actual = LandBuyService.getUnpaidDebt(mockInstallmentBuyDetailBO);
-      expect(actual).toEqual(100000);
+      expect(actual).toEqual(150000);
     });
 
     it('CASH - happy path', function() {
       var actual = LandBuyService.getUnpaidDebt(mockCashBuyDetailBO);
-      expect(actual).toEqual(0);
-    });
-
-    it('INSTALLMENT - wrong buyType', function() {
-      mockInstallmentBuyDetailBO.buyType = 'CASH';
-      var actual = LandBuyService.getUnpaidDebt(mockInstallmentBuyDetailBO);
       expect(actual).toEqual(0);
     });
 

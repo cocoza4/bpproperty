@@ -9,10 +9,7 @@
   .service('LandBuyService', ['LandBuy', 'LandBuyBO', function(LandBuy, LandBuyBO) {
 
     this.getUnpaidDebt = function(data) {
-      if (data.buyType === 'CASH') {
-        return 0;
-      }
-      return data.buyPrice - data.downPayment - data.totalPayment;
+      return data.buyPrice - data.totalPayment;
     };
 
     this.getInstallmentPerMonth = function(data) {

@@ -14,6 +14,7 @@ import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
 import com.porpermpol.ppproperty.purchase.model.Payment;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -251,6 +252,7 @@ public class LandBuyDetailBODAOIT {
         this.assertLandBuyDetail(installmentLandBuyDetail, bos.getContent().get(0));
     }
 
+    @Ignore
     @Test
     public void testGetReceipt() throws Exception {
         assertNotNull(buyDetailBODAO.getReceipt(cashLandBuyDetail.getId(), cashLandBuyDetail.getCustomerId()));

@@ -26,6 +26,8 @@
               msg: 'Payment deleted'
             });
 
+            $modalInstance.close('success');
+
             // emit to load installments
             $rootScope.$broadcast('loadLandBuyDetailBO');
             $rootScope.$broadcast('loadPayments');
@@ -37,7 +39,6 @@
             });
           });
 
-        $modalInstance.dismiss('cancel');
       };
 
       $scope.closeModal = function() {
@@ -154,7 +155,7 @@
             }
           });
         } else {
-          $uibModal.open({
+          var modalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'savePaymentModal.html',
             controller: 'SavePaymentModalCtrl',
@@ -164,12 +165,16 @@
               }
             }
           });
+
+          modalInstance.result.then(function(status) {
+            $scope.addPaymentDisabled = true;
+          }, function() {});
         }
 
       };
 
       $scope.confirmDeleteModal = function(selected) {
-        $uibModal.open({
+        var modalInstance = $uibModal.open({
           animation: true,
           templateUrl: 'confirmDeleteModal.html',
           controller: 'ConfirmDeleteModalCtrl',
@@ -179,12 +184,23 @@
             }
           }
         });
+
+        if ($scope.landBuy.buyType == 'CASH') {
+          modalInstance.result.then(function(status) {
+            $scope.addPaymentDisabled = false;
+          }, function() {});
+        }
+
       };
 
       this.loadPayments = function() {
         PaymentService.query(self.paymentCriteria).then(function(data) {
           $scope.gridOptions.data = data.content;
           $scope.gridOptions.totalItems = data.totalRecords;
+
+          if ($scope.landBuy.buyType == 'CASH' && data.totalRecords >= 1) {
+            $scope.addPaymentDisabled = true;
+          }
         });
       };
 
@@ -232,7 +248,7 @@
           if (isNew) {
             PaymentService.create(paymentCriteria, $scope.payment).then(function(data) {
 
-              $modalInstance.dismiss('cancel'); // hide dialog
+              $modalInstance.close('success'); // hide dialog
 
               NotificationService.notify({
                 type: 'success',

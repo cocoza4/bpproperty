@@ -294,7 +294,7 @@
           enableFiltering: false
         }, {
           field: "totalPayment",
-          displayName: "\u0e22\u0e2d\u0e14\u0e1c\u0e48\u0e2d\u0e19",
+          displayName: "\u0e22\u0e2d\u0e14\u0e08\u0e48\u0e32\u0e22",
           headerCellClass: 'center',
           cellFilter: 'number',
           cellClass: 'right',

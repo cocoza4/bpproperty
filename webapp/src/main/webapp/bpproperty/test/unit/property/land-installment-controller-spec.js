@@ -76,7 +76,7 @@ describe('land-payment', function() {
 
       expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
       expect($rootScope.$broadcast).toHaveBeenCalledWith('loadPayments');
-      expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+      expect($modalInstance.close).toHaveBeenCalledWith('success');
       expect(NotificationService.notify).toHaveBeenCalledWith({
         type: 'success',
         msg: 'Payment deleted'
@@ -96,7 +96,6 @@ describe('land-payment', function() {
       $scope.delete();
       $scope.$digest();
 
-      expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
       expect(NotificationService.notify).toHaveBeenCalledWith({
         type: 'error',
         msg: 'Unable to delete the selected Payment'
@@ -348,7 +347,7 @@ describe('land-payment', function() {
         landId: 1,
         buyDetailId: 1,
       }, $scope.payment);
-      expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+      expect($modalInstance.close).toHaveBeenCalledWith('success');
       expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
       expect($rootScope.$broadcast).toHaveBeenCalledWith('loadPayments');
       expect(NotificationService.notify).toHaveBeenCalledWith({
@@ -449,8 +448,6 @@ describe('land-payment', function() {
 
   describe('PaymentListCtrl', function() {
 
-    //TODO: finish this
-
     beforeEach(inject(function($injector) {
       mockLandBuyDetail = {
         "id": 1,
@@ -520,6 +517,15 @@ describe('land-payment', function() {
           params: {
             landId: 1,
             buyDetailId: 1
+          }
+        }
+      };
+
+      modalInstance = {
+        result: {
+          then: function(confirmCallback, cancelCallback) {
+            this.confirmCallBack = confirmCallback;
+            this.cancelCallback = cancelCallback;
           }
         }
       };
@@ -605,7 +611,7 @@ describe('land-payment', function() {
     it('validate $scope.savePaymentModal() - CASH', function() {
       $scope.landBuy = mockCashLandBuyDetail;
       var dummy = "dummy";
-      spyOn($uibModal, 'open');
+      spyOn($uibModal, 'open').and.returnValue(modalInstance);
       $scope.savePaymentModal(dummy);
       $scope.$digest();
       expect($uibModal.open).toHaveBeenCalledWith({
@@ -618,7 +624,24 @@ describe('land-payment', function() {
       });
     });
 
-    it('validate $scope.confirmDeleteModal()', function() {
+    it('validate $scope.confirmDeleteModal() - CASH', function() {
+      $scope.landBuy = mockCashLandBuyDetail;
+      var dummy = "dummy";
+      spyOn($uibModal, 'open').and.returnValue(modalInstance);
+      $scope.confirmDeleteModal(dummy);
+      $scope.$digest();
+      expect($uibModal.open).toHaveBeenCalledWith({
+        animation: true,
+        templateUrl: 'confirmDeleteModal.html',
+        controller: 'ConfirmDeleteModalCtrl',
+        resolve: {
+          payment: jasmine.any(Function)
+        }
+      });
+    });
+
+    it('validate $scope.confirmDeleteModal() - INSTALLMENT', function() {
+      $scope.landBuy = mockLandBuyDetail;
       var dummy = "dummy";
       spyOn($uibModal, 'open');
       $scope.confirmDeleteModal(dummy);
