@@ -22,13 +22,6 @@
         <property name="password" value="${password}"/>
     </bean>
 
-    <!--<bean id="dataSource" class="org.apache.tomcat.dbcp.dbcp2.BasicDataSource">-->
-    <!--<property name="username" value="admin"/>-->
-    <!--<property name="password" value="admin"/>-->
-    <!--<property name="url" value="jdbc:h2:mem:test"/>-->
-    <!--<property name="driverClassName" value="org.h2.Driver"/>-->
-    <!--</bean>-->
-
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <constructor-arg ref="dataSource"/>
     </bean>

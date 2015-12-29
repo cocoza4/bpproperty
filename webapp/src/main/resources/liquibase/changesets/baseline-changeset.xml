@@ -9,7 +9,7 @@
 
         <sqlFile dbms="postgresql"
                  encoding="utf8"
-                 path="liquibase/changesets/data.sql"
+                 path="liquibase/changesets/test-data.sql"
                  relativeToChangelogFile="false"
                  splitStatements="true"
                  stripComments="true"
