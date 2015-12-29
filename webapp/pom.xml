@@ -105,8 +105,8 @@
                 <configuration>
                     <!-- These are the default configurations: -->
                     <compiler>net.sf.jasperreports.engine.design.JRJdtCompiler</compiler>
-                    <sourceDirectory>jasper</sourceDirectory>
-                    <outputDirectory>${project.build.directory}/jasper</outputDirectory>
+                    <sourceDirectory>src/main/resources/jasper</sourceDirectory>
+                    <outputDirectory>src/main/resources/jasper</outputDirectory>
                     <outputFileExt>.jasper</outputFileExt>
                     <xmlValidation>true</xmlValidation>
                     <verbose>false</verbose>
