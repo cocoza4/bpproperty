@@ -118,9 +118,12 @@ public class LandRestController {
     @ResponseBody
     @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/receipt", method = RequestMethod.GET, produces = "application/pdf")
     public byte[] getReceipt(@PathVariable("landId") long landId,
-                                         @PathVariable("buyDetailId") long buyDetailId,
-                                         @RequestParam(value = "customerId", defaultValue = "1") int customerId) {
-        ByteArrayOutputStream outputStream = landBuyService.getReceipt(buyDetailId, customerId);
+                             @PathVariable("buyDetailId") long buyDetailId,
+                             @RequestParam(value = "receiptId") long receiptId) {
+        ByteArrayOutputStream outputStream = landBuyService.getReceipt(buyDetailId, receiptId);
+        if (outputStream == null) {
+            throw new ResourceNotFoundException();
+        }
         return outputStream.toByteArray();
     }
 

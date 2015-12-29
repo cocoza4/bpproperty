@@ -6,6 +6,7 @@ import com.porpermpol.ppproperty.person.service.ICustomerService;
 import com.porpermpol.ppproperty.property.model.Area;
 import com.porpermpol.ppproperty.property.model.Land;
 import com.porpermpol.ppproperty.property.service.ILandService;
+import com.porpermpol.ppproperty.purchase.dao.IPaymentDAO;
 import com.porpermpol.ppproperty.purchase.model.BuyType;
 import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
 import com.porpermpol.ppproperty.purchase.model.Payment;
@@ -42,6 +43,9 @@ public class LandBuyServiceIT {
     private Land land;
     private LandBuyDetail landBuyDetail;
     private Payment payment;
+
+    @Autowired
+    private IPaymentDAO paymentDAO;
 
     @Before
     public void setUp() throws Exception {
@@ -90,6 +94,7 @@ public class LandBuyServiceIT {
     @After
     public void tearDown() throws Exception {
         landService.deleteById(land.getId());
+        paymentDAO.deleteAll();
         customerService.deleteById(customer.getId());
     }
 
@@ -159,5 +164,48 @@ public class LandBuyServiceIT {
         assertEquals(expected, returnPayment.getAmount());
         assertEquals(USER_LOGIN_ID, returnPayment.getUpdatedBy());
         assertEquals(CURRENT_DATE, returnPayment.getUpdatedTime());
+    }
+
+    @Test
+    public void testGetReceipt() throws Exception {
+        landBuyService.saveLandBuyDetail(landBuyDetail);
+        payment.setBuyDetailId(landBuyDetail.getId());
+        landBuyService.savePayment(payment);
+
+        assertNotNull(landBuyService.getReceipt(landBuyDetail.getId(), payment.getId()));
+    }
+
+    @Test
+    public void testGetReceipt_invalidReceiptId() throws Exception {
+
+        LandBuyDetail model = new LandBuyDetail();
+        try {
+
+            landBuyService.saveLandBuyDetail(landBuyDetail);
+            payment.setBuyDetailId(landBuyDetail.getId());
+            landBuyService.savePayment(payment);
+
+            model.setArea(new Area(1, 2, 3));
+            model.setCustomerId(customer.getId());
+            model.setLandId(land.getId());
+            model.setDownPayment(1000f);
+            model.setBuyPrice(100000f);
+            model.setBuyType(BuyType.CASH);
+            model.setAnnualInterest(15.5f);
+            model.setYearsOfInstallment(5);
+            landBuyService.saveLandBuyDetail(model);
+
+            Payment anotherPayment = new Payment();
+            anotherPayment.setPayFor(new Date());
+            anotherPayment.setAmount(200f);
+            anotherPayment.setDescription("description");
+            anotherPayment.setBuyDetailId(model.getId());
+            landBuyService.savePayment(anotherPayment);
+
+            assertNull(landBuyService.getReceipt(landBuyDetail.getId(), anotherPayment.getId()));
+        } finally {
+            landBuyService.deleteLandBuyDetailById(model.getId());
+        }
+
     }
 }

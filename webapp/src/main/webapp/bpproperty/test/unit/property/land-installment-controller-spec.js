@@ -587,6 +587,17 @@ describe('land-payment', function() {
       });
     });
 
+    it('validate $scope.loadReceipt()', function() {
+      var expectedParams = {
+        receiptId: mockPayments[0].id
+      };
+      spyOn(PaymentService, 'loadReceipt');
+      $scope.loadReceipt(mockPayments[0]);
+      expect(PaymentService.loadReceipt).toHaveBeenCalledWith(mockLandBuyDetail.landId,
+        mockLandBuyDetail.id,
+        expectedParams);
+    });
+
     it('validate loadPayments()', function() {
       PaymentListCtrl.loadPayments();
       $scope.$digest();

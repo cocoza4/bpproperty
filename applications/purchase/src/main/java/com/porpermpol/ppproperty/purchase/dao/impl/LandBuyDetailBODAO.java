@@ -6,6 +6,7 @@ import com.porpermpol.ppproperty.purchase.bo.LandBuyDetailBO;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailBODAO;
 import com.porpermpol.ppproperty.purchase.model.BuyType;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -28,11 +29,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Repository
 public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
 
+    private static final Locale TH_LOCALE = new Locale("th", "TH");
     private static final String JASPER_FILE = "src/main/resources/jasper/receipt.jasper";
 
     private static final String SQL_GROUP_BY_CLAUSE = " GROUP BY lbd.id, buy_type, buyer_id, lbd.land_id, buy_price, " +
@@ -102,22 +105,22 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
         }
     }
 
-    //TODO: implement report
     @Override
-    public ByteArrayOutputStream getReceipt(long buyDetailId, long customerId) {
+    public ByteArrayOutputStream getReceipt(long buyDetailId, long customerId, float amount, long receiptId) {
 
         Connection conn = DataSourceUtils.getConnection(jdbcTemplate.getDataSource());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         Map params = new HashMap();
-        params.put("payment", 50000f);
+        params.put(JRParameter.REPORT_LOCALE, TH_LOCALE);
+        params.put("payment", amount);
+        params.put("receipt_id", receiptId);
         params.put("buy_detail_id", buyDetailId);
         params.put("customer_id", customerId);
 
         try {
             JasperPrint jasperPrint = JasperFillManager.fillReport(JASPER_FILE, params, conn);
             JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
-
         } catch (JRException e) {
             e.printStackTrace();
         }

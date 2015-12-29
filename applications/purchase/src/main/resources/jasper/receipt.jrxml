@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
-<!-- 2015-11-04T19:56:11 -->
+<!-- 2015-12-29T21:31:35 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="receipt" pageWidth="595" pageHeight="421" whenNoDataType="AllSectionsNoDetail" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
 	<property name="template.engine" value="tabular_template"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -14,17 +14,10 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
 	<style name="Title" forecolor="#FFFFFF" fontName="tahoma" fontSize="50" isBold="false"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="tahoma" fontSize="18" isBold="false"/>
 	<style name="Column header" forecolor="#666666" fontName="tahoma" fontSize="14" isBold="false"/>
 	<style name="Detail" mode="Transparent" fontName="tahoma"/>
-	<style name="Row" mode="Transparent" fontName="tahoma">
-		<conditionalStyle>
-			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
-			<style mode="Opaque" backcolor="#EEEFF0"/>
-		</conditionalStyle>
-	</style>
 	<style name="Table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -65,27 +58,27 @@
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<parameter name="buy_detail_id" class="java.lang.Long"/>
-		<parameter name="customer_id" class="java.lang.Long"/>
+		<parameter name="receipt_id" class="java.lang.Long"/>
 		<parameter name="payment" class="java.lang.Float"/>
 		<queryString>
-			<![CDATA[SELECT l.name, 
-						lbd.buy_type, 
-						lbd.buy_price, 
-						(down_payment + (SELECT coalesce(sum(amount), 0) FROM installment WHERE buy_detail_id = lbd.id)) AS acc_payment 
-						FROM land l INNER JOIN land_buy_detail lbd ON l.id = lbd.land_id  
-						WHERE lbd.id = $P{buy_detail_id}]]>
+			<![CDATA[SELECT l.name,
+							lbd.buy_type,
+							lbd.buy_price,
+							(SELECT coalesce(sum(amount), 0) FROM payment 
+								WHERE buy_detail_id = lbd.id AND 
+										id != $P{receipt_id}) AS total_payment
+							FROM land l INNER JOIN land_buy_detail lbd ON l.id = lbd.land_id
+							WHERE lbd.id = $P{buy_detail_id}]]>
 		</queryString>
 		<field name="name" class="java.lang.String"/>
 		<field name="buy_type" class="java.lang.String"/>
 		<field name="buy_price" class="java.lang.Float"/>
-		<field name="acc_payment" class="java.lang.Float"/>
-		<variable name="total" class="java.lang.Float">
-			<variableExpression><![CDATA[$F{buy_price} - $V{acc_payment}]]></variableExpression>
-			<initialValueExpression><![CDATA[$F{buy_price} - $V{acc_payment}]]></initialValueExpression>
+		<field name="total_payment" class="java.lang.Float"/>
+		<variable name="sub_total" class="java.lang.Float">
+			<variableExpression><![CDATA[$F{buy_price} - $F{total_payment}]]></variableExpression>
 		</variable>
-		<variable name="acc_payment" class="java.lang.Float">
-			<variableExpression><![CDATA[($F{acc_payment} == null) ? 0 : $F{acc_payment}]]></variableExpression>
-			<initialValueExpression><![CDATA[($F{acc_payment} == null) ? 0 : $F{acc_payment}]]></initialValueExpression>
+		<variable name="net_total" class="java.lang.Float">
+			<variableExpression><![CDATA[$V{sub_total} - $P{payment}]]></variableExpression>
 		</variable>
 	</subDataset>
 	<parameter name="buy_detail_id" class="java.lang.Long">
@@ -100,6 +93,10 @@
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA[$P{payment}]]></defaultValueExpression>
 	</parameter>
+	<parameter name="receipt_id" class="java.lang.Long">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[$P{receipt_id}]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT firstname, lastname, address, tel FROM customer 
 						WHERE id = $P{customer_id}]]>
@@ -108,7 +105,6 @@
 	<field name="lastname" class="java.lang.String"/>
 	<field name="address" class="java.lang.String"/>
 	<field name="tel" class="java.lang.String"/>
-	<variable name="net_total" class="java.lang.Float"/>
 	<pageHeader>
 		<band height="88">
 			<line>
@@ -124,7 +120,7 @@
 			</image>
 			<staticText>
 				<reportElement x="95" y="58" width="205" height="15" uuid="43d495e6-0323-4f72-963a-9e91e71e39e2"/>
-				<text><![CDATA[081-9595-240]]></text>
+				<text><![CDATA[099-191-9515]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="95" y="40" width="205" height="15" uuid="1bcc2a02-5f29-4c5d-9a54-065c5594eb41"/>
@@ -159,8 +155,10 @@
 			</textField>
 			<textField pattern="EEEEE dd MMMMM yyyy">
 				<reportElement x="470" y="30" width="105" height="20" uuid="3836ce65-eca3-4cad-a6de-b1818def0a2b"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Receipt #   1"]]></textFieldExpression>
+				<textElement textAlignment="Right">
+					<font fontName="tahoma"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ใบเสร็จ # " + $P{receipt_id}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -175,11 +173,13 @@
 						<datasetParameter name="buy_detail_id">
 							<datasetParameterExpression><![CDATA[$P{buy_detail_id}]]></datasetParameterExpression>
 						</datasetParameter>
+						<datasetParameter name="receipt_id">
+							<datasetParameterExpression><![CDATA[$P{receipt_id}]]></datasetParameterExpression>
+						</datasetParameter>
 						<datasetParameter name="payment">
 							<datasetParameterExpression><![CDATA[$P{payment}]]></datasetParameterExpression>
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-						<returnValue fromVariable="total" toVariable="net_total"/>
 					</datasetRun>
 					<jr:column width="200" uuid="06d1364f-8060-496c-ac0c-b44946e09dd0">
 						<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
@@ -264,7 +264,8 @@
 							<property name="com.jaspersoft.studio.unit.height" value="px"/>
 							<staticText>
 								<reportElement x="0" y="0" width="100" height="29" uuid="733ebf66-3cc7-4210-aad1-a2ce8a40d1c5"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
+								<box rightPadding="5"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="tahoma" size="12" isBold="true"/>
 								</textElement>
 								<text><![CDATA[ยอดคงค้างสุทธิ]]></text>
@@ -288,7 +289,8 @@
 								<reportElement x="0" y="1" width="100" height="30" uuid="3a410dea-8a9a-4136-903a-5cbe9d21481f">
 									<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 								</reportElement>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
+								<box rightPadding="5"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="tahoma" size="12"/>
 								</textElement>
 								<text><![CDATA[ยอดชำระ]]></text>
@@ -304,7 +306,7 @@
 									<font size="12"/>
 									<paragraph rightIndent="10"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{acc_payment}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_payment}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -325,7 +327,7 @@
 									<font fontName="tahoma" size="12"/>
 									<paragraph rightIndent="10"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{total} - $P{payment}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{net_total}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:columnHeader style="Table_CH" height="30">
@@ -362,7 +364,7 @@
 									<font fontName="tahoma" size="12"/>
 									<paragraph rightIndent="10"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{total}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{sub_total}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -383,7 +385,7 @@
 				<textElement>
 					<font fontName="tahoma"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new String($F{firstname} + " " + $F{lastname})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{firstname} + " " + $F{lastname}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="65" width="380" height="15" uuid="0925d7fe-e543-4225-b44e-ff1828d6cb8a">
@@ -392,13 +394,13 @@
 				<textElement>
 					<font fontName="tahoma"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{address} != null) ? $F{address} : ""]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="85" width="380" height="15" uuid="199db39e-5210-4d3a-a0c5-baf4543d9d49">
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{tel}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{tel} != null) ? $F{tel} : ""]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

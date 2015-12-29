@@ -14,7 +14,6 @@ import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
 import com.porpermpol.ppproperty.purchase.model.Payment;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +54,7 @@ public class LandBuyDetailBODAOIT {
     private Customer customer;
     private LandBuyDetail cashLandBuyDetail;
     private LandBuyDetail installmentLandBuyDetail;
+    private Payment cash;
 
     @Before
     public void setUp() throws Exception {
@@ -100,13 +100,13 @@ public class LandBuyDetailBODAOIT {
         installmentLandBuyDetail.setCreatedTime(df.parse("2015/02/11"));
         buyDetailDAO.save(installmentLandBuyDetail);
 
-        Payment payment = new Payment();
-        payment.setBuyDetailId(cashLandBuyDetail.getId());
-        payment.setAmount(100000f);
-        payment.setDescription("description");
-        payment.setCreatedBy(0L);
-        payment.setCreatedTime(new Date());
-        paymentDAO.save(payment);
+        cash = new Payment();
+        cash.setBuyDetailId(cashLandBuyDetail.getId());
+        cash.setAmount(100000f);
+        cash.setDescription("description");
+        cash.setCreatedBy(0L);
+        cash.setCreatedTime(new Date());
+        paymentDAO.save(cash);
 
         Payment payment1 = new Payment();
         payment1.setBuyDetailId(installmentLandBuyDetail.getId());
@@ -252,10 +252,9 @@ public class LandBuyDetailBODAOIT {
         this.assertLandBuyDetail(installmentLandBuyDetail, bos.getContent().get(0));
     }
 
-    @Ignore
     @Test
     public void testGetReceipt() throws Exception {
-        assertNotNull(buyDetailBODAO.getReceipt(cashLandBuyDetail.getId(), cashLandBuyDetail.getCustomerId()));
+        assertNotNull(buyDetailBODAO.getReceipt(cashLandBuyDetail.getId(), cashLandBuyDetail.getCustomerId(), cash.getAmount(), cash.getId()));
     }
 
     private void assertLandBuyDetail(LandBuyDetail expected, LandBuyDetailBO actual) {

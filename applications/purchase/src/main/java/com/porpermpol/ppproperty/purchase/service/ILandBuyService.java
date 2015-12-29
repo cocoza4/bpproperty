@@ -21,7 +21,7 @@ public interface ILandBuyService {
     LandBuyDetailBO findLandByDetailBOById(long id);
     List<LandBuyDetail> findLandBuyDetailsByCustomerId(long customerId);
 
-    ByteArrayOutputStream getReceipt(long buyDetailId, long customerId);
+    ByteArrayOutputStream getReceipt(long buyDetailId, long receiptId);
 
     Page<LandBuyDetailBO> findLandBuyDetailBOByCriteria(BuyType buyType, String firstName, Long landId, Long customerId,
                                                         Integer month, Integer year, Pageable pageable);

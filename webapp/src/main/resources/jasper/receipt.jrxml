@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
-<!-- 2015-12-28T18:22:07 -->
+<!-- 2015-12-29T21:31:35 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="receipt" pageWidth="595" pageHeight="421" whenNoDataType="AllSectionsNoDetail" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
 	<property name="template.engine" value="tabular_template"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -58,27 +58,27 @@
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<parameter name="buy_detail_id" class="java.lang.Long"/>
-		<parameter name="customer_id" class="java.lang.Long"/>
+		<parameter name="receipt_id" class="java.lang.Long"/>
 		<parameter name="payment" class="java.lang.Float"/>
 		<queryString>
-			<![CDATA[SELECT l.name, 
-						lbd.buy_type, 
-						lbd.buy_price, 
-						(SELECT coalesce(sum(amount), 0) FROM payment WHERE buy_detail_id = lbd.id) AS total_payment 
-						FROM land l INNER JOIN land_buy_detail lbd ON l.id = lbd.land_id  
-						WHERE lbd.id = $P{buy_detail_id}]]>
+			<![CDATA[SELECT l.name,
+							lbd.buy_type,
+							lbd.buy_price,
+							(SELECT coalesce(sum(amount), 0) FROM payment 
+								WHERE buy_detail_id = lbd.id AND 
+										id != $P{receipt_id}) AS total_payment
+							FROM land l INNER JOIN land_buy_detail lbd ON l.id = lbd.land_id
+							WHERE lbd.id = $P{buy_detail_id}]]>
 		</queryString>
 		<field name="name" class="java.lang.String"/>
 		<field name="buy_type" class="java.lang.String"/>
 		<field name="buy_price" class="java.lang.Float"/>
 		<field name="total_payment" class="java.lang.Float"/>
-		<variable name="total" class="java.lang.Float">
-			<variableExpression><![CDATA[$F{buy_price} - $V{total_payment}]]></variableExpression>
-			<initialValueExpression><![CDATA[$F{buy_price} - $V{total_payment}]]></initialValueExpression>
+		<variable name="sub_total" class="java.lang.Float">
+			<variableExpression><![CDATA[$F{buy_price} - $F{total_payment}]]></variableExpression>
 		</variable>
-		<variable name="total_payment" class="java.lang.Float">
-			<variableExpression><![CDATA[($F{total_payment} == null) ? 0 : $F{total_payment}]]></variableExpression>
-			<initialValueExpression><![CDATA[($F{total_payment} == null) ? 0 : $F{total_payment}]]></initialValueExpression>
+		<variable name="net_total" class="java.lang.Float">
+			<variableExpression><![CDATA[$V{sub_total} - $P{payment}]]></variableExpression>
 		</variable>
 	</subDataset>
 	<parameter name="buy_detail_id" class="java.lang.Long">
@@ -93,7 +93,10 @@
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA[$P{payment}]]></defaultValueExpression>
 	</parameter>
-	<parameter name="receipt_id" class="java.lang.Long"/>
+	<parameter name="receipt_id" class="java.lang.Long">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[$P{receipt_id}]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT firstname, lastname, address, tel FROM customer 
 						WHERE id = $P{customer_id}]]>
@@ -102,7 +105,6 @@
 	<field name="lastname" class="java.lang.String"/>
 	<field name="address" class="java.lang.String"/>
 	<field name="tel" class="java.lang.String"/>
-	<variable name="net_total" class="java.lang.Float"/>
 	<pageHeader>
 		<band height="88">
 			<line>
@@ -171,11 +173,13 @@
 						<datasetParameter name="buy_detail_id">
 							<datasetParameterExpression><![CDATA[$P{buy_detail_id}]]></datasetParameterExpression>
 						</datasetParameter>
+						<datasetParameter name="receipt_id">
+							<datasetParameterExpression><![CDATA[$P{receipt_id}]]></datasetParameterExpression>
+						</datasetParameter>
 						<datasetParameter name="payment">
 							<datasetParameterExpression><![CDATA[$P{payment}]]></datasetParameterExpression>
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-						<returnValue fromVariable="total" toVariable="net_total"/>
 					</datasetRun>
 					<jr:column width="200" uuid="06d1364f-8060-496c-ac0c-b44946e09dd0">
 						<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
@@ -302,7 +306,7 @@
 									<font size="12"/>
 									<paragraph rightIndent="10"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{total_payment}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_payment}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -323,7 +327,7 @@
 									<font fontName="tahoma" size="12"/>
 									<paragraph rightIndent="10"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{total} - $P{payment}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{net_total}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:columnHeader style="Table_CH" height="30">
@@ -360,7 +364,7 @@
 									<font fontName="tahoma" size="12"/>
 									<paragraph rightIndent="10"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{total}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{sub_total}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -381,7 +385,7 @@
 				<textElement>
 					<font fontName="tahoma"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new String($F{firstname} + " " + $F{lastname})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{firstname} + " " + $F{lastname}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="65" width="380" height="15" uuid="0925d7fe-e543-4225-b44e-ff1828d6cb8a">

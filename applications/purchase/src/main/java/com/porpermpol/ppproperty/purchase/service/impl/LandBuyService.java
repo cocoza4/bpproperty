@@ -81,8 +81,13 @@ public class LandBuyService implements ILandBuyService {
 
     @Transactional(readOnly = true)
     @Override
-    public ByteArrayOutputStream getReceipt(long buyDetailId, long customerId) {
-        return landBuyDetailBODAO.getReceipt(buyDetailId, customerId);
+    public ByteArrayOutputStream getReceipt(long buyDetailId, long receiptId) {
+        LandBuyDetail buy = landBuyDetailDAO.findOne(buyDetailId);
+        Payment payment = paymentDAO.findOne(receiptId);
+        if (buy != null && payment != null && buy.getId() == payment.getBuyDetailId()) {
+            return landBuyDetailBODAO.getReceipt(buyDetailId, buy.getCustomerId(), payment.getAmount(), receiptId);
+        }
+        return null;
     }
 
     @Transactional(readOnly = true)

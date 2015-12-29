@@ -71,7 +71,7 @@
           cellClass: 'center',
           width: '3%',
           cellTemplate: '<span class="glyphicon glyphicon-print pointer" ' +
-            'ng-click="grid.appScope.print(row.entity)" ' +
+            'ng-click="grid.appScope.loadReceipt(row.entity)" ' +
             'style="color:#999933;vertical-align: middle"></span>'
         }, {
           field: 'id', // receipt id
@@ -137,8 +137,11 @@
         }
       };
 
-      $scope.print = function(selected) { //TODO: finish this
-        alert('fuck');
+      $scope.loadReceipt = function(payment) {
+        var params = {
+          receiptId: payment.id
+        };
+        PaymentService.loadReceipt($scope.landBuy.landId, $scope.landBuy.id, params);
       };
 
       $scope.savePaymentModal = function(selected) {

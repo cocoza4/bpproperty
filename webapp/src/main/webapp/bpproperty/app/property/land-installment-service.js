@@ -6,7 +6,7 @@
 
     .module('land-payment-service', ['ngResource'])
 
-  .service('PaymentService', ['Payment', function(Payment) {
+  .service('PaymentService', ['Payment', '$window', function(Payment, $window) {
 
     function updatePayDate(payment, month, year) {
       if (month && year) {
@@ -14,6 +14,11 @@
         payment.payFor = date.getTime();
       }
     }
+
+    this.loadReceipt = function(landId, buyId, params) {
+      var url = '/api/lands/' + landId + '/buydetails/' + buyId + '/receipt?' + $.param(params);
+      $window.open(url, '_blank');
+    };
 
     this.query = function(criteria) {
       return Payment.query(criteria).$promise;
