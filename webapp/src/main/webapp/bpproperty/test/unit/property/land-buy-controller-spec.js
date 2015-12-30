@@ -242,7 +242,7 @@ describe('land-buy', function() {
       });
       expect($scope.years).toEqual(['\u0e17\u0e38\u0e01\u0e1b\u0e35', 2016, 2015]);
       expect($scope.gridOptions.paginationPageSizes).toEqual([10, 25, 50, 100, 500]);
-      expect($scope.gridOptions.paginationPageSize).toEqual(10);
+      expect($scope.gridOptions.paginationPageSize).toEqual(50);
       expect($scope.land).toEqual(mockBuyDetailList.land);
       expect($scope.gridOptions.data).toEqual(mockBuyDetailObjTable.content);
       expect($scope.gridOptions.totalItems).toEqual(mockBuyDetailObjTable.totalRecords);

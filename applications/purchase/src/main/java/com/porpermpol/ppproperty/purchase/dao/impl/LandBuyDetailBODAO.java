@@ -36,7 +36,7 @@ import java.util.Map;
 public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
 
     private static final Locale TH_LOCALE = new Locale("th", "TH");
-    private static final String JASPER_FILE = "src/main/resources/jasper/receipt.jasper";
+    private static final String JASPER_FILE = LandBuyDetailBODAO.class.getClassLoader().getResource("jasper/receipt.jasper").getFile();
 
     private static final String SQL_GROUP_BY_CLAUSE = " GROUP BY lbd.id, buy_type, buyer_id, lbd.land_id, buy_price, " +
             "down_payment, annual_interest, years_of_installment, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +

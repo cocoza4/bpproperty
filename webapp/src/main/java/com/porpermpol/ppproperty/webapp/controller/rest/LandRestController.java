@@ -28,7 +28,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -83,7 +86,7 @@ public class LandRestController {
                                                                 @RequestParam(value = "month", required = false) Integer month,
                                                                 @RequestParam(value = "year", required = false) Integer year,
                                                                 @RequestParam(value = "page", defaultValue = "0") int page,
-                                                                @RequestParam(value = "length", defaultValue = "10") int length) {
+                                                                @RequestParam(value = "length", defaultValue = "50") int length) {
         Pageable pageRequest = new PageRequest(page, length, Sort.Direction.ASC, "id");
         BuyType buyType = buyTypeCode == null ? null : BuyType.get(buyTypeCode);
 
@@ -119,11 +122,16 @@ public class LandRestController {
     @RequestMapping(value = "/{landId}/buydetails/{buyDetailId}/receipt", method = RequestMethod.GET, produces = "application/pdf")
     public byte[] getReceipt(@PathVariable("landId") long landId,
                              @PathVariable("buyDetailId") long buyDetailId,
-                             @RequestParam(value = "receiptId") long receiptId) {
+                             @RequestParam(value = "receiptId") long receiptId,
+                             HttpServletResponse response) throws URISyntaxException {
         ByteArrayOutputStream outputStream = landBuyService.getReceipt(buyDetailId, receiptId);
         if (outputStream == null) {
             throw new ResourceNotFoundException();
         }
+        String filename = String.format("ใบเสร็จลูกค้า-%d.pdf", receiptId);
+        URI uri = new URI(null, null, filename, null);
+        String asciiFileName = uri.toASCIIString();
+        response.setHeader("Content-Disposition", "filename=\"" + asciiFileName + "\"");
         return outputStream.toByteArray();
     }
 
@@ -148,7 +156,7 @@ public class LandRestController {
     public DataTableObject<Payment> getPaymentsByBuyDetailId(@PathVariable("landId") long landId,
                                                           @PathVariable("buyDetailId") long buyDetailId,
                                                           @RequestParam(value = "page", defaultValue = "0") int page,
-                                                          @RequestParam(value = "length", defaultValue = "10") int length) {
+                                                          @RequestParam(value = "length", defaultValue = "50") int length) {
         Pageable pageable = new PageRequest(page, length);
 
         Page<Payment> paymentPage = landBuyService.findPaymentsByLandBuyDetailId(buyDetailId, pageable);

@@ -371,7 +371,7 @@
 
         useExternalPagination: true,
         paginationPageSizes: [10, 25, 50, 100, 500],
-        paginationPageSize: 10,
+        paginationPageSize: 50,
 
         columnDefs: [{
           field: 'buyType',
