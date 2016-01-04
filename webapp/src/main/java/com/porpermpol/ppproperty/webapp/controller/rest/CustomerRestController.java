@@ -47,7 +47,7 @@ public class CustomerRestController {
                                             @RequestParam(value = "address", required = false) String address,
                                             @RequestParam(value = "tel", required = false) String tel,
                                             @RequestParam(value = "page", defaultValue = "0") int page,
-                                            @RequestParam(value = "length", defaultValue = "10") int length) {
+                                            @RequestParam(value = "length", defaultValue = "50") int length) {
 
         Pageable pageRequest = new PageRequest(page, length, Sort.Direction.ASC, "id");
         Page<Customer> customerPage = customerService.findByCriteria(firstname, lastname, address, tel, pageRequest);
@@ -80,7 +80,7 @@ public class CustomerRestController {
     public DataTableObject<LandBuyDetailBO> getLandBuyDetailsByCustomerId(@PathVariable("id") long id,
                                                              @RequestParam(value = "buyType", required = false) String buyTypeCode,
                                                              @RequestParam(value = "page", defaultValue = "0") int page,
-                                                             @RequestParam(value = "length", defaultValue = "10") int length) {
+                                                             @RequestParam(value = "length", defaultValue = "50") int length) {
 
         Pageable pageRequest = new PageRequest(page, length, Sort.Direction.ASC, "id");
         BuyType buyType = buyTypeCode == null ? null : BuyType.get(buyTypeCode);

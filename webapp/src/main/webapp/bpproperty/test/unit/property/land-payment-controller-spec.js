@@ -154,7 +154,7 @@ describe('land-payment', function() {
 
       it('init - new payment', function() {
         expect($scope.payment).toEqual({});
-        expect($scope.years).toEqual([2015]);
+        expect($scope.years).toEqual([2016, 2015, 2014]);
         expect($scope.selectedYear).toEqual(2015);
         expect($scope.selectedMonth).toEqual({
           key: 0,
@@ -228,7 +228,7 @@ describe('land-payment', function() {
 
       it('init - existing payment', function() {
         expect($scope.payment).toEqual(mockPayment);
-        expect($scope.years).toEqual([2015, 2014]);
+        expect($scope.years).toEqual([2016, 2015, 2014, 2013]);
         expect($scope.selectedYear).toEqual(2014);
         expect($scope.selectedMonth).toEqual({
           key: 1,

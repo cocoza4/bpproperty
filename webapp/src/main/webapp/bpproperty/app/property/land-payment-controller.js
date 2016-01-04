@@ -87,8 +87,6 @@
           cellFilter: 'date: "MMMM yyyy"',
           headerCellClass: 'center',
           cellClass: 'right',
-          footerCellClass: 'right',
-          footerCellTemplate: '<div class="ui-grid-cell-contents">Total</div>',
           visible: 'true'
         }, {
           field: 'amount',
@@ -407,7 +405,7 @@
 
       function generateYears(current, selected) {
         var years = [];
-        for (var i = current; i >= selected; i--) {
+        for (var i = current + 1; i >= selected - 1; i--) {
           years.push(i);
         }
         return years;
@@ -423,7 +421,7 @@
         $scope.years = generateYears(currentYear, selectedYear);
 
       } else { // create new payment
-        $scope.years = [currentYear];
+        $scope.years = [currentYear + 1, currentYear, currentYear - 1];
         $scope.selectedMonth = $scope.months[currentMonth];
         $scope.selectedYear = currentYear;
       }
