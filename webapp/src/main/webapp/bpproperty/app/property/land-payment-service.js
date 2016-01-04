@@ -9,7 +9,7 @@
   .service('PaymentService', ['Payment', '$window', function(Payment, $window) {
 
     function updatePayDate(payment, month, year) {
-      if (month && year) {
+      if (month !== undefined && year !== undefined) {
         var date = new Date(year, month, 1);
         payment.payFor = date.getTime();
       }

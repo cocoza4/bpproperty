@@ -13,6 +13,6 @@
     <include file="liquibase/changesets/purchase-baseline-changeset.xml" relativeToChangelogFile="false"/>
     <include file="liquibase/changesets/security-baseline-changeset.xml" relativeToChangelogFile="false"/>
 
-    <include file="changesets/baseline-changeset.xml" relativeToChangelogFile="true"/>
+    <!--<include file="changesets/baseline-changeset.xml" relativeToChangelogFile="true"/>-->
 
 </databaseChangeLog>
