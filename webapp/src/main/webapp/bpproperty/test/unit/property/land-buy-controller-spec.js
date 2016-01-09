@@ -77,7 +77,6 @@ describe('land-buy', function() {
       "buyType": "INSTALLMENT",
       "buyerFirstName": "firstname1",
       "buyerLastName": "lastname1",
-      "downPayment": 100.55,
       "buyPrice": 1000.1,
       "annualInterest": 15.0,
       "yearsOfInstallment": 5,
@@ -519,7 +518,6 @@ describe('land-buy', function() {
       expect($scope.buyDetail).toEqual({
         landId: 1,
         buyType: 'CASH',
-        downPayment: null,
         annualInterest: null,
         yearsOfInstallment: null
       });
@@ -530,7 +528,6 @@ describe('land-buy', function() {
       $scope.$digest();
       $scope.buyDetail.buyType = 'CASH';
       $scope.$digest();
-      expect($scope.buyDetail.downPayment).toBeNull();
       expect($scope.buyDetail.annualInterest).toBeNull();
       expect($scope.buyDetail.yearsOfInstallment).toBeNull();
     });
@@ -625,7 +622,6 @@ describe('land-buy', function() {
             "landId": 1,
             "customerId": 1,
             "buyType": "INSTALLMENT",
-            "downPayment": 100.55,
             "buyPrice": 1000.1,
             "annualInterest": 15.0,
             "totalPayment": 500,
@@ -722,7 +718,7 @@ describe('land-buy', function() {
       expect($scope.buyDetail).toEqual(mockBuyDetailBO);
       expect($scope.land).toEqual(mockLand);
       expect($scope.installmentPerMonth).toBeCloseTo(870.83);
-      expect($scope.unpaidDebt).toEqual(95000);
+      expect($scope.unpaidDebt).toEqual(65000);
       expect($scope.customer).toEqual({
         id: 6,
         firstName: 'firstname',

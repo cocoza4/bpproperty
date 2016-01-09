@@ -70,7 +70,6 @@ public class PaymentDAOIT {
         landBuyDetail.setBuyPrice(10000f);
         landBuyDetail.setBuyType(BuyType.INSTALLMENT);
         landBuyDetail.setAnnualInterest(15.5f);
-        landBuyDetail.setDownPayment(1000f);
         landBuyDetail.setYearsOfInstallment(5);
         landBuyDetail.setCreatedBy(0L);
         landBuyDetail.setCreatedTime(new Date());
@@ -79,6 +78,7 @@ public class PaymentDAOIT {
         payment = new Payment();
         payment.setBuyDetailId(landBuyDetail.getId());
         payment.setAmount(10000f);
+        payment.setIsDownPayment(true);
         payment.setPayFor(new Date());
         payment.setDescription("description");
         payment.setCreatedBy(0L);
@@ -127,6 +127,7 @@ public class PaymentDAOIT {
         Payment model = paymentDAO.findOne(payment.getId());
 
         assertEquals(payment.getId(), model.getId());
+        assertTrue(payment.isDownPayment());
         assertEquals(payment.getAmount(), model.getAmount());
         assertEquals(payment.getPayFor(), model.getPayFor());
         assertEquals(payment.getBuyDetailId(), model.getBuyDetailId());

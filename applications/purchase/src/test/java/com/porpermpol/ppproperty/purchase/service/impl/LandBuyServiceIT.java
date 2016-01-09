@@ -79,7 +79,6 @@ public class LandBuyServiceIT {
         landBuyDetail.setArea(new Area(1, 2, 3));
         landBuyDetail.setCustomerId(customer.getId());
         landBuyDetail.setLandId(land.getId());
-        landBuyDetail.setDownPayment(1000f);
         landBuyDetail.setBuyPrice(100000f);
         landBuyDetail.setBuyType(BuyType.CASH);
         landBuyDetail.setAnnualInterest(15.5f);
@@ -88,6 +87,7 @@ public class LandBuyServiceIT {
         payment = new Payment();
         payment.setPayFor(new Date());
         payment.setAmount(200f);
+        payment.setIsDownPayment(true);
         payment.setDescription("description");
     }
 
@@ -188,7 +188,6 @@ public class LandBuyServiceIT {
             model.setArea(new Area(1, 2, 3));
             model.setCustomerId(customer.getId());
             model.setLandId(land.getId());
-            model.setDownPayment(1000f);
             model.setBuyPrice(100000f);
             model.setBuyType(BuyType.CASH);
             model.setAnnualInterest(15.5f);

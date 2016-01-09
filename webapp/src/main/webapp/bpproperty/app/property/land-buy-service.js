@@ -9,7 +9,7 @@
   .service('LandBuyService', ['LandBuy', 'LandBuyBO', function(LandBuy, LandBuyBO) {
 
     this.getUnpaidDebt = function(data) {
-      var debt = data.buyPrice - data.totalPayment;
+      var debt = data.buyPrice - data.downPayment - data.totalPayment;
       if (debt < 0) {
         return 0;
       }

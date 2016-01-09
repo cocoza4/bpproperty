@@ -60,7 +60,6 @@ public class LandBuyDetailDAOIT {
         landBuyDetail.setArea(new Area(1, 2, 3));
         landBuyDetail.setCustomerId(customer.getId());
         landBuyDetail.setLandId(land.getId());
-        landBuyDetail.setDownPayment(1000f);
         landBuyDetail.setBuyPrice(100000f);
         landBuyDetail.setBuyType(BuyType.INSTALLMENT);
         landBuyDetail.setAnnualInterest(15.5f);

@@ -39,14 +39,16 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
     private static final String JASPER_FILE = LandBuyDetailBODAO.class.getClassLoader().getResource("jasper/receipt.jasper").getFile();
 
     private static final String SQL_GROUP_BY_CLAUSE = " GROUP BY lbd.id, buy_type, buyer_id, lbd.land_id, buy_price, " +
-            "down_payment, annual_interest, years_of_installment, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +
-            "c.firstname, c.lastname";
+                "annual_interest, years_of_installment, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +
+                "down_payment, c.firstname, c.lastname";
 
-    private static final String SQL_SELECT_ALL = "SELECT lbd.id, buy_type, c.id AS buyer_id, land_id, buy_price, " +
-            "down_payment, annual_interest, years_of_installment, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +
-            "c.firstname, c.lastname, coalesce(sum(amount), 0) AS total_payment " +
-            "FROM land_buy_detail lbd INNER JOIN customer c ON lbd.customer_id = c.id " +
-            "LEFT JOIN payment ON buy_detail_id = lbd.id";
+    private static final String SQL_SELECT_ALL =
+                "SELECT lbd.id, buy_type, c.id AS buyer_id, land_id, buy_price, annual_interest, " +
+                        "years_of_installment, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +
+                        "(SELECT amount FROM payment WHERE is_down_payment = true AND buy_detail_id = lbd.id) AS down_payment, " +
+                        "c.firstname, c.lastname, coalesce(sum(amount), 0) AS total_payment " +
+                "FROM land_buy_detail lbd INNER JOIN customer c ON lbd.customer_id = c.id " +
+                "LEFT JOIN (SELECT amount, buy_detail_id FROM payment WHERE is_down_payment = false) p ON p.buy_detail_id = lbd.id";
 
     private static final String SQL_SELECT_BY_ID = SQL_SELECT_ALL + " WHERE lbd.id = ? " + SQL_GROUP_BY_CLAUSE;
 

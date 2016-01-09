@@ -5,12 +5,9 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-    <!--<property name="now" value="UNIX_TIMESTAMP()" dbms="mysql"/>-->
-    <!--<property name="now" value="UNIX_TIMESTAMP()" dbms="hsqldb"/>-->
-    <!--<property name="now" value="0" dbms="h2"/>-->
-
     <include file="liquibase/changesets/person-baseline-changeset.xml" relativeToChangelogFile="false"/>
     <include file="liquibase/changesets/property-baseline-changeset.xml" relativeToChangelogFile="false"/>
     <include file="liquibase/changesets/purchase-baseline-changeset.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changesets/purchase-changeset-001.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

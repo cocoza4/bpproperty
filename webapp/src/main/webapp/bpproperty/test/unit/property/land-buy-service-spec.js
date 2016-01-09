@@ -47,7 +47,7 @@ describe('land-buy', function() {
 
     it('INSTALLMENT - happy path', function() {
       var actual = LandBuyService.getUnpaidDebt(mockInstallmentBuyDetailBO);
-      expect(actual).toEqual(150000);
+      expect(actual).toEqual(100000);
     });
 
     it('CASH - happy path', function() {

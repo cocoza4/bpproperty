@@ -30,7 +30,7 @@ public class PaymentDAO extends JdbcRepository<Payment, Long> implements IPaymen
 
     private static final String SQL_SELECT_BY_LAND_BUY_DETAIL_ID = "SELECT * FROM payment " +
             "WHERE buy_detail_id = ? " +
-            "ORDER BY pay_for ASC";
+            "ORDER BY pay_for, id ASC";
     private static final String SQL_COUNT_BY_LAND_BUY_DETAIL_ID = "SELECT count(*) FROM payment " +
             "WHERE buy_detail_id = ?";
 
@@ -45,6 +45,7 @@ public class PaymentDAO extends JdbcRepository<Payment, Long> implements IPaymen
             return new Payment(rs.getLong("id"),
                     rs.getLong("buy_detail_id"),
                     rs.getObject("pay_for") == null ? null : new Date(rs.getLong("pay_for")),
+                    rs.getBoolean("is_down_payment"),
                     rs.getFloat("amount"),
                     rs.getString("description"),
                     rs.getLong("created_by"),
@@ -61,6 +62,7 @@ public class PaymentDAO extends JdbcRepository<Payment, Long> implements IPaymen
             mapping.put("id", model.getId());
             mapping.put("buy_detail_id", model.getBuyDetailId());
             mapping.put("pay_for", model.getPayFor() == null ? null : model.getPayFor().getTime());
+            mapping.put("is_down_payment", model.isDownPayment());
             mapping.put("amount", model.getAmount());
             mapping.put("description", model.getDescription());
             ModelUtils.setAuditFields(mapping, model);

@@ -8,7 +8,6 @@ public class LandBuyDetail extends PersistableModel<Long> {
     private Long landId;
     private Long customerId;
     private BuyType buyType;
-    private Float downPayment;
     private Float buyPrice;
     private Float annualInterest;
     private Integer yearsOfInstallment;
@@ -37,14 +36,6 @@ public class LandBuyDetail extends PersistableModel<Long> {
 
     public void setBuyType(BuyType buyType) {
         this.buyType = buyType;
-    }
-
-    public Float getDownPayment() {
-        return downPayment;
-    }
-
-    public void setDownPayment(Float downPayment) {
-        this.downPayment = downPayment;
     }
 
     public Float getBuyPrice() {
@@ -93,7 +84,6 @@ public class LandBuyDetail extends PersistableModel<Long> {
                 "landId=" + landId +
                 ", customerId=" + customerId +
                 ", buyType=" + buyType +
-                ", downPayment=" + downPayment +
                 ", buyPrice=" + buyPrice +
                 ", annualInterest=" + annualInterest +
                 ", yearsOfInstallment=" + yearsOfInstallment +

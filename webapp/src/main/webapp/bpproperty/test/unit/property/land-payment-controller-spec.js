@@ -104,43 +104,249 @@ describe('land-payment', function() {
 
   });
 
-  describe('SaveInstallmentModalCtrl', function() {
+  describe('SavePaymentModalCtrl', function() {
 
-    beforeEach(inject(function($injector) {
+    describe('installment', function() {
 
-      var baseTime = new Date(2015, 0, 1);
-      jasmine.clock().mockDate(baseTime);
+      beforeEach(inject(function($injector) {
 
-      mockPayment = {
-        "id": 1,
-        "createdBy": 0,
-        "createdTime": 1422631659000,
-        "updatedBy": 1,
-        "updatedTime": 1444840281934,
-        "buyDetailId": 1,
-        "payFor": new Date(2014, 1, 1).getTime(),
-        "amount": 1.0,
-        "description": "description"
-      };
+        var baseTime = new Date(2015, 0, 1);
+        jasmine.clock().mockDate(baseTime);
 
-      $modalInstance = jasmine.createSpyObj('$modalInstance', ['close', 'dismiss']);
+        mockPayment = {
+          "id": 1,
+          "createdBy": 0,
+          "createdTime": 1422631659000,
+          "updatedBy": 1,
+          "updatedTime": 1444840281934,
+          "buyDetailId": 1,
+          "isDownPayment": false,
+          "payFor": new Date(2014, 1, 1).getTime(),
+          "amount": 1.0,
+          "description": "description"
+        };
 
-      $route = {
-        current: {
-          params: {
+        $modalInstance = jasmine.createSpyObj('$modalInstance', ['close', 'dismiss']);
+
+        $route = {
+          current: {
+            params: {
+              landId: 1,
+              buyDetailId: 1,
+              paymentId: 1
+            }
+          }
+        };
+
+      }));
+
+      describe('Save a new Payment', function() {
+
+        beforeEach(function() {
+          SavePaymentModalCtrl = $controller('SavePaymentModalCtrl', {
+            $rootScope: $rootScope,
+            $scope: $scope,
+            $route: $route,
+            $modalInstance: $modalInstance,
+            PaymentService: PaymentService,
+            NotificationService: NotificationService,
+            payment: {},
+            hasDownPayment: false,
+            isInstallment: true
+          });
+          $scope.$digest();
+        });
+
+        it('init - new payment', function() {
+          expect($scope.payment).toEqual({});
+          expect($scope.showDownPaymentCheckBox).toBeTruthy();
+          expect($scope.isInstallment).toEqual(true);
+          expect($scope.years).toEqual([2016, 2015, 2014]);
+          expect($scope.selectedYear).toEqual(2015);
+          expect($scope.selectedMonth).toEqual({
+            key: 0,
+            value: '\u0e21\u0e01\u0e23\u0e32\u0e04\u0e21' // January
+          });
+        });
+
+        it('should successfully create a new Payment', function() {
+          var deferred = $q.defer();
+          spyOn(NotificationService, 'notify');
+          spyOn($rootScope, '$broadcast').and.callThrough();
+          spyOn(PaymentService, 'create').and.returnValue(deferred.promise);
+
+          $scope.savePayment(true);
+          deferred.resolve();
+          $scope.$digest();
+
+          expect($scope.payment.buyDetailId).toEqual(1);
+          expect(PaymentService.create).toHaveBeenCalledWith({
             landId: 1,
             buyDetailId: 1,
-            paymentId: 1
+          }, $scope.payment, $scope.selectedMonth.key, $scope.selectedYear);
+          expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+          expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
+          expect($rootScope.$broadcast).toHaveBeenCalledWith('loadPayments');
+          expect(NotificationService.notify).toHaveBeenCalledWith({
+            type: 'success',
+            msg: 'Payment created'
+          });
+        });
+
+        it('should fail to create a new Payment', function() {
+          var deferred = $q.defer();
+          spyOn(NotificationService, 'notify');
+          spyOn($rootScope, '$broadcast').and.callThrough();
+          spyOn(PaymentService, 'create').and.returnValue(deferred.promise);
+
+          $scope.savePayment(true);
+          deferred.reject();
+          $scope.$digest();
+
+          expect($scope.payment.buyDetailId).toEqual(1);
+          expect(PaymentService.create).toHaveBeenCalledWith({
+            landId: 1,
+            buyDetailId: 1,
+          }, $scope.payment, $scope.selectedMonth.key, $scope.selectedYear);
+          expect($modalInstance.dismiss).not.toHaveBeenCalledWith('cancel');
+          expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadLandBuyDetailBO');
+          expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadPayments');
+          expect(NotificationService.notify).toHaveBeenCalledWith({
+            type: 'error',
+            msg: 'Unable to create Payment'
+          });
+        });
+
+      });
+
+      describe('Save an existing Payment', function() {
+        beforeEach(function() {
+          SavePaymentModalCtrl = $controller('SavePaymentModalCtrl', {
+            $rootScope: $rootScope,
+            $scope: $scope,
+            $route: $route,
+            $modalInstance: $modalInstance,
+            PaymentService: PaymentService,
+            NotificationService: NotificationService,
+            payment: mockPayment,
+            hasDownPayment: true,
+            isInstallment: true
+          });
+          $scope.$digest();
+        });
+
+        it('init - existing payment', function() {
+          expect($scope.payment).toEqual(mockPayment);
+          expect($scope.showDownPaymentCheckBox).toBeFalsy();
+          expect($scope.isInstallment).toBeTruthy();
+          expect($scope.years).toEqual([2016, 2015, 2014, 2013]);
+          expect($scope.selectedYear).toEqual(2014);
+          expect($scope.selectedMonth).toEqual({
+            key: 1,
+            value: '\u0e01\u0e38\u0e21\u0e20\u0e32\u0e1e\u0e31\u0e19\u0e18\u0e4c' // February
+          });
+        });
+
+        it('init - isDownPayment is true', function() {
+          mockPayment.isDownPayment = true;
+          SavePaymentModalCtrl = $controller('SavePaymentModalCtrl', {
+            $rootScope: $rootScope,
+            $scope: $scope,
+            $route: $route,
+            $modalInstance: $modalInstance,
+            PaymentService: PaymentService,
+            NotificationService: NotificationService,
+            payment: mockPayment,
+            hasDownPayment: true,
+            isInstallment: true
+          });
+          $scope.$digest();
+
+          expect($scope.payment).toEqual(mockPayment);
+          expect($scope.showDownPaymentCheckBox).toBeTruthy();
+        });
+
+        it('should successfully update an existing Payment', function() {
+          var deferred = $q.defer();
+          spyOn(NotificationService, 'notify');
+          spyOn($rootScope, '$broadcast').and.callThrough();
+          spyOn(PaymentService, 'update').and.returnValue(deferred.promise);
+
+          $scope.savePayment(true);
+          deferred.resolve();
+          $scope.$digest();
+
+          expect($scope.payment.buyDetailId).toEqual(1);
+          expect(PaymentService.update).toHaveBeenCalledWith({
+            landId: 1,
+            buyDetailId: 1,
+          }, $scope.payment, $scope.selectedMonth.key, $scope.selectedYear);
+          expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+          expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
+          expect($rootScope.$broadcast).toHaveBeenCalledWith('loadPayments');
+          expect(NotificationService.notify).toHaveBeenCalledWith({
+            type: 'success',
+            msg: 'Payment updated'
+          });
+        });
+
+        it('should fail to create a new Payment', function() {
+          var deferred = $q.defer();
+          spyOn(NotificationService, 'notify');
+          spyOn($rootScope, '$broadcast').and.callThrough();
+          spyOn(PaymentService, 'update').and.returnValue(deferred.promise);
+
+          $scope.savePayment(true);
+          deferred.reject();
+          $scope.$digest();
+
+          expect($scope.payment.buyDetailId).toEqual(1);
+          expect(PaymentService.update).toHaveBeenCalledWith({
+            landId: 1,
+            buyDetailId: 1,
+          }, $scope.payment, $scope.selectedMonth.key, $scope.selectedYear);
+          expect($modalInstance.dismiss).not.toHaveBeenCalledWith('cancel');
+          expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadLandBuyDetailBO');
+          expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadPayments');
+          expect(NotificationService.notify).toHaveBeenCalledWith({
+            type: 'error',
+            msg: 'Unable to update existing Payment'
+          });
+        });
+
+      });
+
+    });
+
+    describe('cash', function() {
+
+      beforeEach(inject(function($injector) {
+
+        $modalInstance = jasmine.createSpyObj('$modalInstance', ['close', 'dismiss']);
+
+        mockPayment = {
+          "id": 1,
+          "createdBy": 0,
+          "createdTime": 1422631659000,
+          "updatedBy": 1,
+          "updatedTime": 1444840281934,
+          "isDownPayment": false,
+          "buyDetailId": 1,
+          "amount": 1.0,
+          "description": "description"
+        };
+
+        $route = {
+          current: {
+            params: {
+              landId: 1,
+              buyDetailId: 1,
+              paymentId: 1
+            }
           }
-        }
-      };
+        };
 
-    }));
-
-    describe('Save a new Payment', function() {
-
-      beforeEach(function() {
-        SaveInstallmentModalCtrl = $controller('SaveInstallmentModalCtrl', {
+        SavePaymentModalCtrl = $controller('SavePaymentModalCtrl', {
           $rootScope: $rootScope,
           $scope: $scope,
           $route: $route,
@@ -148,18 +354,17 @@ describe('land-payment', function() {
           PaymentService: PaymentService,
           NotificationService: NotificationService,
           payment: {},
+          hasDownPayment: false,
+          isInstallment: false
         });
         $scope.$digest();
-      });
+
+      }));
 
       it('init - new payment', function() {
         expect($scope.payment).toEqual({});
-        expect($scope.years).toEqual([2016, 2015, 2014]);
-        expect($scope.selectedYear).toEqual(2015);
-        expect($scope.selectedMonth).toEqual({
-          key: 0,
-          value: '\u0e21\u0e01\u0e23\u0e32\u0e04\u0e21' // January
-        });
+        expect($scope.isInstallment).toBeFalsy();
+        expect($scope.showDownPaymentCheckBox).toBeTruthy();
       });
 
       it('should successfully create a new Payment', function() {
@@ -176,7 +381,7 @@ describe('land-payment', function() {
         expect(PaymentService.create).toHaveBeenCalledWith({
           landId: 1,
           buyDetailId: 1,
-        }, $scope.payment, $scope.selectedMonth.key, $scope.selectedYear);
+        }, $scope.payment, undefined, undefined);
         expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
         expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
         expect($rootScope.$broadcast).toHaveBeenCalledWith('loadPayments');
@@ -200,7 +405,7 @@ describe('land-payment', function() {
         expect(PaymentService.create).toHaveBeenCalledWith({
           landId: 1,
           buyDetailId: 1,
-        }, $scope.payment, $scope.selectedMonth.key, $scope.selectedYear);
+        }, $scope.payment, undefined, undefined);
         expect($modalInstance.dismiss).not.toHaveBeenCalledWith('cancel');
         expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadLandBuyDetailBO');
         expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadPayments');
@@ -210,236 +415,94 @@ describe('land-payment', function() {
         });
       });
 
-    });
+      describe('Update Existing Payment', function() {
 
-    describe('Save an existing Payment', function() {
-      beforeEach(function() {
-        SaveInstallmentModalCtrl = $controller('SaveInstallmentModalCtrl', {
-          $rootScope: $rootScope,
-          $scope: $scope,
-          $route: $route,
-          $modalInstance: $modalInstance,
-          PaymentService: PaymentService,
-          NotificationService: NotificationService,
-          payment: mockPayment,
+        beforeEach(function() {
+          SavePaymentModalCtrl = $controller('SavePaymentModalCtrl', {
+            $rootScope: $rootScope,
+            $scope: $scope,
+            $route: $route,
+            $modalInstance: $modalInstance,
+            PaymentService: PaymentService,
+            NotificationService: NotificationService,
+            payment: mockPayment,
+            hasDownPayment: false,
+            isInstallment: false
+          });
         });
-        $scope.$digest();
-      });
 
-      it('init - existing payment', function() {
-        expect($scope.payment).toEqual(mockPayment);
-        expect($scope.years).toEqual([2016, 2015, 2014, 2013]);
-        expect($scope.selectedYear).toEqual(2014);
-        expect($scope.selectedMonth).toEqual({
-          key: 1,
-          value: '\u0e01\u0e38\u0e21\u0e20\u0e32\u0e1e\u0e31\u0e19\u0e18\u0e4c' // February
+        it('init', function() {
+          expect($scope.payment).toEqual(mockPayment);
+          expect($scope.isInstallment).toBeFalsy();
+          expect($scope.showDownPaymentCheckBox).toBeTruthy();
         });
-      });
 
-      it('should successfully update an existing Payment', function() {
-        var deferred = $q.defer();
-        spyOn(NotificationService, 'notify');
-        spyOn($rootScope, '$broadcast').and.callThrough();
-        spyOn(PaymentService, 'update').and.returnValue(deferred.promise);
-
-        $scope.savePayment(true);
-        deferred.resolve();
-        $scope.$digest();
-
-        expect($scope.payment.buyDetailId).toEqual(1);
-        expect(PaymentService.update).toHaveBeenCalledWith({
-          landId: 1,
-          buyDetailId: 1,
-        }, $scope.payment, $scope.selectedMonth.key, $scope.selectedYear);
-        expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
-        expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
-        expect($rootScope.$broadcast).toHaveBeenCalledWith('loadPayments');
-        expect(NotificationService.notify).toHaveBeenCalledWith({
-          type: 'success',
-          msg: 'Payment updated'
+        it('init - payment.isDownPayment = true', function() {
+          mockPayment.isDownPayment = true;
+          SavePaymentModalCtrl = $controller('SavePaymentModalCtrl', {
+            $rootScope: $rootScope,
+            $scope: $scope,
+            $route: $route,
+            $modalInstance: $modalInstance,
+            PaymentService: PaymentService,
+            NotificationService: NotificationService,
+            payment: mockPayment,
+            hasDownPayment: false,
+            isInstallment: false
+          });
+          expect($scope.payment).toEqual(mockPayment);
+          expect($scope.isInstallment).toBeFalsy();
+          expect($scope.showDownPaymentCheckBox).toBeTruthy();
         });
-      });
 
-      it('should fail to create a new Payment', function() {
-        var deferred = $q.defer();
-        spyOn(NotificationService, 'notify');
-        spyOn($rootScope, '$broadcast').and.callThrough();
-        spyOn(PaymentService, 'update').and.returnValue(deferred.promise);
+        it('should successfully update an existing Payment', function() {
+          var deferred = $q.defer();
+          spyOn(NotificationService, 'notify');
+          spyOn($rootScope, '$broadcast').and.callThrough();
+          spyOn(PaymentService, 'update').and.returnValue(deferred.promise);
 
-        $scope.savePayment(true);
-        deferred.reject();
-        $scope.$digest();
+          $scope.savePayment(true);
+          deferred.resolve();
+          $scope.$digest();
 
-        expect($scope.payment.buyDetailId).toEqual(1);
-        expect(PaymentService.update).toHaveBeenCalledWith({
-          landId: 1,
-          buyDetailId: 1,
-        }, $scope.payment, $scope.selectedMonth.key, $scope.selectedYear);
-        expect($modalInstance.dismiss).not.toHaveBeenCalledWith('cancel');
-        expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadLandBuyDetailBO');
-        expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadPayments');
-        expect(NotificationService.notify).toHaveBeenCalledWith({
-          type: 'error',
-          msg: 'Unable to update existing Payment'
-        });
-      });
-
-    });
-
-  });
-
-  describe('SavePaymentModalCtrl', function() {
-
-    beforeEach(inject(function($injector) {
-
-      $modalInstance = jasmine.createSpyObj('$modalInstance', ['close', 'dismiss']);
-
-      mockPayment = {
-        "id": 1,
-        "createdBy": 0,
-        "createdTime": 1422631659000,
-        "updatedBy": 1,
-        "updatedTime": 1444840281934,
-        "buyDetailId": 1,
-        "amount": 1.0,
-        "description": "description"
-      };
-
-      $route = {
-        current: {
-          params: {
+          expect($scope.payment.buyDetailId).toEqual(1);
+          expect(PaymentService.update).toHaveBeenCalledWith({
             landId: 1,
             buyDetailId: 1,
-            paymentId: 1
-          }
-        }
-      };
-
-      SavePaymentModalCtrl = $controller('SavePaymentModalCtrl', {
-        $rootScope: $rootScope,
-        $scope: $scope,
-        $route: $route,
-        $modalInstance: $modalInstance,
-        PaymentService: PaymentService,
-        NotificationService: NotificationService,
-        payment: {},
-      });
-      $scope.$digest();
-
-    }));
-
-    it('init - new payment', function() {
-      expect($scope.payment).toEqual({});
-    });
-
-    it('should successfully create a new Payment', function() {
-      var deferred = $q.defer();
-      spyOn(NotificationService, 'notify');
-      spyOn($rootScope, '$broadcast').and.callThrough();
-      spyOn(PaymentService, 'create').and.returnValue(deferred.promise);
-
-      $scope.savePayment(true);
-      deferred.resolve();
-      $scope.$digest();
-
-      expect($scope.payment.buyDetailId).toEqual(1);
-      expect(PaymentService.create).toHaveBeenCalledWith({
-        landId: 1,
-        buyDetailId: 1,
-      }, $scope.payment);
-      expect($modalInstance.close).toHaveBeenCalledWith('success');
-      expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
-      expect($rootScope.$broadcast).toHaveBeenCalledWith('loadPayments');
-      expect(NotificationService.notify).toHaveBeenCalledWith({
-        type: 'success',
-        msg: 'Payment created'
-      });
-    });
-
-    it('should fail to create a new Payment', function() {
-      var deferred = $q.defer();
-      spyOn(NotificationService, 'notify');
-      spyOn($rootScope, '$broadcast').and.callThrough();
-      spyOn(PaymentService, 'create').and.returnValue(deferred.promise);
-
-      $scope.savePayment(true);
-      deferred.reject();
-      $scope.$digest();
-
-      expect($scope.payment.buyDetailId).toEqual(1);
-      expect(PaymentService.create).toHaveBeenCalledWith({
-        landId: 1,
-        buyDetailId: 1,
-      }, $scope.payment);
-      expect($modalInstance.dismiss).not.toHaveBeenCalledWith('cancel');
-      expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadLandBuyDetailBO');
-      expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadPayments');
-      expect(NotificationService.notify).toHaveBeenCalledWith({
-        type: 'error',
-        msg: 'Unable to create Payment'
-      });
-    });
-
-    describe('Update Existing Payment', function() {
-
-      beforeEach(function() {
-        SavePaymentModalCtrl = $controller('SavePaymentModalCtrl', {
-          $rootScope: $rootScope,
-          $scope: $scope,
-          $route: $route,
-          $modalInstance: $modalInstance,
-          PaymentService: PaymentService,
-          NotificationService: NotificationService,
-          payment: mockPayment,
+          }, $scope.payment, undefined, undefined);
+          expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+          expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
+          expect($rootScope.$broadcast).toHaveBeenCalledWith('loadPayments');
+          expect(NotificationService.notify).toHaveBeenCalledWith({
+            type: 'success',
+            msg: 'Payment updated'
+          });
         });
-      });
 
-      it('should successfully update an existing Payment', function() {
-        var deferred = $q.defer();
-        spyOn(NotificationService, 'notify');
-        spyOn($rootScope, '$broadcast').and.callThrough();
-        spyOn(PaymentService, 'update').and.returnValue(deferred.promise);
+        it('should fail to update an existing Payment', function() {
+          var deferred = $q.defer();
+          spyOn(NotificationService, 'notify');
+          spyOn($rootScope, '$broadcast').and.callThrough();
+          spyOn(PaymentService, 'update').and.returnValue(deferred.promise);
 
-        $scope.savePayment(true);
-        deferred.resolve();
-        $scope.$digest();
+          $scope.savePayment(true);
+          deferred.reject();
+          $scope.$digest();
 
-        expect($scope.payment.buyDetailId).toEqual(1);
-        expect(PaymentService.update).toHaveBeenCalledWith({
-          landId: 1,
-          buyDetailId: 1,
-        }, $scope.payment);
-        expect($modalInstance.dismiss).toHaveBeenCalledWith('cancel');
-        expect($rootScope.$broadcast).toHaveBeenCalledWith('loadLandBuyDetailBO');
-        expect($rootScope.$broadcast).toHaveBeenCalledWith('loadPayments');
-        expect(NotificationService.notify).toHaveBeenCalledWith({
-          type: 'success',
-          msg: 'Payment updated'
+          expect($scope.payment.buyDetailId).toEqual(1);
+          expect(PaymentService.update).toHaveBeenCalledWith({
+            landId: 1,
+            buyDetailId: 1,
+          }, $scope.payment, undefined, undefined);
+          expect($modalInstance.dismiss).not.toHaveBeenCalledWith('cancel');
+          expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadLandBuyDetailBO');
+          expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadPayments');
+          expect(NotificationService.notify).toHaveBeenCalledWith({
+            type: 'error',
+            msg: 'Unable to update existing Payment'
+          });
         });
-      });
 
-      it('should fail to update an existing Payment', function() {
-        var deferred = $q.defer();
-        spyOn(NotificationService, 'notify');
-        spyOn($rootScope, '$broadcast').and.callThrough();
-        spyOn(PaymentService, 'update').and.returnValue(deferred.promise);
-
-        $scope.savePayment(true);
-        deferred.reject();
-        $scope.$digest();
-
-        expect($scope.payment.buyDetailId).toEqual(1);
-        expect(PaymentService.update).toHaveBeenCalledWith({
-          landId: 1,
-          buyDetailId: 1,
-        }, $scope.payment);
-        expect($modalInstance.dismiss).not.toHaveBeenCalledWith('cancel');
-        expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadLandBuyDetailBO');
-        expect($rootScope.$broadcast).not.toHaveBeenCalledWith('loadPayments');
-        expect(NotificationService.notify).toHaveBeenCalledWith({
-          type: 'error',
-          msg: 'Unable to update existing Payment'
-        });
       });
 
     });
@@ -455,7 +518,6 @@ describe('land-payment', function() {
         "buyType": "INSTALLMENT",
         "buyerFirstName": "firstname1",
         "buyerLastName": "lastname1",
-        "downPayment": 100.55,
         "buyPrice": 100000,
         "annualInterest": 15.0,
         "yearsOfInstallment": 5,
@@ -578,7 +640,7 @@ describe('land-payment', function() {
 
     it('init', function() {
       expect($scope.landBuy).toEqual(mockLandBuyDetail);
-      expect($scope.gridOptions.columnDefs[2].visible).toBeTruthy();
+      expect($scope.gridOptions.columnDefs[3].visible).toBeTruthy();
       expect(PaymentListCtrl.paymentCriteria).toEqual({
         landId: $route.current.params.landId,
         buyDetailId: $route.current.params.buyDetailId,
@@ -604,33 +666,19 @@ describe('land-payment', function() {
       expect(PaymentService.query).toHaveBeenCalledWith(PaymentListCtrl.paymentCriteria);
     });
 
-    it('validate $scope.savePaymentModal() - INSTALLMENT', function() {
+    it('validate $scope.savePaymentModal()', function() {
       var dummy = "dummy";
       spyOn($uibModal, 'open');
       $scope.savePaymentModal(dummy);
       $scope.$digest();
       expect($uibModal.open).toHaveBeenCalledWith({
         animation: true,
-        templateUrl: 'saveInstallmentModal.html',
-        controller: 'SaveInstallmentModalCtrl',
-        resolve: {
-          payment: jasmine.any(Function)
-        }
-      });
-    });
-
-    it('validate $scope.savePaymentModal() - CASH', function() {
-      $scope.landBuy = mockCashLandBuyDetail;
-      var dummy = "dummy";
-      spyOn($uibModal, 'open').and.returnValue(modalInstance);
-      $scope.savePaymentModal(dummy);
-      $scope.$digest();
-      expect($uibModal.open).toHaveBeenCalledWith({
-        animation: true,
-        templateUrl: 'savePaymentModal.html',
+        templateUrl: 'property/savePaymentModal.html',
         controller: 'SavePaymentModalCtrl',
         resolve: {
-          payment: jasmine.any(Function)
+          payment: jasmine.any(Function),
+          hasDownPayment: jasmine.any(Function),
+          isInstallment: jasmine.any(Function)
         }
       });
     });

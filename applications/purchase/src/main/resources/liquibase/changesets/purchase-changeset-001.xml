@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet author="coco" id="addDownPayment">
+
+        <comment>
+            Drop column down_payment in land_buy_detail table and add is_down_payment flag in payment table.
+        </comment>
+
+        <dropColumn columnName="down_payment" tableName="land_buy_detail"/>
+
+        <addColumn tableName="payment">
+            <column name="is_down_payment" type="boolean" defaultValueBoolean="false"/>
+        </addColumn>
+
+    </changeSet>
+
+
+</databaseChangeLog>
