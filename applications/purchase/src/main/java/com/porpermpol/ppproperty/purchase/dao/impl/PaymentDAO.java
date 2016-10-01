@@ -30,7 +30,7 @@ public class PaymentDAO extends JdbcRepository<Payment, Long> implements IPaymen
 
     private static final String SQL_SELECT_BY_LAND_BUY_DETAIL_ID = "SELECT * FROM payment " +
             "WHERE buy_detail_id = ? " +
-            "ORDER BY pay_for, id ASC";
+            "ORDER BY pay_for DESC, id DESC";
     private static final String SQL_COUNT_BY_LAND_BUY_DETAIL_ID = "SELECT count(*) FROM payment " +
             "WHERE buy_detail_id = ?";
 
