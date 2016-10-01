@@ -634,7 +634,7 @@ describe('land-payment', function() {
         landId: $route.current.params.landId,
         buyDetailId: $route.current.params.buyDetailId,
         page: 0,
-        length: 10
+        length: 50
       });
     });
 
@@ -645,7 +645,7 @@ describe('land-payment', function() {
         landId: $route.current.params.landId,
         buyDetailId: $route.current.params.buyDetailId,
         page: 0,
-        length: 10
+        length: 50
       });
     });
 

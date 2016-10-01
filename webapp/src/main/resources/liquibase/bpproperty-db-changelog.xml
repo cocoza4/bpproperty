@@ -13,7 +13,8 @@
     <include file="liquibase/changesets/purchase-baseline-changeset.xml" relativeToChangelogFile="false"/>
     <include file="liquibase/changesets/security-baseline-changeset.xml" relativeToChangelogFile="false"/>
 
-    <include file="changesets/baseline-changeset.xml" relativeToChangelogFile="true"/>
+    <!-- populate data: remove in prod -->
+    <!--<include file="changesets/baseline-changeset.xml" relativeToChangelogFile="true"/>-->
 
     <include file="liquibase/changesets/purchase-changeset-001.xml" relativeToChangelogFile="false"/>
 

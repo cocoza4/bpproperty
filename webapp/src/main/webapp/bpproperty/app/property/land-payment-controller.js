@@ -136,7 +136,7 @@
 
           gridApi.pagination.on.paginationChanged($scope, function(newPage, pageSize) {
             self.paymentCriteria.page = newPage - 1;
-            self.payment.length = pageSize;
+            self.paymentCriteria.length = pageSize;
             self.loadPayments();
           });
 
@@ -205,7 +205,7 @@
         landId: $route.current.params.landId,
         buyDetailId: $route.current.params.buyDetailId,
         page: 0,
-        length: 10
+        length: 50
       };
 
       $scope.$on('loadPayments', function(event) {
