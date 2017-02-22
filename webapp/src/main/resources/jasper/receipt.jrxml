@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
-<!-- 2015-12-30T23:38:24 -->
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-02-23T00:25:22 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="receipt" pageWidth="595" pageHeight="421" whenNoDataType="AllSectionsNoDetail" columnWidth="575" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="4eedbb89-b4f6-4469-9ab6-f642a1688cf7">
 	<property name="template.engine" value="tabular_template"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -14,6 +14,7 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="tahoma" fontSize="50" isBold="false"/>
 	<style name="SubTitle" forecolor="#CCCCCC" fontName="tahoma" fontSize="18" isBold="false"/>
 	<style name="Column header" forecolor="#666666" fontName="tahoma" fontSize="14" isBold="false"/>
@@ -54,40 +55,28 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<subDataset name="tableDataset" uuid="6590503c-ab84-4f89-80d9-38ac71dd1404">
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
-		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<parameter name="buy_detail_id" class="java.lang.Long"/>
-		<parameter name="receipt_id" class="java.lang.Long"/>
-		<parameter name="payment" class="java.lang.Float"/>
+	<subDataset name="receipt_datasource" uuid="435f5bd0-71e4-4579-82cd-8e4021db76aa">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+		<parameter name="payment" class="java.lang.Float">
+			<parameterDescription><![CDATA[]]></parameterDescription>
+		</parameter>
 		<queryString>
-			<![CDATA[SELECT l.name,
-							lbd.buy_type,
-							lbd.buy_price,
-							(SELECT coalesce(sum(amount), 0) FROM payment 
-								WHERE buy_detail_id = lbd.id AND 
-										id != $P{receipt_id}) AS total_payment
-							FROM land l INNER JOIN land_buy_detail lbd ON l.id = lbd.land_id
-							WHERE lbd.id = $P{buy_detail_id}]]>
+			<![CDATA[]]>
 		</queryString>
-		<field name="name" class="java.lang.String"/>
-		<field name="buy_type" class="java.lang.String"/>
-		<field name="buy_price" class="java.lang.Float"/>
-		<field name="total_payment" class="java.lang.Float"/>
-		<variable name="sub_total" class="java.lang.Float">
-			<variableExpression><![CDATA[$F{buy_price} - $F{total_payment}]]></variableExpression>
-		</variable>
-		<variable name="net_total" class="java.lang.Float">
-			<variableExpression><![CDATA[$V{sub_total} - $P{payment}]]></variableExpression>
-		</variable>
+		<field name="name" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="type" class="java.lang.String"/>
+		<field name="price" class="java.lang.Float"/>
+		<field name="accumulatedPayment" class="java.lang.Float"/>
+		<field name="debt" class="java.lang.Float">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
 	</subDataset>
-	<parameter name="buy_detail_id" class="java.lang.Long">
+	<parameter name="receipt_datasource" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="customer_name" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
-		<defaultValueExpression><![CDATA[$P{buy_detail_id}]]></defaultValueExpression>
-	</parameter>
-	<parameter name="customer_id" class="java.lang.Long">
-		<parameterDescription><![CDATA[]]></parameterDescription>
-		<defaultValueExpression><![CDATA[$P{customer_id}]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{customer_name}]]></defaultValueExpression>
 	</parameter>
 	<parameter name="payment" class="java.lang.Float">
 		<parameterDescription><![CDATA[]]></parameterDescription>
@@ -97,14 +86,14 @@
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA[$P{receipt_id}]]></defaultValueExpression>
 	</parameter>
-	<queryString>
-		<![CDATA[SELECT firstname, lastname, address, tel FROM customer 
-						WHERE id = $P{customer_id}]]>
-	</queryString>
-	<field name="firstname" class="java.lang.String"/>
-	<field name="lastname" class="java.lang.String"/>
-	<field name="address" class="java.lang.String"/>
-	<field name="tel" class="java.lang.String"/>
+	<parameter name="address" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[$P{address}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tel" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[$P{tel}]]></defaultValueExpression>
+	</parameter>
 	<pageHeader>
 		<band height="88">
 			<line>
@@ -163,213 +152,7 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="276">
-			<componentElement>
-				<reportElement x="0" y="120" width="575" height="130" uuid="b8e9c2ed-feb3-408c-b9be-6aebbeb6af52">
-					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-				</reportElement>
-				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="tableDataset" uuid="9367257b-6670-4788-85de-c33c6471a642">
-						<datasetParameter name="buy_detail_id">
-							<datasetParameterExpression><![CDATA[$P{buy_detail_id}]]></datasetParameterExpression>
-						</datasetParameter>
-						<datasetParameter name="receipt_id">
-							<datasetParameterExpression><![CDATA[$P{receipt_id}]]></datasetParameterExpression>
-						</datasetParameter>
-						<datasetParameter name="payment">
-							<datasetParameterExpression><![CDATA[$P{payment}]]></datasetParameterExpression>
-						</datasetParameter>
-						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					</datasetRun>
-					<jr:column width="200" uuid="06d1364f-8060-496c-ac0c-b44946e09dd0">
-						<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
-						<jr:columnHeader style="Table_CH" height="30">
-							<staticText>
-								<reportElement key="" style="Column header" x="0" y="0" width="200" height="30" forecolor="#000000" uuid="93321529-b12d-4528-8316-4e6e94a6c476">
-									<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-								</reportElement>
-								<box leftPadding="2"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="tahoma" size="12" isBold="true"/>
-								</textElement>
-								<text><![CDATA[รายการ]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell style="Table_TD" height="30">
-							<textField>
-								<reportElement style="Detail" x="0" y="0" width="200" height="30" uuid="4be9692f-e0bf-4a89-9f21-b579d46c9adf">
-									<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-								</reportElement>
-								<box leftPadding="2"/>
-								<textElement textAlignment="Left" verticalAlignment="Middle">
-									<font fontName="tahoma" size="12"/>
-									<paragraph leftIndent="10"/>
-								</textElement>
-								<textFieldExpression><![CDATA["ชำระค่าที่ดิน " + $F{name}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="60" uuid="25357c6d-7a1a-4bcb-ac60-8d18805b681c">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
-						<jr:columnHeader style="Table_CH" height="30">
-							<staticText>
-								<reportElement x="0" y="0" width="60" height="30" forecolor="#000000" uuid="c8f288aa-8d2e-48ce-8ee7-d710740d7b52"/>
-								<box leftPadding="2"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="tahoma" size="12" isBold="true"/>
-								</textElement>
-								<text><![CDATA[ประเภท]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell style="Table_TD" height="30">
-							<textField>
-								<reportElement style="Detail" x="0" y="0" width="60" height="30" uuid="6735552d-0796-499f-af74-e308260bc5e0"/>
-								<box leftPadding="2"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="tahoma" size="12"/>
-								</textElement>
-								<textFieldExpression><![CDATA[($F{buy_type}.equals("C")) ? "สด" : "ผ่อน"]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="120" uuid="18cfa391-26d8-4a47-8e88-a7d1bef16d74">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
-						<jr:columnHeader style="Table_CH" height="30">
-							<staticText>
-								<reportElement key="" style="Column header" x="0" y="0" width="120" height="30" forecolor="#000000" uuid="fc75656e-008d-47b4-ab25-2cdb62acb876"/>
-								<box leftPadding="2"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="tahoma" size="12" isBold="true"/>
-								</textElement>
-								<text><![CDATA[ราคาซื้อ]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell style="Table_TD" height="30">
-							<textField pattern="#,###.##">
-								<reportElement style="Detail" x="0" y="0" width="120" height="30" uuid="db5ac821-df67-42ec-8f12-c3cbce27a8fd"/>
-								<box leftPadding="2"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="tahoma" size="12"/>
-									<paragraph rightIndent="10"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$F{buy_price}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="100" uuid="c192f0f1-d7f3-4362-8149-f9d592cdac30">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
-						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-						<jr:tableFooter height="29">
-							<property name="com.jaspersoft.studio.unit.height" value="px"/>
-							<staticText>
-								<reportElement x="0" y="0" width="100" height="29" uuid="733ebf66-3cc7-4210-aad1-a2ce8a40d1c5"/>
-								<box rightPadding="5"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="tahoma" size="12" isBold="true"/>
-								</textElement>
-								<text><![CDATA[ยอดคงค้างสุทธิ]]></text>
-							</staticText>
-						</jr:tableFooter>
-						<jr:columnHeader style="Table_CH" height="30">
-							<staticText>
-								<reportElement key="" style="Column header" stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="30" forecolor="#000000" uuid="2c3771ca-3b46-4bae-837b-88fac22baff7">
-									<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-								</reportElement>
-								<box leftPadding="2"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="tahoma" size="12" isBold="true"/>
-								</textElement>
-								<text><![CDATA[ยอดสะสม]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="31">
-							<property name="com.jaspersoft.studio.unit.height" value="px"/>
-							<staticText>
-								<reportElement x="0" y="1" width="100" height="30" uuid="3a410dea-8a9a-4136-903a-5cbe9d21481f">
-									<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-								</reportElement>
-								<box rightPadding="5"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="tahoma" size="12"/>
-								</textElement>
-								<text><![CDATA[ยอดชำระ]]></text>
-							</staticText>
-						</jr:columnFooter>
-						<jr:detailCell style="Table_TD" height="30">
-							<textField pattern="#,###.##">
-								<reportElement style="Detail" positionType="Float" x="0" y="0" width="100" height="30" uuid="94659f20-5913-48a2-b64c-683d0584936c">
-									<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-								</reportElement>
-								<box leftPadding="2"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font size="12"/>
-									<paragraph rightIndent="10"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$F{total_payment}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="94" uuid="3b5756b3-5f26-4b57-a5cc-9a26c11ecc24">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
-						<jr:tableFooter height="29">
-							<textField pattern="#,###.##">
-								<reportElement x="0" y="0" width="94" height="29" uuid="88f8a2e4-850e-4e26-9049-cb4de2c2544c">
-									<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-								</reportElement>
-								<box topPadding="0">
-									<topPen lineWidth="0.5"/>
-									<leftPen lineWidth="0.5"/>
-									<bottomPen lineWidth="0.5"/>
-									<rightPen lineWidth="0.5"/>
-								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
-									<font fontName="tahoma" size="12"/>
-									<paragraph rightIndent="10"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$V{net_total}]]></textFieldExpression>
-							</textField>
-						</jr:tableFooter>
-						<jr:columnHeader style="Table_CH" height="30">
-							<staticText>
-								<reportElement x="0" y="0" width="94" height="30" uuid="e3021ab4-de3f-4e15-80a2-954a593c9cc9"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-									<font fontName="tahoma" size="12" isBold="true"/>
-								</textElement>
-								<text><![CDATA[ยอดคงค้างรวม]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="31">
-							<textField pattern="#,###.##">
-								<reportElement x="0" y="0" width="94" height="31" uuid="1e5d9250-e5a6-429a-bfff-05c63dca6eb3">
-									<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
-								</reportElement>
-								<box>
-									<topPen lineWidth="0.5"/>
-									<leftPen lineWidth="0.5"/>
-									<bottomPen lineWidth="0.5"/>
-									<rightPen lineWidth="0.5"/>
-								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="tahoma" size="12"/>
-									<paragraph rightIndent="10"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$P{payment}]]></textFieldExpression>
-							</textField>
-						</jr:columnFooter>
-						<jr:detailCell style="Table_TD" height="30">
-							<textField pattern="#,###.##">
-								<reportElement x="0" y="0" width="94" height="30" uuid="2a2fc386-b031-4c25-9b37-fecacc7c0955"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="tahoma" size="12"/>
-									<paragraph rightIndent="10"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$V{sub_total}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-				</jr:table>
-			</componentElement>
+		<band height="292">
 			<staticText>
 				<reportElement x="0" y="20" width="84" height="25" uuid="57aed2b1-4f4e-40a3-a6ad-54dae8dd4c5a">
 					<property name="local_mesure_unitheight" value="pixel"/>
@@ -385,7 +168,7 @@
 				<textElement>
 					<font fontName="tahoma"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{firstname} + " " + $F{lastname}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{customer_name}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="65" width="380" height="15" uuid="0925d7fe-e543-4225-b44e-ff1828d6cb8a">
@@ -394,14 +177,185 @@
 				<textElement>
 					<font fontName="tahoma"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{address} != null) ? $F{address} : ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{address} != null) ? $P{address} : ""]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="85" width="380" height="15" uuid="199db39e-5210-4d3a-a0c5-baf4543d9d49">
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[($F{tel} != null) ? $F{tel} : ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{tel} != null) ? $P{tel} : ""]]></textFieldExpression>
 			</textField>
+			<componentElement>
+				<reportElement x="0" y="110" width="575" height="182" uuid="c6abd869-6d0f-40cd-99cb-2f53b8920eae">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="receipt_datasource" uuid="866dfd40-6fb9-40fe-8b3e-3bc8c9340e03">
+						<datasetParameter name="payment">
+							<datasetParameterExpression><![CDATA[$P{payment}]]></datasetParameterExpression>
+						</datasetParameter>
+						<dataSourceExpression><![CDATA[$P{receipt_datasource}]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="205" uuid="0fe78135-a59a-4ef9-a806-d09da2b3e50d">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:tableFooter height="30" rowSpan="1"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="205" height="30" uuid="7ce84259-57d2-4a49-aa0b-501fcb3355d3"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+									<font fontName="tahoma" isBold="true"/>
+								</textElement>
+								<text><![CDATA[รายการ]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="30" rowSpan="1"/>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="200" height="30" uuid="efae36be-4d30-4533-819f-02ff6b1e2f2c"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="tahoma"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="70" uuid="2267e2bb-cee2-4250-9ef2-55edbc963cd5">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:tableFooter height="30" rowSpan="1"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="30" uuid="c5a03a21-1a0d-4813-987b-d24aee32d13d"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="tahoma" isBold="true"/>
+								</textElement>
+								<text><![CDATA[ประเภท]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="30" rowSpan="1"/>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="70" height="30" uuid="d5c5f02b-85bf-4d12-96b9-8696e2c2cdd1"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="tahoma"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{type}.equals("C")) ? "สด" : "ผ่อน"]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="a21e92f3-7903-4612-9b3e-2febd4c09dce">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:tableFooter height="30" rowSpan="1"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="30" uuid="eed7da63-d29c-4adc-8892-208c05d5d9ea"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="tahoma" isBold="true"/>
+								</textElement>
+								<text><![CDATA[ราคา]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="30" rowSpan="1"/>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField pattern="#,###.##">
+								<reportElement x="0" y="0" width="100" height="30" uuid="0fbff49f-77dc-4ad4-ae9c-96a124b34ba2"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="tahoma"/>
+									<paragraph rightIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="53a70cdd-aed7-44d5-afd2-8a79b8d991a4">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:tableFooter height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="30" uuid="5a932874-ff58-4a96-b55b-c30bdcaaa7ab"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="tahoma" isBold="true"/>
+									<paragraph rightIndent="5"/>
+								</textElement>
+								<text><![CDATA[ยอดคงค้างสุทธิ]]></text>
+							</staticText>
+						</jr:tableFooter>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="30" uuid="32817e6c-5c10-46b6-a6f9-58ae48524d1a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="tahoma" isBold="true"/>
+								</textElement>
+								<text><![CDATA[ยอดชำระสะสม]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="30" uuid="7795ae44-dbcf-4533-9a34-ddf496bfa22f"/>
+								<box>
+									<pen lineWidth="0.0"/>
+								</box>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="tahoma"/>
+									<paragraph rightIndent="5"/>
+								</textElement>
+								<text><![CDATA[ยอดชำระ]]></text>
+							</staticText>
+						</jr:columnFooter>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField pattern="#,###.##">
+								<reportElement x="0" y="0" width="100" height="30" uuid="e3554fdb-166a-4804-ae27-198bc4abddea"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="tahoma"/>
+									<paragraph rightIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{accumulatedPayment}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="c4195004-7358-4331-a6b6-9813a1e273cc">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:tableFooter style="Table_TD" height="30" rowSpan="1">
+							<textField pattern="#,###.##">
+								<reportElement x="0" y="0" width="100" height="30" uuid="09209de4-df60-40a6-8a7d-5656eaac9577"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="tahoma"/>
+									<paragraph leftIndent="0" rightIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{debt} - $P{payment}]]></textFieldExpression>
+							</textField>
+						</jr:tableFooter>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="30" uuid="20218603-4c0d-4375-b0d6-aaaccb0ede21"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="tahoma" isBold="true"/>
+								</textElement>
+								<text><![CDATA[ยอดคงค้าง]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="Table_TD" height="30" rowSpan="1">
+							<textField pattern="#,###.##">
+								<reportElement x="0" y="0" width="100" height="30" uuid="885a20c8-97b3-4f3b-a258-9fbfddfd8779"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="tahoma"/>
+									<paragraph leftIndent="0" rightIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$P{payment}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField pattern="#,###.##">
+								<reportElement x="0" y="0" width="100" height="30" uuid="39e38ca9-faca-429d-964f-d2979632b388"/>
+								<textElement textAlignment="Right" verticalAlignment="Middle">
+									<font fontName="tahoma"/>
+									<paragraph rightIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{debt}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
 		</band>
 	</detail>
 	<pageFooter>

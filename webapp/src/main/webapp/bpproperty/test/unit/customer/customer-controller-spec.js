@@ -20,7 +20,7 @@ describe('customer', function() {
       "buyPrice": 1000.1,
       "annualInterest": 15.0,
       "totalPayment": 500,
-      "yearsOfInstallment": 5,
+      "installmentMonths": 5,
       "description": null,
       "area": {
         "rai": 10,
@@ -37,7 +37,7 @@ describe('customer', function() {
       "downPayment": null,
       "buyPrice": 10.8,
       "annualInterest": null,
-      "yearsOfInstallment": null,
+      "installmentMonths": null,
       "description": null,
       "area": {
         "rai": 5,

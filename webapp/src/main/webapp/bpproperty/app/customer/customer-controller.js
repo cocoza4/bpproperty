@@ -305,7 +305,7 @@
           footerCellClass: 'right',
           footerCellFilter: 'number'
         }, {
-          field: 'unpaidDebt',
+          field: 'debt',
           displayName: "\u0e22\u0e2d\u0e14\u0e04\u0e07\u0e04\u0e49\u0e32\u0e07",
           headerCellClass: 'center',
           cellFilter: 'number',
@@ -347,18 +347,10 @@
         }
       };
 
-      this.preProcessing = function(data) {
-        angular.forEach(data, function(row) {
-          row.installmentPerMonth = LandBuyService.getInstallmentPerMonth(row);
-          row.unpaidDebt = LandBuyService.getUnpaidDebt(row);
-        });
-      };
-
       this.queryTable = function() {
         CustomerService.queryByCustomerId(self.criteria).then(
           function(data) {
             $scope.gridOptions.totalItems = data.totalRecords;
-            self.preProcessing(data.content);
             $scope.gridOptions.data = data.content;
           },
           function(error) {
@@ -375,7 +367,6 @@
       };
 
       var self = this;
-      this.preProcessing(CustomerLands.landBuyDetails.content);
       $scope.gridOptions.data = CustomerLands.landBuyDetails.content;
       $scope.gridOptions.totalItems = CustomerLands.landBuyDetails.totalRecords;
       $scope.customer = CustomerLands.customer;

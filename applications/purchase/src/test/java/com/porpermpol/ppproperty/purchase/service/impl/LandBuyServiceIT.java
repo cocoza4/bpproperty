@@ -82,7 +82,7 @@ public class LandBuyServiceIT {
         landBuyDetail.setBuyPrice(100000f);
         landBuyDetail.setBuyType(BuyType.CASH);
         landBuyDetail.setAnnualInterest(15.5f);
-        landBuyDetail.setYearsOfInstallment(5);
+        landBuyDetail.setInstallmentMonths(5);
 
         payment = new Payment();
         payment.setPayFor(new Date());
@@ -191,7 +191,7 @@ public class LandBuyServiceIT {
             model.setBuyPrice(100000f);
             model.setBuyType(BuyType.CASH);
             model.setAnnualInterest(15.5f);
-            model.setYearsOfInstallment(5);
+            model.setInstallmentMonths(5);
             landBuyService.saveLandBuyDetail(model);
 
             Payment anotherPayment = new Payment();

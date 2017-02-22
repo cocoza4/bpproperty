@@ -10,7 +10,7 @@ public class LandBuyDetail extends PersistableModel<Long> {
     private BuyType buyType;
     private Float buyPrice;
     private Float annualInterest;
-    private Integer yearsOfInstallment;
+    private Integer installmentMonths;
     private String description;
     private Area area;
 
@@ -54,14 +54,6 @@ public class LandBuyDetail extends PersistableModel<Long> {
         this.annualInterest = annualInterest;
     }
 
-    public Integer getYearsOfInstallment() {
-        return yearsOfInstallment;
-    }
-
-    public void setYearsOfInstallment(Integer yearsOfInstallment) {
-        this.yearsOfInstallment = yearsOfInstallment;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -78,6 +70,14 @@ public class LandBuyDetail extends PersistableModel<Long> {
         this.area = area;
     }
 
+    public Integer getInstallmentMonths() {
+        return installmentMonths;
+    }
+
+    public void setInstallmentMonths(Integer installmentMonths) {
+        this.installmentMonths = installmentMonths;
+    }
+
     @Override
     public String toString() {
         return "LandBuyDetail{" +
@@ -86,7 +86,7 @@ public class LandBuyDetail extends PersistableModel<Long> {
                 ", buyType=" + buyType +
                 ", buyPrice=" + buyPrice +
                 ", annualInterest=" + annualInterest +
-                ", yearsOfInstallment=" + yearsOfInstallment +
+                ", installmentMonths=" + installmentMonths +
                 ", description='" + description + '\'' +
                 ", area=" + area +
                 '}';

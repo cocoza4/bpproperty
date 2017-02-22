@@ -16,7 +16,10 @@ public class LandBuyDetailBO {
     private Float downPayment;
     private Float buyPrice;
     private Float annualInterest;
-    private Integer yearsOfInstallment;
+    private Float interest;
+    private Float debt;
+    private Integer installmentMonths; // number of months to pay by installments
+    private Float installmentPerMonth; // amount of money for installment per month
     private Float totalPayment;
     private String description;
     private Area area;
@@ -94,12 +97,36 @@ public class LandBuyDetailBO {
         this.annualInterest = annualInterest;
     }
 
-    public Integer getYearsOfInstallment() {
-        return yearsOfInstallment;
+    public Float getInterest() {
+        return interest;
     }
 
-    public void setYearsOfInstallment(Integer yearsOfInstallment) {
-        this.yearsOfInstallment = yearsOfInstallment;
+    public void setInterest(Float interest) {
+        this.interest = interest;
+    }
+
+    public Float getDebt() {
+        return debt;
+    }
+
+    public void setDebt(Float debt) {
+        this.debt = debt;
+    }
+
+    public Integer getInstallmentMonths() {
+        return installmentMonths;
+    }
+
+    public void setInstallmentMonths(Integer installmentMonths) {
+        this.installmentMonths = installmentMonths;
+    }
+
+    public Float getInstallmentPerMonth() {
+        return installmentPerMonth;
+    }
+
+    public void setInstallmentPerMonth(Float installmentPerMonth) {
+        this.installmentPerMonth = installmentPerMonth;
     }
 
     public Float getTotalPayment() {
@@ -133,4 +160,5 @@ public class LandBuyDetailBO {
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
+
 }

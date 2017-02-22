@@ -41,6 +41,7 @@ public class PaymentDAOIT {
     private IPaymentDAO paymentDAO;
 
     private Payment payment;
+    private Payment payment1;
 
     @Before
     public void setUp() throws Exception {
@@ -70,7 +71,7 @@ public class PaymentDAOIT {
         landBuyDetail.setBuyPrice(10000f);
         landBuyDetail.setBuyType(BuyType.INSTALLMENT);
         landBuyDetail.setAnnualInterest(15.5f);
-        landBuyDetail.setYearsOfInstallment(5);
+        landBuyDetail.setInstallmentMonths(5);
         landBuyDetail.setCreatedBy(0L);
         landBuyDetail.setCreatedTime(new Date());
         buyDetailDAO.save(landBuyDetail);
@@ -83,6 +84,23 @@ public class PaymentDAOIT {
         payment.setDescription("description");
         payment.setCreatedBy(0L);
         payment.setCreatedTime(new Date());
+
+        payment = new Payment();
+        payment.setBuyDetailId(landBuyDetail.getId());
+        payment.setAmount(10000f);
+        payment.setIsDownPayment(true);
+        payment.setPayFor(new Date());
+        payment.setDescription("description");
+        payment.setCreatedBy(0L);
+        payment.setCreatedTime(new Date());
+
+        payment1 = new Payment();
+        payment1.setBuyDetailId(landBuyDetail.getId());
+        payment1.setAmount(50000f);
+        payment1.setPayFor(new Date());
+        payment1.setDescription("description");
+        payment1.setCreatedBy(0L);
+        payment1.setCreatedTime(new Date());
     }
 
     @After
@@ -144,6 +162,14 @@ public class PaymentDAOIT {
         assertEquals(0, paymentDAO.findByLandBuyDetailId(payment.getBuyDetailId(), pageable).getTotalElements());
         paymentDAO.save(payment);
         assertEquals(1, paymentDAO.findByLandBuyDetailId(payment.getBuyDetailId(), pageable).getTotalElements());
+    }
+
+    @Test
+    public void testGetDownPayment() throws Exception {
+        paymentDAO.save(payment);
+        paymentDAO.save(payment1);
+        Float actual = paymentDAO.getDownPayment(payment.getBuyDetailId());
+        assertEquals(new Float(10000f), actual);
     }
 
     @Test

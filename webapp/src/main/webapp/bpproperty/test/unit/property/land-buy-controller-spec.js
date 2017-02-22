@@ -43,7 +43,7 @@ describe('land-buy', function() {
         "buyPrice": 250000,
         "annualInterest": 8,
         "totalPayment": 0,
-        "yearsOfInstallment": 5,
+        "installmentMonths": 5,
         "description": null,
         "area": {
           "rai": 10,
@@ -60,7 +60,7 @@ describe('land-buy', function() {
         "downPayment": null,
         "buyPrice": 10.8,
         "annualInterest": null,
-        "yearsOfInstallment": null,
+        "installmentMonths": null,
         "description": null,
         "area": {
           "rai": 5,
@@ -79,7 +79,7 @@ describe('land-buy', function() {
       "buyerLastName": "lastname1",
       "buyPrice": 1000.1,
       "annualInterest": 15.0,
-      "yearsOfInstallment": 5,
+      "installmentMonths": 5,
       "description": null,
       "area": {
         "rai": 10,
@@ -362,7 +362,7 @@ describe('land-buy', function() {
         "downPayment": 100.55,
         "buyPrice": 10.8,
         "annualInterest": 10.0,
-        "yearsOfInstallment": 3,
+        "installmentMonths": 3,
         "description": null,
         "area": {
           "rai": 5,
@@ -519,7 +519,7 @@ describe('land-buy', function() {
         landId: 1,
         buyType: 'CASH',
         annualInterest: null,
-        yearsOfInstallment: null
+        installmentMonths: null
       });
     });
 
@@ -529,7 +529,7 @@ describe('land-buy', function() {
       $scope.buyDetail.buyType = 'CASH';
       $scope.$digest();
       expect($scope.buyDetail.annualInterest).toBeNull();
-      expect($scope.buyDetail.yearsOfInstallment).toBeNull();
+      expect($scope.buyDetail.installmentMonths).toBeNull();
     });
 
     it('validate validateBuyDetail() - no cusotmer selected', function() {
@@ -625,7 +625,7 @@ describe('land-buy', function() {
             "buyPrice": 1000.1,
             "annualInterest": 15.0,
             "totalPayment": 500,
-            "yearsOfInstallment": 5,
+            "installmentMonths": 5,
             "description": null,
             "area": {
               "rai": 10,
@@ -682,25 +682,28 @@ describe('land-buy', function() {
     beforeEach(inject(function($injector) {
 
       mockBuyDetailBO = {
-        "id": 6,
-        "landId": 1,
+        "id": 41,
+        "landId": 2,
         "buyType": "INSTALLMENT",
-        "buyerId": 6,
+        "buyerId": 42,
         "buyerFirstName": "firstname",
         "buyerLastName": "lastname",
-        "downPayment": 30000.0,
-        "buyPrice": 125000.0,
-        "annualInterest": 3,
-        "yearsOfInstallment": 12.5,
-        "totalPayment": 30000.0,
+        "downPayment": 480000,
+        "buyPrice": 850000,
+        "annualInterest": 8,
+        "interest": 74000,
+        "debt": 429000,
+        "installmentMonths": 30,
+        "installmentPerMonth": 14800,
+        "totalPayment": 15000,
         "description": null,
         "area": {
-          "rai": 0,
-          "yarn": 0,
-          "tarangwa": 25
+            "rai": 1,
+            "yarn": 0,
+            "tarangwa": 0
         },
-        "createdTime": 1446185713723
-      };
+        "createdTime": 1484480902769
+    };
 
       BuyDetails = {
         land: mockLand,
@@ -717,10 +720,8 @@ describe('land-buy', function() {
     it('init', function() {
       expect($scope.buyDetail).toEqual(mockBuyDetailBO);
       expect($scope.land).toEqual(mockLand);
-      expect($scope.installmentPerMonth).toBeCloseTo(870.83);
-      expect($scope.unpaidDebt).toEqual(65000);
       expect($scope.customer).toEqual({
-        id: 6,
+        id: 42,
         firstName: 'firstname',
         lastName: 'lastname'
       });

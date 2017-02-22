@@ -33,6 +33,8 @@ public class PaymentDAO extends JdbcRepository<Payment, Long> implements IPaymen
             "ORDER BY pay_for DESC, id DESC";
     private static final String SQL_COUNT_BY_LAND_BUY_DETAIL_ID = "SELECT count(*) FROM payment " +
             "WHERE buy_detail_id = ?";
+    private static final String SQL_DOWN_PAYMENT = "SELECT amount FROM payment WHERE buy_detail_id = ? AND " +
+            "is_down_payment = TRUE";
 
     public PaymentDAO() {
         super(ROW_MAPPER, ROW_UNMAPPER, "payment", "id");
@@ -90,6 +92,11 @@ public class PaymentDAO extends JdbcRepository<Payment, Long> implements IPaymen
         long criteriaCount = this.countByCriteria(id);
 
         return new PageImpl<>(payments, pageable, criteriaCount);
+    }
+
+    @Override
+    public Float getDownPayment(long buyDetailId) {
+        return jdbcOperations.queryForObject(SQL_DOWN_PAYMENT, Float.class, buyDetailId);
     }
 
     private long countByCriteria(long id) {

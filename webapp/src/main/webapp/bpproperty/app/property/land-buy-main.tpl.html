@@ -66,12 +66,22 @@
         </div>
       </div>
 
-      <div class="row" ng-show="installmentPerMonth && unpaidDebt > 0" style="padding-top: 3px">
+      <div class="row" ng-show="buyDetail.interest" style="padding-top: 3px">
+        <div class="col-xs-3 col-sm-2">
+          <label for="name">ดอกเบี้ย</label>
+        </div>
+        <div class="col-xs-9 col-sm-10">
+          <span>{{ buyDetail.interest | number }}
+            บาท</span>
+        </div>
+      </div>
+
+      <div class="row" ng-show="buyDetail.installmentPerMonth" style="padding-top: 3px">
         <div class="col-xs-3 col-sm-2">
           <label for="name">ผ่อน / เดือน</label>
         </div>
         <div class="col-xs-9 col-sm-10">
-          <span>{{ installmentPerMonth | number }}
+          <span>{{ buyDetail.installmentPerMonth | number }}
             บาท</span>
         </div>
       </div>
@@ -81,12 +91,12 @@
           <label for="name">สถานะ</label>
         </div>
         <div class="col-xs-9 col-sm-10">
-          <span ng-show="unpaidDebt <= 0">
+          <span ng-show="buyDetail.debt <= 0">
             จ่ายแล้ว
             <span class="glyphicon glyphicon-ok-circle" style="color: green"></span>
           </span>
-          <span ng-show="unpaidDebt > 0">
-            ค้างชำระ ({{ unpaidDebt | number }}
+          <span ng-show="buyDetail.debt > 0">
+            ค้างชำระ ({{ buyDetail.debt | number }}
             บาท)
             <span class="glyphicon glyphicon-ban-circle" style="color: red"></span>
           </span>

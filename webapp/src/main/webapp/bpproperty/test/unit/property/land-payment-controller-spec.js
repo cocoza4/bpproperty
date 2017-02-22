@@ -520,7 +520,7 @@ describe('land-payment', function() {
         "buyerLastName": "lastname1",
         "buyPrice": 100000,
         "annualInterest": 15.0,
-        "yearsOfInstallment": 5,
+        "installmentMonths": 5,
         "description": null,
         "area": {
           "rai": 10,

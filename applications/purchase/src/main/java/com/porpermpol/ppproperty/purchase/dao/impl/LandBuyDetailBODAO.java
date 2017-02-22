@@ -5,11 +5,6 @@ import com.porpermpol.ppproperty.property.model.Area;
 import com.porpermpol.ppproperty.purchase.bo.LandBuyDetailBO;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailBODAO;
 import com.porpermpol.ppproperty.purchase.model.BuyType;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,34 +12,26 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
-import java.io.ByteArrayOutputStream;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 @Repository
 public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
 
-    private static final Locale TH_LOCALE = new Locale("th", "TH");
-    private static final String JASPER_FILE = LandBuyDetailBODAO.class.getClassLoader().getResource("jasper/receipt.jasper").getFile();
 
     private static final String SQL_GROUP_BY_CLAUSE = " GROUP BY lbd.id, buy_type, buyer_id, lbd.land_id, buy_price, " +
-                "annual_interest, years_of_installment, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +
+                "annual_interest, installment_months, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +
                 "down_payment, c.firstname, c.lastname";
 
     private static final String SQL_SELECT_ALL =
                 "SELECT lbd.id, buy_type, c.id AS buyer_id, land_id, buy_price, annual_interest, " +
-                        "years_of_installment, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +
+                        "installment_months, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +
                         "(SELECT amount FROM payment WHERE is_down_payment = true AND buy_detail_id = lbd.id) AS down_payment, " +
                         "c.firstname, c.lastname, coalesce(sum(amount), 0) AS total_payment " +
                 "FROM land_buy_detail lbd INNER JOIN customer c ON lbd.customer_id = c.id " +
@@ -108,29 +95,6 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
     }
 
     @Override
-    public ByteArrayOutputStream getReceipt(long buyDetailId, long customerId, float amount, long receiptId) {
-
-        Connection conn = DataSourceUtils.getConnection(jdbcTemplate.getDataSource());
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-        Map params = new HashMap();
-        params.put(JRParameter.REPORT_LOCALE, TH_LOCALE);
-        params.put("payment", amount);
-        params.put("receipt_id", receiptId);
-        params.put("buy_detail_id", buyDetailId);
-        params.put("customer_id", customerId);
-
-        try {
-            JasperPrint jasperPrint = JasperFillManager.fillReport(JASPER_FILE, params, conn);
-            JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
-        } catch (JRException e) {
-            e.printStackTrace();
-        }
-
-        return outputStream;
-    }
-
-    @Override
     public Page<LandBuyDetailBO> findByCriteria(BuyType buyType, String firstName, Long landId, Long customerId,
                                                 Date filteredMonth, Date filteredYear, Pageable pageable) {
 
@@ -156,7 +120,7 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
         return jdbcTemplate.queryForObject(sb.toString(), Long.class, params);
     }
 
-    public static final RowMapper<LandBuyDetailBO> ROW_MAPPER = new RowMapper<LandBuyDetailBO>() {
+    private static final RowMapper<LandBuyDetailBO> ROW_MAPPER = new RowMapper<LandBuyDetailBO>() {
         @Override
         public LandBuyDetailBO mapRow(ResultSet rs, int rowNum) throws SQLException {
             LandBuyDetailBO model = new LandBuyDetailBO();
@@ -169,11 +133,31 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
             model.setBuyPrice(rs.getFloat("buy_price"));
             model.setDownPayment((Float)rs.getObject("down_payment"));
             model.setAnnualInterest((Float)rs.getObject("annual_interest"));
-            model.setYearsOfInstallment((Integer)rs.getObject("years_of_installment"));
+            model.setInstallmentMonths((Integer)rs.getObject("installment_months"));
             model.setTotalPayment((Float)rs.getObject("total_payment"));
             model.setDescription(rs.getString("description"));
             model.setArea(new Area(rs.getInt("rai"), rs.getInt("yarn"), rs.getInt("tarangwa")));
             model.setCreatedTime(new Date(rs.getLong("created_time")));
+
+            if (model.getDownPayment() == null) {
+                model.setDownPayment(0f);
+            }
+
+            if (BuyType.INSTALLMENT == model.getBuyType() && model.getInstallmentMonths() != null &&
+                    model.getAnnualInterest() != null) {
+
+                float initialDebt = model.getBuyPrice() - model.getDownPayment();
+                float interest = initialDebt * (model.getAnnualInterest() / 100f) * (model.getInstallmentMonths() / 12f);
+                float balanceOwed = initialDebt + interest;
+
+                model.setInterest(interest);
+                model.setInstallmentPerMonth(balanceOwed / model.getInstallmentMonths());
+                model.setDebt(balanceOwed - model.getTotalPayment());
+
+            } else {
+                model.setDebt(model.getBuyPrice() - model.getDownPayment() - model.getTotalPayment());
+            }
+
             return model;
         }
     };

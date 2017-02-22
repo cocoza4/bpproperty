@@ -63,7 +63,7 @@ public class LandBuyDetailDAOIT {
         landBuyDetail.setBuyPrice(100000f);
         landBuyDetail.setBuyType(BuyType.INSTALLMENT);
         landBuyDetail.setAnnualInterest(15.5f);
-        landBuyDetail.setYearsOfInstallment(5);
+        landBuyDetail.setInstallmentMonths(5);
         landBuyDetail.setCreatedBy(0L);
         landBuyDetail.setCreatedTime(new Date());
     }
@@ -90,13 +90,13 @@ public class LandBuyDetailDAOIT {
 
         Integer expected = 1;
 
-        landBuyDetail.setYearsOfInstallment(expected);
+        landBuyDetail.setInstallmentMonths(expected);
         landBuyDetail.setUpdatedBy(0L);
         landBuyDetail.setUpdatedTime(new Date());
 
         buyDetailDAO.save(landBuyDetail);
 
-        assertEquals(expected, buyDetailDAO.findOne(landBuyDetail.getId()).getYearsOfInstallment());
+        assertEquals(expected, buyDetailDAO.findOne(landBuyDetail.getId()).getInstallmentMonths());
 
     }
 
@@ -138,7 +138,7 @@ public class LandBuyDetailDAOIT {
         assertEquals(landBuyDetail.getCustomerId(), model.getCustomerId());
         assertEquals(landBuyDetail.getLandId(), model.getLandId());
         assertEquals(landBuyDetail.getAnnualInterest(), model.getAnnualInterest());
-        assertEquals(landBuyDetail.getYearsOfInstallment(), model.getYearsOfInstallment());
+        assertEquals(landBuyDetail.getInstallmentMonths(), model.getInstallmentMonths());
         assertEquals(landBuyDetail.getBuyType(), model.getBuyType());
         assertEquals(landBuyDetail.getBuyPrice(), model.getBuyPrice());
         assertEquals(landBuyDetail.getArea().getYarn(), model.getArea().getYarn());

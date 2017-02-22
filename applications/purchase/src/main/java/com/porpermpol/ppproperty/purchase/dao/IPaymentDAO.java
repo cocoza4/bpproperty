@@ -7,4 +7,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface IPaymentDAO extends PagingAndSortingRepository<Payment, Long> {
     Page<Payment> findByLandBuyDetailId(long id, Pageable pageable);
+    Float getDownPayment(long buyDetailId);
 }

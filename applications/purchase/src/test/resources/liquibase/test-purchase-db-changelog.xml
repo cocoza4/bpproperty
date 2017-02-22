@@ -8,6 +8,8 @@
     <include file="liquibase/changesets/person-baseline-changeset.xml" relativeToChangelogFile="false"/>
     <include file="liquibase/changesets/property-baseline-changeset.xml" relativeToChangelogFile="false"/>
     <include file="liquibase/changesets/purchase-baseline-changeset.xml" relativeToChangelogFile="false"/>
+
     <include file="liquibase/changesets/purchase-changeset-001.xml" relativeToChangelogFile="false"/>
+    <include file="liquibase/changesets/purchase-changeset-002.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

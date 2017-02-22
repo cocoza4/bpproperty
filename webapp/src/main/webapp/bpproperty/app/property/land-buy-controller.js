@@ -161,7 +161,7 @@
       $scope.$watch('buyDetail.buyType', function() {
         if ($scope.buyDetail.buyType == 'CASH') {
           $scope.buyDetail.annualInterest = null;
-          $scope.buyDetail.yearsOfInstallment = null;
+          $scope.buyDetail.installmentMonths = null;
         }
       });
 
@@ -257,8 +257,6 @@
       });
 
       function updateScope(buyDetailBO) {
-        $scope.installmentPerMonth = LandBuyService.getInstallmentPerMonth(buyDetailBO);
-        $scope.unpaidDebt = LandBuyService.getUnpaidDebt(buyDetailBO);
         $scope.buyDetail = buyDetailBO;
         $scope.customer = {
           id: $scope.buyDetail.buyerId,
@@ -269,7 +267,6 @@
 
       var self = this;
       updateScope(BuyDetails.buyDetailBO);
-
       $scope.land = BuyDetails.land;
     }
   ])
@@ -477,7 +474,7 @@
           footerCellClass: 'right',
           footerCellFilter: 'number'
         }, {
-          field: 'unpaidDebt',
+          field: 'debt',
           displayName: "\u0e22\u0e2d\u0e14\u0e04\u0e07\u0e04\u0e49\u0e32\u0e07",
           headerCellClass: 'center',
           cellFilter: 'number',
@@ -590,8 +587,6 @@
           }
 
           row.buyerName = CustomerService.getCustomerFullName(row);
-          row.installmentPerMonth = LandBuyService.getInstallmentPerMonth(row);
-          row.unpaidDebt = LandBuyService.getUnpaidDebt(row);
         });
       };
 
