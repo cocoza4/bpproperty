@@ -34,11 +34,13 @@ public class LandBuyDetailDAOIT {
     @Autowired
     private ILandBuyDetailDAO buyDetailDAO;
 
+    private Land land;
+    private Customer customer;
     private LandBuyDetail landBuyDetail;
 
     @Before
     public void setUp() throws Exception {
-        Land land = new Land();
+        land = new Land();
         land.setName("name");
         land.setAddress("address");
         land.setDescription("description");
@@ -47,7 +49,7 @@ public class LandBuyDetailDAOIT {
         land.setCreatedTime(new Date());
         propertyDAO.save(land);
 
-        Customer customer = new Customer();
+        customer = new Customer();
         customer.setFirstName("firstname");
         customer.setLastName("lastname");
         customer.setAddress("address");
@@ -70,8 +72,8 @@ public class LandBuyDetailDAOIT {
 
     @After
     public void tearDown() throws Exception {
-        propertyDAO.deleteAll();
-        customerDAO.deleteAll();
+        propertyDAO.delete(land);
+        customerDAO.delete(customer);
     }
 
     @Test

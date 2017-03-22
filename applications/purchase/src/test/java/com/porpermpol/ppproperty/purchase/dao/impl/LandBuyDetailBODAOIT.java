@@ -25,6 +25,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -134,7 +135,7 @@ public class LandBuyDetailBODAOIT {
         payment2.setBuyDetailId(installmentLandBuyDetail.getId());
         payment2.setAmount(1000f);
         payment2.setPayFor(new Date());
-        payment1.setIsDownPayment(false);
+        payment2.setIsDownPayment(false);
         payment2.setDescription("description");
         payment2.setCreatedBy(0L);
         payment2.setCreatedTime(new Date());
@@ -143,9 +144,8 @@ public class LandBuyDetailBODAOIT {
 
     @After
     public void tearDown() throws Exception {
-        propertyDAO.deleteAll();
-        customerDAO.deleteAll();
-        buyDetailDAO.deleteAll();
+        propertyDAO.delete(land);
+        customerDAO.delete(customer);
     }
 
     @Test
@@ -154,7 +154,7 @@ public class LandBuyDetailBODAOIT {
         assertEquals(new Float(74000), bo.getInterest());
         assertEquals(new Float(14800), bo.getInstallmentPerMonth());
         assertEquals(new Float(443000), bo.getDebt());
-        this.assertLandBuyDetail(installmentLandBuyDetail, bo);
+        this.assertLandBuyDetail(924000f, installmentLandBuyDetail, bo);
     }
 
     @Test
@@ -163,7 +163,7 @@ public class LandBuyDetailBODAOIT {
         assertEquals(new Float(8000), bo.getInterest());
         assertEquals(new Float(9000), bo.getInstallmentPerMonth());
         assertEquals(new Float(108000), bo.getDebt());
-        this.assertLandBuyDetail(installmentLandBuyDetail2, bo);
+        this.assertLandBuyDetail(108000f, installmentLandBuyDetail2, bo);
     }
 
     @Test
@@ -172,7 +172,7 @@ public class LandBuyDetailBODAOIT {
         assertNull(bo.getInterest());
         assertNull(bo.getInstallmentPerMonth());
         assertEquals(new Float(0), bo.getDebt());
-        this.assertLandBuyDetail(cashLandBuyDetail, bo);
+        this.assertLandBuyDetail(cashLandBuyDetail.getBuyPrice(), cashLandBuyDetail, bo);
     }
 
     @Test
@@ -201,10 +201,6 @@ public class LandBuyDetailBODAOIT {
         Pageable pageable = new PageRequest(0, 10);
         Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(BuyType.INSTALLMENT, null, null, null, null, null, pageable);
         assertEquals(2, bos.getTotalElements());
-        LandBuyDetailBO bo = bos.getContent().get(0);
-        assertEquals(new Float(1000), bo.getTotalPayment());
-        assertEquals(new Float(480000), bo.getDownPayment());
-        this.assertLandBuyDetail(installmentLandBuyDetail, bo);
     }
 
     @Test
@@ -215,7 +211,7 @@ public class LandBuyDetailBODAOIT {
         LandBuyDetailBO bo = bos.getContent().get(0);
         assertEquals(new Float(100000f), bo.getTotalPayment());
         assertEquals(new Float(0), bo.getDownPayment());
-        this.assertLandBuyDetail(cashLandBuyDetail, bo);
+        this.assertLandBuyDetail(cashLandBuyDetail.getBuyPrice(), cashLandBuyDetail, bo);
     }
 
     @Test
@@ -239,7 +235,7 @@ public class LandBuyDetailBODAOIT {
         assertEquals(1, bos.getTotalElements());
         LandBuyDetailBO bo = bos.getContent().get(0);
         assertEquals(new Float(1000f), bo.getTotalPayment());
-        this.assertLandBuyDetail(installmentLandBuyDetail, bo);
+        this.assertLandBuyDetail(924000f, installmentLandBuyDetail, bo);
     }
 
     @Test
@@ -249,7 +245,7 @@ public class LandBuyDetailBODAOIT {
         assertEquals(1, bos.getTotalElements());
         LandBuyDetailBO bo = bos.getContent().get(0);
         assertEquals(new Float(1000f), bo.getTotalPayment());
-        this.assertLandBuyDetail(installmentLandBuyDetail, bo);
+        this.assertLandBuyDetail(924000f, installmentLandBuyDetail, bo);
     }
 
     @Test
@@ -286,10 +282,10 @@ public class LandBuyDetailBODAOIT {
         Page<LandBuyDetailBO> bos = buyDetailBODAO.findByCriteria(BuyType.INSTALLMENT, "first", land.getId(),
                 customer.getId(), df.parse("2015/02/11"), null, pageable); // filtering by year is not supposed to use with by month
         assertEquals(1, bos.getTotalElements());
-        this.assertLandBuyDetail(installmentLandBuyDetail, bos.getContent().get(0));
+        this.assertLandBuyDetail(924000f, installmentLandBuyDetail, bos.getContent().get(0));
     }
 
-    private void assertLandBuyDetail(LandBuyDetail expected, LandBuyDetailBO actual) {
+    private void assertLandBuyDetail(Float buyPrice, LandBuyDetail expected, LandBuyDetailBO actual) {
         Area area = expected.getArea();
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getLandId(), actual.getLandId());
@@ -298,7 +294,7 @@ public class LandBuyDetailBODAOIT {
         assertEquals(area.getRai(), actual.getArea().getRai());
         assertEquals(area.getYarn(), actual.getArea().getYarn());
         assertEquals(area.getTarangwa(), actual.getArea().getTarangwa());
-        assertEquals(expected.getBuyPrice(), actual.getBuyPrice());
+        assertEquals(buyPrice, actual.getBuyPrice());
         assertEquals(expected.getDescription(), actual.getDescription());
         assertEquals(expected.getBuyType(), actual.getBuyType());
         assertEquals(expected.getInstallmentMonths(), actual.getInstallmentMonths());

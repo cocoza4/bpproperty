@@ -40,22 +40,24 @@ public class PaymentDAOIT {
     @Autowired
     private IPaymentDAO paymentDAO;
 
+    private Land land;
+    private Customer customer;
     private Payment payment;
     private Payment payment1;
 
     @Before
     public void setUp() throws Exception {
 
-        Land Land = new Land();
-        Land.setName("name");
-        Land.setAddress("address");
-        Land.setDescription("description");
-        Land.setArea(new Area(10, 20, 30));
-        Land.setCreatedBy(0L);
-        Land.setCreatedTime(new Date());
-        propertyDAO.save(Land);
+        land = new Land();
+        land.setName("name");
+        land.setAddress("address");
+        land.setDescription("description");
+        land.setArea(new Area(10, 20, 30));
+        land.setCreatedBy(0L);
+        land.setCreatedTime(new Date());
+        propertyDAO.save(land);
 
-        Customer customer = new Customer();
+        customer = new Customer();
         customer.setFirstName("firstname");
         customer.setLastName("lastname");
         customer.setAddress("address");
@@ -67,7 +69,7 @@ public class PaymentDAOIT {
         LandBuyDetail landBuyDetail = new LandBuyDetail();
         landBuyDetail.setArea(new Area(1, 2, 3));
         landBuyDetail.setCustomerId(customer.getId());
-        landBuyDetail.setLandId(Land.getId());
+        landBuyDetail.setLandId(land.getId());
         landBuyDetail.setBuyPrice(10000f);
         landBuyDetail.setBuyType(BuyType.INSTALLMENT);
         landBuyDetail.setAnnualInterest(15.5f);
@@ -105,9 +107,8 @@ public class PaymentDAOIT {
 
     @After
     public void tearDown() throws Exception {
-        propertyDAO.deleteAll();
-        customerDAO.deleteAll();
-        buyDetailDAO.deleteAll();
+        propertyDAO.delete(land);
+        customerDAO.delete(customer);
     }
 
     @Test

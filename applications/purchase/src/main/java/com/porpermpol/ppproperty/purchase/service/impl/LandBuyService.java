@@ -7,9 +7,11 @@ import com.porpermpol.ppproperty.property.dao.ILandDAO;
 import com.porpermpol.ppproperty.property.model.Land;
 import com.porpermpol.ppproperty.purchase.bo.LandBuyDetailBO;
 import com.porpermpol.ppproperty.purchase.bo.ReceiptBO;
+import com.porpermpol.ppproperty.purchase.bo.ReceiptItemBO;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailBODAO;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailDAO;
 import com.porpermpol.ppproperty.purchase.dao.IPaymentDAO;
+import com.porpermpol.ppproperty.purchase.dao.IReceiptBODAO;
 import com.porpermpol.ppproperty.purchase.model.BuyType;
 import com.porpermpol.ppproperty.purchase.model.LandBuyDetail;
 import com.porpermpol.ppproperty.purchase.model.Payment;
@@ -41,6 +43,8 @@ public class LandBuyService implements ILandBuyService {
     private ILandDAO landDAO;
     @Autowired
     private ICustomerDAO customerDAO;
+    @Autowired
+    private IReceiptBODAO receiptBODAO;
 
     private Calendar calendar = Calendar.getInstance();
 
@@ -91,40 +95,41 @@ public class LandBuyService implements ILandBuyService {
         return landBuyDetailDAO.findByCustomerId(customerId);
     }
 
-    private ReceiptBO buildReceiptBO(float payment, LandBuyDetailBO detail, Land land) {
-        Float buyPrice = detail.getBuyPrice();
-        Float accPaymentBeforePayment = detail.getDownPayment() + detail.getTotalPayment() - payment;
-        if (detail.getInterest() != null) {
-            buyPrice += detail.getInterest();
+    private ReceiptItemBO buildReceiptItemBO(boolean isDownPayment, ReceiptBO bo) {
+        float total = bo.getAccPayment();
+        float debt = bo.getDebt();
+        if (!isDownPayment) {
+            total += bo.getDownPayment();
+        } else {
+            debt += bo.getDownPayment();
         }
-        Float debtBeforePayment = buyPrice - accPaymentBeforePayment;
-        return new ReceiptBO(land.getName(), detail.getBuyType().getCode(),
-                buyPrice, accPaymentBeforePayment, debtBeforePayment);
+        ReceiptItemBO receiptItemBO = new ReceiptItemBO(bo.getLandName(), bo.getBuyType().getCode(),
+                bo.getBuyPrice(), total, debt);
+
+        return receiptItemBO;
     }
 
     @Transactional(readOnly = true)
     @Override
     public ByteArrayOutputStream getReceipt(long buyDetailId, long receiptId) {
 
-        LandBuyDetailBO bo = landBuyDetailBODAO.findById(buyDetailId);
+        ReceiptBO bo = receiptBODAO.findReceiptById(buyDetailId, receiptId);
         Payment payment = paymentDAO.findOne(receiptId);
-        if (bo != null && payment != null && bo.getId() == payment.getBuyDetailId()) {
 
-            Land land = landDAO.findOne(bo.getLandId());
-            Customer customer = customerDAO.findOne(bo.getBuyerId());
+        if (bo != null && payment != null && bo.getLandBuyDetailId() == payment.getBuyDetailId()) {
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ReceiptItemBO receiptItemBO = this.buildReceiptItemBO(payment.isDownPayment(), bo);
 
-            List<ReceiptBO> list = Arrays.asList(this.buildReceiptBO(payment.getAmount(), bo, land));
+            List<ReceiptItemBO> list = Arrays.asList(receiptItemBO);
             JRBeanCollectionDataSource receiptJRBean = new JRBeanCollectionDataSource(list, false);
 
             Map params = new HashMap();
             params.put(JRParameter.REPORT_LOCALE, TH_LOCALE);
             params.put("receipt_id", receiptId);
-            params.put("land_name", land.getName());
-            params.put("customer_name", customer.getFirstName() + " " + customer.getLastName());
-            params.put("address", customer.getAddress());
-            params.put("tel", customer.getTel());
+            params.put("customer_name", bo.getBuyerFirstName() + " " + bo.getBuyerLastName());
+            params.put("address", bo.getBuyerAddress());
+            params.put("tel", bo.getBuyerTel());
             params.put("payment", payment.getAmount());
             params.put("receipt_datasource", receiptJRBean);
 

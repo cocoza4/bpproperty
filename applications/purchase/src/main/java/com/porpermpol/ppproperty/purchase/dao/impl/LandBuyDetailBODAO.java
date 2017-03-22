@@ -2,6 +2,7 @@ package com.porpermpol.ppproperty.purchase.dao.impl;
 
 import com.porpermpol.ppproperty.core.jdbcrepository.extension.JdbcDao;
 import com.porpermpol.ppproperty.property.model.Area;
+import com.porpermpol.ppproperty.purchase.utils.PurchaseUtils;
 import com.porpermpol.ppproperty.purchase.bo.LandBuyDetailBO;
 import com.porpermpol.ppproperty.purchase.dao.ILandBuyDetailBODAO;
 import com.porpermpol.ppproperty.purchase.model.BuyType;
@@ -16,14 +17,10 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
-
 
     private static final String SQL_GROUP_BY_CLAUSE = " GROUP BY lbd.id, buy_type, buyer_id, lbd.land_id, buy_price, " +
                 "annual_interest, installment_months, lbd.description, rai, yarn, tarangwa, lbd.created_time, " +
@@ -129,8 +126,8 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
             model.setBuyerId(rs.getLong("buyer_id"));
             model.setBuyerFirstName(rs.getString("firstname"));
             model.setBuyerLastName(rs.getString("lastname"));
-            model.setBuyType(BuyType.get(rs.getString("buy_type")));
             model.setBuyPrice(rs.getFloat("buy_price"));
+            model.setBuyType(BuyType.get(rs.getString("buy_type")));
             model.setDownPayment((Float)rs.getObject("down_payment"));
             model.setAnnualInterest((Float)rs.getObject("annual_interest"));
             model.setInstallmentMonths((Integer)rs.getObject("installment_months"));
@@ -143,20 +140,11 @@ public class LandBuyDetailBODAO extends JdbcDao implements ILandBuyDetailBODAO {
                 model.setDownPayment(0f);
             }
 
-            if (BuyType.INSTALLMENT == model.getBuyType() && model.getInstallmentMonths() != null &&
-                    model.getAnnualInterest() != null) {
-
-                float initialDebt = model.getBuyPrice() - model.getDownPayment();
-                float interest = initialDebt * (model.getAnnualInterest() / 100f) * (model.getInstallmentMonths() / 12f);
-                float balanceOwed = initialDebt + interest;
-
-                model.setInterest(interest);
-                model.setInstallmentPerMonth(balanceOwed / model.getInstallmentMonths());
-                model.setDebt(balanceOwed - model.getTotalPayment());
-
-            } else {
-                model.setDebt(model.getBuyPrice() - model.getDownPayment() - model.getTotalPayment());
-            }
+            Map<String, Float> map = PurchaseUtils.getFinancialData(model);
+            model.setBuyPrice(map.get("buyPrice")); // reset buyPrice with interest
+            model.setInterest(map.get("interest"));
+            model.setInstallmentPerMonth(map.get("installmentPerMonth"));
+            model.setDebt(map.get("debt"));
 
             return model;
         }
